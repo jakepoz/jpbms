@@ -796,6 +796,152 @@
 				)
 			)
 		)
+		(symbol "Device:Polyfuse_Small"
+			(pin_numbers hide)
+			(pin_names
+				(offset 0)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "F"
+				(at -1.905 0 90)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "Polyfuse_Small"
+				(at 1.905 0 90)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 1.27 -5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Resettable fuse, polymeric positive temperature coefficient, small symbol"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "resettable fuse PTC PPTC polyfuse polyswitch"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "*polyfuse* *PTC*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "Polyfuse_Small_0_1"
+				(rectangle
+					(start -0.508 1.27)
+					(end 0.508 -1.27)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 2.54) (xy 0 -2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.016 1.27) (xy -1.016 0.762) (xy 1.016 -0.762) (xy 1.016 -1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "Polyfuse_Small_1_1"
+				(pin passive line
+					(at 0 2.54 270)
+					(length 0.635)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -2.54 90)
+					(length 0.635)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
 		(symbol "Device:R"
 			(pin_numbers hide)
 			(pin_names
@@ -1847,6 +1993,12 @@
 		)
 	)
 	(junction
+		(at 80.01 46.99)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "03b95eed-6de1-4bc8-8ea4-e110d01394c2")
+	)
+	(junction
 		(at 55.88 100.33)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -1943,12 +2095,6 @@
 		(uuid "984e1ee8-7f48-40b7-bcbd-b38d74afe714")
 	)
 	(junction
-		(at 66.04 46.99)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "a8081099-40de-49a5-9e96-fe1e1bf87417")
-	)
-	(junction
 		(at 82.55 172.72)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -2012,13 +2158,23 @@
 	)
 	(wire
 		(pts
-			(xy 69.85 44.45) (xy 49.53 44.45)
+			(xy 49.53 44.45) (xy 73.66 44.45)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "07cb192a-53e6-4207-8c8d-5f7fce5ef2c8")
+	)
+	(wire
+		(pts
+			(xy 78.74 44.45) (xy 81.28 44.45)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0c65f4ac-adef-4f21-b5f5-188fa4a73155")
 	)
 	(wire
 		(pts
@@ -2059,6 +2215,16 @@
 			(type default)
 		)
 		(uuid "18a94827-8d10-4550-8bb3-a5409e753107")
+	)
+	(wire
+		(pts
+			(xy 80.01 46.99) (xy 80.01 52.07)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1d52d0b6-d492-4e99-ac7f-9cb8428b23d1")
 	)
 	(wire
 		(pts
@@ -2132,7 +2298,7 @@
 	)
 	(wire
 		(pts
-			(xy 69.85 46.99) (xy 66.04 46.99)
+			(xy 50.8 46.99) (xy 73.66 46.99)
 		)
 		(stroke
 			(width 0)
@@ -2322,7 +2488,7 @@
 	)
 	(wire
 		(pts
-			(xy 69.85 41.91) (xy 49.53 41.91)
+			(xy 73.66 41.91) (xy 49.53 41.91)
 		)
 		(stroke
 			(width 0)
@@ -2359,16 +2525,6 @@
 			(type default)
 		)
 		(uuid "8b7ea41c-1657-428c-9000-e05ccfafd7f4")
-	)
-	(wire
-		(pts
-			(xy 50.8 46.99) (xy 66.04 46.99)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "8bfc7347-2ed1-4c3e-a70d-a9e7e277d398")
 	)
 	(wire
 		(pts
@@ -2422,6 +2578,16 @@
 	)
 	(wire
 		(pts
+			(xy 78.74 46.99) (xy 80.01 46.99)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9bd087c5-3bca-4737-8745-6ca8aaa376e9")
+	)
+	(wire
+		(pts
 			(xy 182.88 53.34) (xy 203.2 53.34)
 		)
 		(stroke
@@ -2449,16 +2615,6 @@
 			(type default)
 		)
 		(uuid "a008d4ad-e059-4c48-b6c4-b53af8c68729")
-	)
-	(wire
-		(pts
-			(xy 66.04 50.8) (xy 66.04 46.99)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a8df0e31-6816-4ff0-9b69-aa5ff0207edb")
 	)
 	(wire
 		(pts
@@ -2529,6 +2685,16 @@
 			(type default)
 		)
 		(uuid "cc347e27-e2a1-4082-b081-7af99f72db20")
+	)
+	(wire
+		(pts
+			(xy 78.74 41.91) (xy 81.28 41.91)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cd9c5a8e-c0a8-4142-9aa7-951308293e61")
 	)
 	(wire
 		(pts
@@ -2620,6 +2786,16 @@
 		)
 		(uuid "f7a86d94-027c-4f58-9247-ab0502b865cd")
 	)
+	(wire
+		(pts
+			(xy 80.01 46.99) (xy 81.28 46.99)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fe1db2ce-efcc-4f47-a7c5-a40409d39b4a")
+	)
 	(text_box "2.5V Regulator"
 		(exclude_from_sim no)
 		(at 25.4 74.93 0)
@@ -2679,7 +2855,7 @@
 	)
 	(text_box "Battery Balance Connector\n"
 		(exclude_from_sim no)
-		(at 26.67 27.94 0)
+		(at 25.4 27.94 0)
 		(size 68.58 36.83)
 		(stroke
 			(width 0)
@@ -2708,7 +2884,7 @@
 	)
 	(global_label "CELL_4V"
 		(shape input)
-		(at 69.85 41.91 0)
+		(at 81.28 41.91 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2717,7 +2893,7 @@
 		)
 		(uuid "20d603e7-2546-4e36-95b5-4ca29db81f5c")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 69.85 41.91 0)
+			(at 81.28 41.91 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2728,7 +2904,7 @@
 	)
 	(global_label "CELL_8V"
 		(shape input)
-		(at 69.85 44.45 0)
+		(at 81.28 44.45 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2737,7 +2913,7 @@
 		)
 		(uuid "349e055e-e75e-43c3-9d39-3b6f0b251c70")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 69.85 44.45 0)
+			(at 81.28 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2792,7 +2968,7 @@
 	)
 	(global_label "CELL_12V"
 		(shape input)
-		(at 69.85 46.99 0)
+		(at 81.28 46.99 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2801,7 +2977,7 @@
 		)
 		(uuid "bc47d643-32ce-492d-9a16-00bca3a611b9")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 69.85 46.99 0)
+			(at 81.28 46.99 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3236,6 +3412,84 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:Polyfuse_Small")
+		(at 76.2 46.99 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "1f88cb3c-8e8f-4985-a236-465d2ebe9135")
+		(property "Reference" "F3"
+			(at 76.2 40.64 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "30V 750mA"
+			(at 76.2 43.18 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" "Fuse:Fuse_1206_3216Metric"
+			(at 81.28 45.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 76.2 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resettable fuse, polymeric positive temperature coefficient, small symbol"
+			(at 76.2 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC_Code" "C976305"
+			(at 76.2 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "556a41ea-86f8-467c-9c1a-f7c1e683f71a")
+		)
+		(pin "2"
+			(uuid "a08bb7f0-04d0-4f57-afd3-182bc57eae0c")
+		)
+		(instances
+			(project "JPBms2"
+				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/fda7e15b-dad1-4f54-abdb-4d4569bf33a6"
+					(reference "F3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:GND")
 		(at 74.93 167.64 270)
 		(unit 1)
@@ -3297,6 +3551,83 @@
 			(project "JPBms2"
 				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/fda7e15b-dad1-4f54-abdb-4d4569bf33a6"
 					(reference "#PWR028")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:Polyfuse_Small")
+		(at 76.2 41.91 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "2e7e2701-2eb3-499d-99c8-a54dc56eabee")
+		(property "Reference" "F1"
+			(at 76.2 35.56 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "30V 750mA"
+			(at 85.09 35.306 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Fuse:Fuse_1206_3216Metric"
+			(at 81.28 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 76.2 41.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resettable fuse, polymeric positive temperature coefficient, small symbol"
+			(at 76.2 41.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC_Code" "C976305"
+			(at 76.2 41.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "c665c483-b515-497f-91ce-831f0ca6e3f6")
+		)
+		(pin "2"
+			(uuid "ab6719bc-fceb-4b9f-939b-3366c13c220b")
+		)
+		(instances
+			(project "JPBms2"
+				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/fda7e15b-dad1-4f54-abdb-4d4569bf33a6"
+					(reference "F1")
 					(unit 1)
 				)
 			)
@@ -3857,6 +4188,84 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:Polyfuse_Small")
+		(at 76.2 44.45 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "59b26a1e-d2f8-4e0c-982f-2ad53a77bb2f")
+		(property "Reference" "F2"
+			(at 76.2 38.1 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "30V 750mA"
+			(at 76.2 40.64 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" "Fuse:Fuse_1206_3216Metric"
+			(at 81.28 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 76.2 44.45 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resettable fuse, polymeric positive temperature coefficient, small symbol"
+			(at 76.2 44.45 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC_Code" "C976305"
+			(at 76.2 44.45 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "db8278f1-4e22-49ea-a81a-9070f76518d3")
+		)
+		(pin "2"
+			(uuid "ef7b7cff-dc1d-49d9-a227-b8bfb48f73e6")
+		)
+		(instances
+			(project "JPBms2"
+				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/fda7e15b-dad1-4f54-abdb-4d4569bf33a6"
+					(reference "F2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:R")
 		(at 52.07 172.72 90)
 		(unit 1)
@@ -4226,7 +4635,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Connector_BarrelJack:BarrelJack_CUI_PJ-063AH_Horizontal"
+		(property "Footprint" "Connector_BarrelJack:BarrelJack_Horizontal"
 			(at 203.2 89.916 0)
 			(effects
 				(font
@@ -4245,6 +4654,15 @@
 			)
 		)
 		(property "Description" "DC Barrel Jack with a mounting pin"
+			(at 204.47 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC_Code" "C319099"
 			(at 204.47 88.9 0)
 			(effects
 				(font
@@ -5121,7 +5539,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 160.528 73.66 90)
 			(effects
 				(font
@@ -5305,7 +5723,7 @@
 	)
 	(symbol
 		(lib_id "power:+BATT")
-		(at 66.04 50.8 180)
+		(at 80.01 52.07 180)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -5314,7 +5732,7 @@
 		(fields_autoplaced yes)
 		(uuid "ef1a793f-084e-4c0f-a840-c409d7f24e91")
 		(property "Reference" "#PWR018"
-			(at 66.04 46.99 0)
+			(at 80.01 48.26 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5323,7 +5741,7 @@
 			)
 		)
 		(property "Value" "+BATT"
-			(at 66.04 55.88 0)
+			(at 80.01 57.15 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5331,7 +5749,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 66.04 50.8 0)
+			(at 80.01 52.07 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5340,7 +5758,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 66.04 50.8 0)
+			(at 80.01 52.07 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5349,7 +5767,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+BATT\""
-			(at 66.04 50.8 0)
+			(at 80.01 52.07 0)
 			(effects
 				(font
 					(size 1.27 1.27)

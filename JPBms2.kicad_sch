@@ -4,9 +4,284 @@
 	(generator_version "8.0")
 	(uuid "d86e471c-a8be-422d-a5d1-5a4699b7b766")
 	(paper "A4")
-	(lib_symbols)
+	(lib_symbols
+		(symbol "Mechanical:MountingHole"
+			(pin_names
+				(offset 1.016)
+			)
+			(exclude_from_sim yes)
+			(in_bom no)
+			(on_board yes)
+			(property "Reference" "H"
+				(at 0 5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "MountingHole"
+				(at 0 3.175 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Mounting Hole without connection"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "mounting hole"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "MountingHole*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "MountingHole_0_1"
+				(circle
+					(center 0 0)
+					(radius 1.27)
+					(stroke
+						(width 1.27)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole")
+		(at 181.61 60.96 0)
+		(unit 1)
+		(exclude_from_sim yes)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "44267141-c8b3-4cee-9fc7-cc029614d6fa")
+		(property "Reference" "H2"
+			(at 184.15 59.6899 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "MountingHole"
+			(at 184.15 62.2299 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_3.2mm_M3"
+			(at 181.61 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 181.61 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mounting Hole without connection"
+			(at 181.61 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(instances
+			(project "JPBms2"
+				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766"
+					(reference "H2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole")
+		(at 181.61 68.58 0)
+		(unit 1)
+		(exclude_from_sim yes)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "5974f6e5-ca5a-46fc-8d03-3386e304c6f1")
+		(property "Reference" "H3"
+			(at 184.15 67.3099 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "MountingHole"
+			(at 184.15 69.8499 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_3.2mm_M3"
+			(at 181.61 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 181.61 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mounting Hole without connection"
+			(at 181.61 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(instances
+			(project "JPBms2"
+				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766"
+					(reference "H3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole")
+		(at 181.61 52.07 0)
+		(unit 1)
+		(exclude_from_sim yes)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "9d5f5cb1-9936-42d6-a6e4-467a12a4ecf9")
+		(property "Reference" "H1"
+			(at 184.15 50.7999 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "MountingHole"
+			(at 184.15 53.3399 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_3.2mm_M3"
+			(at 181.61 52.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 181.61 52.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mounting Hole without connection"
+			(at 181.61 52.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(instances
+			(project "JPBms2"
+				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766"
+					(reference "H1")
+					(unit 1)
+				)
+			)
+		)
+	)
 	(sheet
-		(at 91.44 20.32)
+		(at 137.16 46.99)
 		(size 22.86 26.67)
 		(fields_autoplaced yes)
 		(stroke
@@ -18,7 +293,7 @@
 		)
 		(uuid "0f5ad211-c4ad-40eb-a8ac-82970ee8fac9")
 		(property "Sheetname" "BuckBoost"
-			(at 91.44 19.6084 0)
+			(at 137.16 46.2784 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -27,7 +302,7 @@
 			)
 		)
 		(property "Sheetfile" "buckboost.kicad_sch"
-			(at 91.44 47.5746 0)
+			(at 137.16 74.2446 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -44,7 +319,7 @@
 		)
 	)
 	(sheet
-		(at 58.42 17.78)
+		(at 104.14 44.45)
 		(size 16.51 27.94)
 		(fields_autoplaced yes)
 		(stroke
@@ -56,7 +331,7 @@
 		)
 		(uuid "852788cb-2266-4d4a-865c-a7e0873e4190")
 		(property "Sheetname" "MCU"
-			(at 58.42 17.0684 0)
+			(at 104.14 43.7384 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -65,7 +340,7 @@
 			)
 		)
 		(property "Sheetfile" "mcu.kicad_sch"
-			(at 58.42 46.3046 0)
+			(at 104.14 72.9746 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -82,7 +357,7 @@
 		)
 	)
 	(sheet
-		(at 22.86 17.78)
+		(at 68.58 44.45)
 		(size 21.59 27.94)
 		(fields_autoplaced yes)
 		(stroke
@@ -94,7 +369,7 @@
 		)
 		(uuid "fda7e15b-dad1-4f54-abdb-4d4569bf33a6")
 		(property "Sheetname" "Power"
-			(at 22.86 17.0684 0)
+			(at 68.58 43.7384 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -103,7 +378,7 @@
 			)
 		)
 		(property "Sheetfile" "power.kicad_sch"
-			(at 22.86 46.3046 0)
+			(at 68.58 72.9746 0)
 			(effects
 				(font
 					(size 1.27 1.27)

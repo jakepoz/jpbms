@@ -2644,7 +2644,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "JakeLib:YSPI0630A"
 			(at 170.18 85.09 0)
 			(effects
 				(font
