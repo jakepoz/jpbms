@@ -2882,6 +2882,16 @@
 		)
 		(uuid "d06f4479-38f5-4b88-b615-76102223adb8")
 	)
+	(text "Rsense = .25 ohm, @ 2 amps = 0.5V\nIout = 0.004 * Vsense\nso 1200 * 0.002 = 2.4V @ 2 amps current"
+		(exclude_from_sim no)
+		(at 220.218 36.068 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "f90899b1-bbbc-4e2b-acd5-1c5934716b24")
+	)
 	(global_label "CELL_4V"
 		(shape input)
 		(at 81.28 41.91 0)
