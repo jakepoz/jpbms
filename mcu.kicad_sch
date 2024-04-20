@@ -3060,6 +3060,16 @@
 	)
 	(wire
 		(pts
+			(xy 166.37 55.88) (xy 158.75 55.88)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "79978297-dc05-48ef-a12a-573a8472a880")
+	)
+	(wire
+		(pts
 			(xy 243.84 86.36) (xy 250.19 86.36)
 		)
 		(stroke
@@ -3429,6 +3439,7 @@
 	)
 	(label "LED_ON"
 		(at 166.37 104.14 0)
+		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3439,6 +3450,7 @@
 	)
 	(label "NRST"
 		(at 68.58 31.75 0)
+		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3449,6 +3461,7 @@
 	)
 	(label "SWDIO"
 		(at 165.1 83.82 0)
+		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3459,6 +3472,7 @@
 	)
 	(label "USART1_RX"
 		(at 165.1 76.2 0)
+		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3469,6 +3483,7 @@
 	)
 	(label "SWCLK"
 		(at 68.58 36.83 0)
+		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3479,6 +3494,7 @@
 	)
 	(label "LED_ACTIVE"
 		(at 166.37 106.68 0)
+		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3500,6 +3516,7 @@
 	)
 	(label "USART1_TX"
 		(at 165.1 73.66 0)
+		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3521,6 +3538,7 @@
 	)
 	(label "LED_ERROR"
 		(at 166.37 109.22 0)
+		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3531,6 +3549,7 @@
 	)
 	(label "NRST"
 		(at 107.95 50.8 180)
+		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3541,6 +3560,7 @@
 	)
 	(label "SWCLK"
 		(at 165.1 86.36 0)
+		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3562,6 +3582,7 @@
 	)
 	(label "SWDIO"
 		(at 68.58 39.37 0)
+		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3682,6 +3703,28 @@
 		(uuid "5c1a4e48-0ac2-4ed6-a9a2-2650e55b02a9")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 180.9667 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "SOLAR_CURRENT_ADC"
+		(shape input)
+		(at 166.37 55.88 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "eeb693ce-4867-4c29-91b5-4aa88ce07897")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 189.4333 55.88 0)
 			(effects
 				(font
 					(size 1.27 1.27)
