@@ -2860,6 +2860,16 @@
 	)
 	(wire
 		(pts
+			(xy 158.75 111.76) (xy 165.1 111.76)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2fa72a63-5286-4d7b-93f1-6d07fd6c5d21")
+	)
+	(wire
+		(pts
 			(xy 264.16 77.47) (xy 264.16 68.58)
 		)
 		(stroke
@@ -3250,6 +3260,16 @@
 	)
 	(wire
 		(pts
+			(xy 158.75 116.84) (xy 165.1 116.84)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c8b8d40c-a45d-4167-91e2-0fdce5bac7ff")
+	)
+	(wire
+		(pts
 			(xy 138.43 45.72) (xy 138.43 43.18)
 		)
 		(stroke
@@ -3337,6 +3357,16 @@
 			(type default)
 		)
 		(uuid "e9bc1186-909f-4681-a5f7-191e4544b873")
+	)
+	(wire
+		(pts
+			(xy 158.75 114.3) (xy 165.1 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ef768de2-5423-4234-89bc-e17841d14f42")
 	)
 	(wire
 		(pts
@@ -3646,6 +3676,28 @@
 			)
 		)
 	)
+	(global_label "NBAL_2"
+		(shape output)
+		(at 165.1 114.3 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "32f8a92e-5977-4973-90e6-fdeb18bea6bd")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 174.9795 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
 	(global_label "DD_BOT_A"
 		(shape output)
 		(at 165.1 101.6 0)
@@ -3659,6 +3711,28 @@
 		(uuid "3ef69024-9af2-4418-b0c2-aaf5062a4869")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 177.2171 101.6 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "NBAL_3"
+		(shape output)
+		(at 165.1 116.84 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "5101d1f9-f7c3-4d65-a882-ba15b4cb6bb4")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 174.9795 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3703,6 +3777,28 @@
 		(uuid "5c1a4e48-0ac2-4ed6-a9a2-2650e55b02a9")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 180.9667 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "NBAL_1"
+		(shape output)
+		(at 165.1 111.76 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "9a5fd112-bb40-4f99-811a-c8c5cee0999e")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 174.9795 111.76 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4441,12 +4537,14 @@
 		)
 		(pin "56"
 			(uuid "6bb161b4-9a77-4dca-a8f2-7a2dcd998f35")
+			(alternate "TIM22_CH1")
 		)
 		(pin "41"
 			(uuid "e797c53c-bbd0-4aa4-aa98-1241fb71078c")
 		)
 		(pin "57"
 			(uuid "3a1eb2c5-f036-4f49-b17a-ae2e95766620")
+			(alternate "TIM22_CH2")
 		)
 		(pin "23"
 			(uuid "56cf5971-473e-40c9-9ba9-561c12856b9f")
