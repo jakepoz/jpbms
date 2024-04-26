@@ -2741,6 +2741,10 @@
 		(uuid "f49ac370-9e7c-418a-9d9f-cb3568eb51f7")
 	)
 	(no_connect
+		(at 64.77 62.23)
+		(uuid "2ade90a8-6cad-4988-84b3-9e99a390a5e2")
+	)
+	(no_connect
 		(at 68.58 41.91)
 		(uuid "4f981432-3b3d-4fc2-af89-35ba6f5cedbc")
 	)
@@ -4131,7 +4135,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_Molex:Molex_PicoBlade_53047-0410_1x04_P1.25mm_Vertical"
+		(property "Footprint" "Connector_Molex:Molex_PicoBlade_53398-0471_1x04-1MP_P1.25mm_Vertical"
 			(at 59.69 64.77 0)
 			(effects
 				(font
