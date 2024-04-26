@@ -2541,6 +2541,102 @@
 				)
 			)
 		)
+		(symbol "power:PWR_FLAG"
+			(power)
+			(pin_numbers hide)
+			(pin_names
+				(offset 0) hide)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "#FLG"
+				(at 0 1.905 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "PWR_FLAG"
+				(at 0 3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Special symbol for telling ERC where power comes from"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "flag power"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "PWR_FLAG_0_0"
+				(pin power_out line
+					(at 0 0 90)
+					(length 0)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(symbol "PWR_FLAG_0_1"
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 1.27) (xy -1.016 1.905) (xy 0 2.54) (xy 1.016 1.905) (xy 0 1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+		)
 		(symbol "power:VDD"
 			(power)
 			(pin_numbers hide)
@@ -2740,17 +2836,151 @@
 		(color 0 0 0 0)
 		(uuid "f49ac370-9e7c-418a-9d9f-cb3568eb51f7")
 	)
+	(junction
+		(at 148.59 41.91)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "fda29a4d-8780-47eb-baec-7391fde63758")
+	)
+	(no_connect
+		(at 123.19 99.06)
+		(uuid "04f6971d-ca20-4460-bf61-142db96cdf40")
+	)
+	(no_connect
+		(at 123.19 88.9)
+		(uuid "07a1565b-a269-40be-97d1-b3ea5da8c7ce")
+	)
+	(no_connect
+		(at 158.75 132.08)
+		(uuid "07b85dd9-1da7-4bd5-ad46-2a6245007f46")
+	)
+	(no_connect
+		(at 158.75 63.5)
+		(uuid "0ac20890-abe4-49b8-822d-ee009b74e2b4")
+	)
 	(no_connect
 		(at 64.77 62.23)
 		(uuid "2ade90a8-6cad-4988-84b3-9e99a390a5e2")
+	)
+	(no_connect
+		(at 158.75 78.74)
+		(uuid "390715c6-ce6a-4070-94a5-91fbc0b7d493")
+	)
+	(no_connect
+		(at 158.75 96.52)
+		(uuid "4373f131-e748-4895-9510-e66279b35055")
 	)
 	(no_connect
 		(at 68.58 41.91)
 		(uuid "4f981432-3b3d-4fc2-af89-35ba6f5cedbc")
 	)
 	(no_connect
+		(at 158.75 99.06)
+		(uuid "6423097d-68be-4028-b52e-c4b81a3a8412")
+	)
+	(no_connect
+		(at 158.75 81.28)
+		(uuid "66200dcc-98c7-4f51-afc2-64de3b4c1603")
+	)
+	(no_connect
+		(at 123.19 96.52)
+		(uuid "672a704b-4cb6-499f-b8b9-073ae180810e")
+	)
+	(no_connect
+		(at 123.19 91.44)
+		(uuid "6ab58e2d-917c-455d-8835-4c09f61f8924")
+	)
+	(no_connect
+		(at 158.75 71.12)
+		(uuid "6d2c2e03-e481-49b4-a29f-421fd7c1331e")
+	)
+	(no_connect
+		(at 158.75 68.58)
+		(uuid "775e0bc2-d987-4291-b5f2-828dac21eda9")
+	)
+	(no_connect
+		(at 123.19 73.66)
+		(uuid "7d236a05-e0db-4d16-bfbc-303f960211ed")
+	)
+	(no_connect
+		(at 123.19 93.98)
+		(uuid "856127c2-f985-4224-a6d6-8a75e5aa20bf")
+	)
+	(no_connect
+		(at 123.19 76.2)
+		(uuid "875f1610-38f1-4d91-ade6-8b9a37373cca")
+	)
+	(no_connect
+		(at 123.19 81.28)
+		(uuid "9741ec99-0fa7-4c0f-a667-5c9f21512ba0")
+	)
+	(no_connect
+		(at 123.19 106.68)
+		(uuid "aa5b82fd-cd60-4ea3-b525-e5d76b4b934f")
+	)
+	(no_connect
+		(at 123.19 111.76)
+		(uuid "b4e91826-4008-456f-a3a1-6abd6cb38b74")
+	)
+	(no_connect
+		(at 123.19 101.6)
+		(uuid "c16d31cb-6d20-4204-af57-1f10cefc295c")
+	)
+	(no_connect
+		(at 123.19 83.82)
+		(uuid "c364c8ca-fdb0-4a82-a99b-3fd6648f63b1")
+	)
+	(no_connect
+		(at 123.19 68.58)
+		(uuid "c41bb128-9716-457f-b23f-bed3ff73e8c0")
+	)
+	(no_connect
+		(at 158.75 127)
+		(uuid "cfc70f25-1203-455a-bbaf-cdfce376dc21")
+	)
+	(no_connect
+		(at 158.75 124.46)
+		(uuid "d0fbb544-bf30-4edb-acc9-3bb0f368974e")
+	)
+	(no_connect
+		(at 123.19 86.36)
+		(uuid "d7f42f28-59c8-477c-82d8-419809b215f9")
+	)
+	(no_connect
+		(at 158.75 93.98)
+		(uuid "d8ca6425-35dc-4433-bc38-b8a5d8f8170a")
+	)
+	(no_connect
+		(at 123.19 104.14)
+		(uuid "d92a3f58-743b-4960-be79-fd6ade5cb3bd")
+	)
+	(no_connect
+		(at 123.19 63.5)
+		(uuid "da15a095-cd3c-489f-8759-dda2b1362e07")
+	)
+	(no_connect
+		(at 123.19 78.74)
+		(uuid "db210843-7536-417a-81fe-3e4aa74650c9")
+	)
+	(no_connect
 		(at 146.05 45.72)
 		(uuid "dc4738bf-5d29-4d82-a67b-99803d4cac32")
+	)
+	(no_connect
+		(at 158.75 129.54)
+		(uuid "dfe7da05-58aa-42d5-9aa8-aa1ea5017c99")
+	)
+	(no_connect
+		(at 158.75 66.04)
+		(uuid "f952995d-ac06-4c89-b067-0cf234e4c438")
+	)
+	(no_connect
+		(at 123.19 60.96)
+		(uuid "fb135f12-86de-4239-b3f2-9d1301f37ed6")
+	)
+	(no_connect
+		(at 123.19 109.22)
+		(uuid "feca50ad-1a9a-4ac4-8e81-cd425fa93804")
 	)
 	(wire
 		(pts
@@ -2834,7 +3064,7 @@
 	)
 	(wire
 		(pts
-			(xy 148.59 40.64) (xy 148.59 45.72)
+			(xy 148.59 40.64) (xy 148.59 41.91)
 		)
 		(stroke
 			(width 0)
@@ -3094,6 +3324,16 @@
 	)
 	(wire
 		(pts
+			(xy 148.59 41.91) (xy 148.59 45.72)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8580dd17-fc05-4351-8a14-f7c4fd2421f7")
+	)
+	(wire
+		(pts
 			(xy 165.1 101.6) (xy 158.75 101.6)
 		)
 		(stroke
@@ -3134,6 +3374,16 @@
 	)
 	(wire
 		(pts
+			(xy 166.37 58.42) (xy 158.75 58.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9158f783-99ce-4894-a2f8-2d224d2fdce6")
+	)
+	(wire
+		(pts
 			(xy 68.58 36.83) (xy 73.66 36.83)
 		)
 		(stroke
@@ -3141,6 +3391,16 @@
 			(type default)
 		)
 		(uuid "966cdfd4-3f96-4a93-bd10-bfeb35553252")
+	)
+	(wire
+		(pts
+			(xy 166.37 60.96) (xy 158.75 60.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "994180a4-72ac-4a73-bf05-487c244278a4")
 	)
 	(wire
 		(pts
@@ -3680,6 +3940,28 @@
 			)
 		)
 	)
+	(global_label "CELL_8V_ADC"
+		(shape input)
+		(at 166.37 60.96 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "2023b6d2-4619-4e0f-9b7c-e131bb10d0db")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 181.6923 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
 	(global_label "NBAL_2"
 		(shape output)
 		(at 165.1 114.3 0)
@@ -3759,6 +4041,28 @@
 		(uuid "530ebd33-341d-4d23-bc45-e6705c58f834")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 177.3985 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "CELL_4V_ADC"
+		(shape input)
+		(at 166.37 58.42 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "532a58a6-a685-452f-8f31-2767e37f7dc1")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 181.6923 58.42 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4519,7 +4823,7 @@
 		)
 		(pin "20"
 			(uuid "01a429eb-6315-40ac-9b88-6be3e0f78e8f")
-			(alternate "DAC_OUT1")
+			(alternate "ADC_IN4")
 		)
 		(pin "47"
 			(uuid "f00d605e-84c6-4996-bafc-476a698839bb")
@@ -5206,6 +5510,73 @@
 			(project "JPBms2"
 				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/852788cb-2266-4d4a-865c-a7e0873e4190"
 					(reference "#PWR07")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:PWR_FLAG")
+		(at 148.59 41.91 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "87c9406b-f762-456d-b370-2e54171b5dbc")
+		(property "Reference" "#FLG04"
+			(at 150.495 41.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "PWR_FLAG"
+			(at 152.4 41.9099 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 148.59 41.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 148.59 41.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Special symbol for telling ERC where power comes from"
+			(at 148.59 41.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "fbd71191-0637-4f83-b681-33291f3d8307")
+		)
+		(instances
+			(project "JPBms2"
+				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/852788cb-2266-4d4a-865c-a7e0873e4190"
+					(reference "#FLG04")
 					(unit 1)
 				)
 			)

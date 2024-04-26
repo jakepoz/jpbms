@@ -1063,7 +1063,7 @@
 				)
 			)
 		)
-		(symbol "Diode:BAT54S"
+		(symbol "Diode:BAT54SW"
 			(pin_names
 				(offset 0)
 			)
@@ -1071,7 +1071,7 @@
 			(in_bom yes)
 			(on_board yes)
 			(property "Reference" "D"
-				(at 2.54 -5.08 0)
+				(at 0.635 -3.81 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -1079,7 +1079,7 @@
 					(justify left)
 				)
 			)
-			(property "Value" "BAT54S"
+			(property "Value" "BAT54SW"
 				(at -6.35 3.175 0)
 				(effects
 					(font
@@ -1088,7 +1088,7 @@
 					(justify left)
 				)
 			)
-			(property "Footprint" "Package_TO_SOT_SMD:SOT-23"
+			(property "Footprint" "Package_TO_SOT_SMD:SOT-323_SC-70"
 				(at 1.905 3.175 0)
 				(effects
 					(font
@@ -1098,7 +1098,7 @@
 					(hide yes)
 				)
 			)
-			(property "Datasheet" "https://www.diodes.com/assets/Datasheets/ds11005.pdf"
+			(property "Datasheet" "https://assets.nexperia.com/documents/data-sheet/BAT54W_SER.pdf"
 				(at -3.048 0 0)
 				(effects
 					(font
@@ -1116,7 +1116,7 @@
 					(hide yes)
 				)
 			)
-			(property "ki_keywords" "schottky diode"
+			(property "ki_keywords" "dual schottky diode"
 				(at 0 0 0)
 				(effects
 					(font
@@ -1125,7 +1125,7 @@
 					(hide yes)
 				)
 			)
-			(property "ki_fp_filters" "SOT?23*"
+			(property "ki_fp_filters" "SOT?323*"
 				(at 0 0 0)
 				(effects
 					(font
@@ -1134,7 +1134,7 @@
 					(hide yes)
 				)
 			)
-			(symbol "BAT54S_0_1"
+			(symbol "BAT54SW_0_1"
 				(polyline
 					(pts
 						(xy -3.81 0) (xy -1.27 0)
@@ -1327,7 +1327,7 @@
 					)
 				)
 			)
-			(symbol "BAT54S_1_1"
+			(symbol "BAT54SW_1_1"
 				(pin passive line
 					(at -7.62 0 0)
 					(length 3.81)
@@ -1751,6 +1751,102 @@
 				)
 			)
 		)
+		(symbol "power:PWR_FLAG"
+			(power)
+			(pin_numbers hide)
+			(pin_names
+				(offset 0) hide)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "#FLG"
+				(at 0 1.905 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "PWR_FLAG"
+				(at 0 3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Special symbol for telling ERC where power comes from"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "flag power"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "PWR_FLAG_0_0"
+				(pin power_out line
+					(at 0 0 90)
+					(length 0)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(symbol "PWR_FLAG_0_1"
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 1.27) (xy -1.016 1.905) (xy 0 2.54) (xy 1.016 1.905) (xy 0 1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+		)
 		(symbol "power:VDD"
 			(power)
 			(pin_numbers hide)
@@ -1993,22 +2089,16 @@
 		)
 	)
 	(junction
-		(at 80.01 46.99)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "03b95eed-6de1-4bc8-8ea4-e110d01394c2")
-	)
-	(junction
 		(at 55.88 100.33)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "073ea16d-24c7-41ba-a95a-4e4196c251d2")
 	)
 	(junction
-		(at 81.28 143.51)
+		(at 82.55 172.72)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "10df2466-f4cd-4baa-929f-138eb184c289")
+		(uuid "0b10edd1-27ff-409b-937d-394709591424")
 	)
 	(junction
 		(at 59.69 172.72)
@@ -2045,12 +2135,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "66a308d5-0630-44dd-8b84-38bfaa727d9a")
-	)
-	(junction
-		(at 182.88 53.34)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "6f405cbb-b64c-4810-a5ba-a2256dfc552c")
 	)
 	(junction
 		(at 58.42 143.51)
@@ -2095,10 +2179,10 @@
 		(uuid "984e1ee8-7f48-40b7-bcbd-b38d74afe714")
 	)
 	(junction
-		(at 82.55 172.72)
+		(at 81.28 143.51)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "ad02ef23-e938-4634-aaa8-9b08abcbcded")
+		(uuid "a6bf3c5e-b493-4f58-8bb7-4a64cb7ecd7b")
 	)
 	(junction
 		(at 168.91 86.36)
@@ -2113,6 +2197,12 @@
 		(uuid "b56d2918-3a36-43be-9ba1-ab4c39123410")
 	)
 	(junction
+		(at 182.88 53.34)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "b7ee0175-2bdb-40ce-848f-3b827a09a9bf")
+	)
+	(junction
 		(at 58.42 151.13)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -2125,10 +2215,22 @@
 		(uuid "c26d2864-f09d-4f7d-a50c-3a3124c9aead")
 	)
 	(junction
+		(at 80.01 48.26)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "e484e77b-85c5-47e7-b12e-ecfd5f567fad")
+	)
+	(junction
 		(at 69.85 143.51)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "e551bffd-ad8f-410b-a6da-85257cb894c1")
+	)
+	(junction
+		(at 144.78 83.82)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "e8fcf28f-7678-42f3-802a-6f442d88b15e")
 	)
 	(junction
 		(at 158.75 67.31)
@@ -2218,16 +2320,6 @@
 	)
 	(wire
 		(pts
-			(xy 80.01 46.99) (xy 80.01 52.07)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "1d52d0b6-d492-4e99-ac7f-9cb8428b23d1")
-	)
-	(wire
-		(pts
 			(xy 168.91 67.31) (xy 168.91 86.36)
 		)
 		(stroke
@@ -2258,6 +2350,16 @@
 	)
 	(wire
 		(pts
+			(xy 144.78 83.82) (xy 144.78 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "29f90657-1dd0-44d8-bb0c-bb55290e6194")
+	)
+	(wire
+		(pts
 			(xy 58.42 151.13) (xy 69.85 151.13)
 		)
 		(stroke
@@ -2284,6 +2386,16 @@
 			(width 0)
 			(type default)
 		)
+		(uuid "37dd45bd-65da-40f8-b94a-8f47d7b74e1a")
+	)
+	(wire
+		(pts
+			(xy 69.85 143.51) (xy 81.28 143.51)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
 		(uuid "429258d7-b503-42de-a16e-bdffb8785775")
 	)
 	(wire
@@ -2295,16 +2407,6 @@
 			(type default)
 		)
 		(uuid "4a6eab04-def7-4299-9f85-f58f277643bf")
-	)
-	(wire
-		(pts
-			(xy 50.8 46.99) (xy 73.66 46.99)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "50aab16c-eb13-4dac-bbc4-070b8a435bd1")
 	)
 	(wire
 		(pts
@@ -2338,6 +2440,16 @@
 	)
 	(wire
 		(pts
+			(xy 81.28 48.26) (xy 80.01 48.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "529d8794-d201-4407-a3db-906d3fdc96ec")
+	)
+	(wire
+		(pts
 			(xy 194.31 100.33) (xy 194.31 96.52)
 		)
 		(stroke
@@ -2345,26 +2457,6 @@
 			(type default)
 		)
 		(uuid "55a61653-805d-48ca-8b0e-d3b426976e2d")
-	)
-	(wire
-		(pts
-			(xy 82.55 172.72) (xy 96.52 172.72)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "5898c057-fdb2-465a-a122-7315862f131a")
-	)
-	(wire
-		(pts
-			(xy 69.85 143.51) (xy 81.28 143.51)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "5b03a6de-800c-4d34-86fe-bc7693ca4c4a")
 	)
 	(wire
 		(pts
@@ -2478,6 +2570,16 @@
 	)
 	(wire
 		(pts
+			(xy 182.88 53.34) (xy 203.2 53.34)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7aa284a4-7054-43ee-bcc5-e79bfa2cefdb")
+	)
+	(wire
+		(pts
 			(xy 58.42 143.51) (xy 69.85 143.51)
 		)
 		(stroke
@@ -2588,7 +2690,7 @@
 	)
 	(wire
 		(pts
-			(xy 182.88 53.34) (xy 203.2 53.34)
+			(xy 163.83 53.34) (xy 182.88 53.34)
 		)
 		(stroke
 			(width 0)
@@ -2608,6 +2710,16 @@
 	)
 	(wire
 		(pts
+			(xy 80.01 46.99) (xy 80.01 48.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9fedd5d9-8770-43ef-9c8f-f5367519667f")
+	)
+	(wire
+		(pts
 			(xy 158.75 63.5) (xy 158.75 67.31)
 		)
 		(stroke
@@ -2618,7 +2730,17 @@
 	)
 	(wire
 		(pts
-			(xy 144.78 80.01) (xy 144.78 86.36)
+			(xy 50.8 46.99) (xy 73.66 46.99)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "aaaa4a1b-83b9-4c13-91e1-740cf18127b7")
+	)
+	(wire
+		(pts
+			(xy 144.78 80.01) (xy 144.78 83.82)
 		)
 		(stroke
 			(width 0)
@@ -2628,13 +2750,13 @@
 	)
 	(wire
 		(pts
-			(xy 163.83 53.34) (xy 182.88 53.34)
+			(xy 80.01 48.26) (xy 80.01 52.07)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "b8396653-0c2b-4515-90da-a08f6310b87b")
+		(uuid "afc19035-85df-4561-8fe9-36edf48dbe10")
 	)
 	(wire
 		(pts
@@ -2695,6 +2817,16 @@
 			(type default)
 		)
 		(uuid "cd9c5a8e-c0a8-4142-9aa7-951308293e61")
+	)
+	(wire
+		(pts
+			(xy 82.55 172.72) (xy 96.52 172.72)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d0c2e1ca-58b8-4bbc-9dca-5b61fe034cd1")
 	)
 	(wire
 		(pts
@@ -2785,16 +2917,6 @@
 			(type default)
 		)
 		(uuid "f7a86d94-027c-4f58-9247-ab0502b865cd")
-	)
-	(wire
-		(pts
-			(xy 80.01 46.99) (xy 81.28 46.99)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "fe1db2ce-efcc-4f47-a7c5-a40409d39b4a")
 	)
 	(text_box "2.5V Regulator"
 		(exclude_from_sim no)
@@ -2972,26 +3094,6 @@
 					(size 1.27 1.27)
 				)
 				(justify left)
-				(hide yes)
-			)
-		)
-	)
-	(global_label "CELL_12V"
-		(shape input)
-		(at 81.28 46.99 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "bc47d643-32ce-492d-9a16-00bca3a611b9")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 81.28 46.99 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
 				(hide yes)
 			)
 		)
@@ -3644,72 +3746,6 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+BATT")
-		(at 43.18 140.97 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "395b1679-052b-4dcf-9007-97b936b26e4b")
-		(property "Reference" "#PWR022"
-			(at 43.18 144.78 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "+BATT"
-			(at 43.18 135.89 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 43.18 140.97 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 43.18 140.97 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"+BATT\""
-			(at 43.18 140.97 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "c55d2790-3ec6-4442-bf62-083870677d1f")
-		)
-		(instances
-			(project "JPBms2"
-				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/fda7e15b-dad1-4f54-abdb-4d4569bf33a6"
-					(reference "#PWR022")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:R")
 		(at 163.83 86.36 90)
 		(unit 1)
@@ -3847,6 +3883,78 @@
 			(project "JPBms2"
 				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/fda7e15b-dad1-4f54-abdb-4d4569bf33a6"
 					(reference "#PWR026")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Diode:BAT54SW")
+		(at 82.55 167.64 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "3dd784b7-f0ae-4ff2-9eba-9068abec8525")
+		(property "Reference" "D6"
+			(at 82.55 161.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "BAT54SW"
+			(at 82.55 163.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-323_SC-70"
+			(at 84.455 164.465 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://assets.nexperia.com/documents/data-sheet/BAT54W_SER.pdf"
+			(at 79.502 167.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Vr 30V, If 200mA, Dual schottky barrier diode, in series, SOT-323"
+			(at 82.55 167.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "20078548-0b2b-4c7b-895c-66ce281addcf")
+		)
+		(pin "3"
+			(uuid "f40b7f0f-0736-4743-935d-5b4335ece020")
+		)
+		(pin "2"
+			(uuid "77b119ca-e7ef-486e-b465-11768a490bfa")
+		)
+		(instances
+			(project "JPBms2"
+				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/fda7e15b-dad1-4f54-abdb-4d4569bf33a6"
+					(reference "D6")
 					(unit 1)
 				)
 			)
@@ -4065,72 +4173,6 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+BATT")
-		(at 36.83 87.63 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "4bc62580-f4ed-41b5-bf06-84f1a5a7e63e")
-		(property "Reference" "#PWR03"
-			(at 36.83 91.44 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "+BATT"
-			(at 36.83 82.55 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 36.83 87.63 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 36.83 87.63 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"+BATT\""
-			(at 36.83 87.63 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "d0038bd4-987e-472a-9b72-3fdf5806acc1")
-		)
-		(instances
-			(project "JPBms2"
-				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/fda7e15b-dad1-4f54-abdb-4d4569bf33a6"
-					(reference "#PWR03")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:C")
 		(at 69.85 147.32 0)
 		(unit 1)
@@ -4192,6 +4234,73 @@
 			(project "JPBms2"
 				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/fda7e15b-dad1-4f54-abdb-4d4569bf33a6"
 					(reference "C12")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:PWR_FLAG")
+		(at 194.31 96.52 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "50883c16-fbae-4267-bd10-9eeccaef0a03")
+		(property "Reference" "#FLG03"
+			(at 192.405 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "PWR_FLAG"
+			(at 190.5 96.5199 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 194.31 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 194.31 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Special symbol for telling ERC where power comes from"
+			(at 194.31 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "986ab020-7620-4c07-9e2e-95a4e71ad069")
+		)
+		(instances
+			(project "JPBms2"
+				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/fda7e15b-dad1-4f54-abdb-4d4569bf33a6"
+					(reference "#FLG03")
 					(unit 1)
 				)
 			)
@@ -4700,6 +4809,73 @@
 		)
 	)
 	(symbol
+		(lib_id "power:PWR_FLAG")
+		(at 81.28 48.26 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "7ca3293f-a36f-4c8c-ac68-6c2eb0c710e1")
+		(property "Reference" "#FLG01"
+			(at 83.185 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "PWR_FLAG"
+			(at 85.09 48.2599 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 81.28 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 81.28 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Special symbol for telling ERC where power comes from"
+			(at 81.28 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "fd8a8c2e-410f-49f2-ab8b-c05ef561dae4")
+		)
+		(instances
+			(project "JPBms2"
+				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/fda7e15b-dad1-4f54-abdb-4d4569bf33a6"
+					(reference "#FLG01")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:R")
 		(at 163.83 46.99 180)
 		(unit 1)
@@ -4764,150 +4940,6 @@
 			(project "JPBms2"
 				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/fda7e15b-dad1-4f54-abdb-4d4569bf33a6"
 					(reference "R6")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Diode:BAT54S")
-		(at 82.55 167.64 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "8a5a4add-6315-4fc0-bc81-ce39b2ca0687")
-		(property "Reference" "D6"
-			(at 82.55 161.29 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "BAT54S"
-			(at 82.55 163.83 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Package_TO_SOT_SMD:SOT-23"
-			(at 84.455 164.465 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "https://www.diodes.com/assets/Datasheets/ds11005.pdf"
-			(at 79.502 167.64 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Vr 30V, If 200mA, Dual schottky barrier diode, in series, SOT-323"
-			(at 82.55 167.64 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "78049b70-e56b-475c-86ac-b9fad48bb9e1")
-		)
-		(pin "3"
-			(uuid "724e85f1-1351-4952-85ff-71b63b1bede7")
-		)
-		(pin "2"
-			(uuid "676c84c1-25f5-4dd1-b5e6-3934044cc169")
-		)
-		(instances
-			(project "JPBms2"
-				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/fda7e15b-dad1-4f54-abdb-4d4569bf33a6"
-					(reference "D6")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Diode:BAT54S")
-		(at 81.28 138.43 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "8aa2f24d-bb83-4f8d-a427-a32ce312f1dc")
-		(property "Reference" "D5"
-			(at 81.28 132.08 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "BAT54S"
-			(at 81.28 134.62 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Package_TO_SOT_SMD:SOT-23"
-			(at 83.185 135.255 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "https://www.diodes.com/assets/Datasheets/ds11005.pdf"
-			(at 78.232 138.43 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Vr 30V, If 200mA, Dual schottky barrier diode, in series, SOT-323"
-			(at 81.28 138.43 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "5b1d0ac7-a33a-4603-b078-975cb56f2c71")
-		)
-		(pin "3"
-			(uuid "0b1711a7-b052-4750-8b05-385984a6f849")
-		)
-		(pin "2"
-			(uuid "a92f830b-7c27-4955-8911-62a7bb3a1f8c")
-		)
-		(instances
-			(project "JPBms2"
-				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/fda7e15b-dad1-4f54-abdb-4d4569bf33a6"
-					(reference "D5")
 					(unit 1)
 				)
 			)
@@ -5255,6 +5287,138 @@
 		)
 	)
 	(symbol
+		(lib_id "power:+BATT")
+		(at 36.83 87.63 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "b7680180-3466-47da-9bca-66ba9054f6ab")
+		(property "Reference" "#PWR03"
+			(at 36.83 91.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+BATT"
+			(at 36.83 82.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 36.83 87.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 36.83 87.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+BATT\""
+			(at 36.83 87.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "6f24d707-ac3c-48a5-b8fb-58317d3eab44")
+		)
+		(instances
+			(project "JPBms2"
+				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/fda7e15b-dad1-4f54-abdb-4d4569bf33a6"
+					(reference "#PWR03")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+BATT")
+		(at 43.18 140.97 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "bbc37c8b-f65f-4df2-b0fd-facdde98bdcf")
+		(property "Reference" "#PWR022"
+			(at 43.18 144.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+BATT"
+			(at 43.18 135.89 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 43.18 140.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 43.18 140.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+BATT\""
+			(at 43.18 140.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "8a8ab601-a9e2-4c85-b5c9-1b7e81ab4273")
+		)
+		(instances
+			(project "JPBms2"
+				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/fda7e15b-dad1-4f54-abdb-4d4569bf33a6"
+					(reference "#PWR022")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:GND")
 		(at 175.26 48.26 270)
 		(unit 1)
@@ -5316,6 +5480,150 @@
 			(project "JPBms2"
 				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/fda7e15b-dad1-4f54-abdb-4d4569bf33a6"
 					(reference "#PWR020")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Diode:BAT54SW")
+		(at 81.28 138.43 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "bcb5a843-1a37-4359-8e0b-66f412cc94b3")
+		(property "Reference" "D5"
+			(at 81.28 132.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "BAT54SW"
+			(at 81.28 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-323_SC-70"
+			(at 83.185 135.255 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://assets.nexperia.com/documents/data-sheet/BAT54W_SER.pdf"
+			(at 78.232 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Vr 30V, If 200mA, Dual schottky barrier diode, in series, SOT-323"
+			(at 81.28 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "3edbc83f-e206-4505-ac1e-a653503a987c")
+		)
+		(pin "3"
+			(uuid "a2e9d6a4-a4af-4723-a0be-1703c01fce3a")
+		)
+		(pin "2"
+			(uuid "4e387ae4-2c07-496d-a3d1-2e2fe10fcecb")
+		)
+		(instances
+			(project "JPBms2"
+				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/fda7e15b-dad1-4f54-abdb-4d4569bf33a6"
+					(reference "D5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Diode:BAT54SW")
+		(at 182.88 48.26 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "c1998b72-1f5c-4a15-a043-acd39db832ec")
+		(property "Reference" "D4"
+			(at 182.88 41.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "BAT54SW"
+			(at 182.88 44.45 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-323_SC-70"
+			(at 184.785 45.085 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://assets.nexperia.com/documents/data-sheet/BAT54W_SER.pdf"
+			(at 179.832 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Vr 30V, If 200mA, Dual schottky barrier diode, in series, SOT-323"
+			(at 182.88 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "511792b6-0261-48ca-9879-4dc50aa50d08")
+		)
+		(pin "3"
+			(uuid "c482171d-a945-4fa8-be1e-024060537b79")
+		)
+		(pin "2"
+			(uuid "d6795c39-9d7e-4a7b-a194-580ad9c8fb3f")
+		)
+		(instances
+			(project "JPBms2"
+				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/fda7e15b-dad1-4f54-abdb-4d4569bf33a6"
+					(reference "D4")
 					(unit 1)
 				)
 			)
@@ -5449,6 +5757,73 @@
 			(project "JPBms2"
 				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/fda7e15b-dad1-4f54-abdb-4d4569bf33a6"
 					(reference "C11")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:PWR_FLAG")
+		(at 144.78 83.82 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "ce4bca3f-3f36-43aa-b1e5-539c7631e3a8")
+		(property "Reference" "#FLG02"
+			(at 146.685 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "PWR_FLAG"
+			(at 148.59 83.8199 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 144.78 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 144.78 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Special symbol for telling ERC where power comes from"
+			(at 144.78 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "460bd59f-44cc-4cd9-a551-ad4a878628a2")
+		)
+		(instances
+			(project "JPBms2"
+				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/fda7e15b-dad1-4f54-abdb-4d4569bf33a6"
+					(reference "#FLG02")
 					(unit 1)
 				)
 			)
@@ -5938,78 +6313,6 @@
 			(project "JPBms2"
 				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/fda7e15b-dad1-4f54-abdb-4d4569bf33a6"
 					(reference "C3")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Diode:BAT54S")
-		(at 182.88 48.26 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "fc28e458-004d-4804-b9bd-485fed6f3bf5")
-		(property "Reference" "D4"
-			(at 182.88 41.91 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "BAT54S"
-			(at 182.88 44.45 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Package_TO_SOT_SMD:SOT-23"
-			(at 184.785 45.085 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "https://www.diodes.com/assets/Datasheets/ds11005.pdf"
-			(at 179.832 48.26 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Vr 30V, If 200mA, Dual schottky barrier diode, in series, SOT-323"
-			(at 182.88 48.26 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "8a0bc92d-6400-4c08-a6eb-ada8d8ceeea6")
-		)
-		(pin "3"
-			(uuid "102ff3cc-467b-4733-94de-0df693e7310b")
-		)
-		(pin "2"
-			(uuid "5bb934da-d5de-4576-81a5-4fc68f2a1cc9")
-		)
-		(instances
-			(project "JPBms2"
-				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/fda7e15b-dad1-4f54-abdb-4d4569bf33a6"
-					(reference "D4")
 					(unit 1)
 				)
 			)
