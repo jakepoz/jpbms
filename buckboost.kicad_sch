@@ -2291,7 +2291,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "026afbb6-cecc-43ee-b1a5-80ba0ae48392")
-		(property "Reference" "TP_A"
+		(property "Reference" "TP5"
 			(at 158.75 81.7879 0)
 			(effects
 				(font
@@ -2307,7 +2307,6 @@
 					(size 1.27 1.27)
 				)
 				(justify left)
-				(hide yes)
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Loop_D2.60mm_Drill1.6mm_Beaded"
@@ -2343,7 +2342,7 @@
 		(instances
 			(project "JPBms2"
 				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/0f5ad211-c4ad-40eb-a8ac-82970ee8fac9"
-					(reference "TP_A")
+					(reference "TP5")
 					(unit 1)
 				)
 			)
@@ -3247,7 +3246,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "6c083d3a-a181-4147-8fa6-f99d3999450e")
-		(property "Reference" "TP_B"
+		(property "Reference" "TP6"
 			(at 186.69 81.7879 0)
 			(effects
 				(font
@@ -3263,7 +3262,6 @@
 					(size 1.27 1.27)
 				)
 				(justify left)
-				(hide yes)
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Loop_D2.60mm_Drill1.6mm_Beaded"
@@ -3299,7 +3297,7 @@
 		(instances
 			(project "JPBms2"
 				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/0f5ad211-c4ad-40eb-a8ac-82970ee8fac9"
-					(reference "TP_B")
+					(reference "TP6")
 					(unit 1)
 				)
 			)

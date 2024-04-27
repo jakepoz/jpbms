@@ -3239,7 +3239,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "TestPoint"
+		(property "Value" "VDD"
 			(at 78.74 86.8679 0)
 			(effects
 				(font
@@ -3442,7 +3442,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "TestPoint"
+		(property "Value" "+BATT"
 			(at 53.34 51.5619 0)
 			(effects
 				(font
@@ -6105,7 +6105,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "TestPoint"
+		(property "Value" "GND"
 			(at 53.34 37.3379 0)
 			(effects
 				(font
@@ -6448,7 +6448,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "TestPoint"
+		(property "Value" "SOLAR_CUR"
 			(at 205.74 51.3079 0)
 			(effects
 				(font
