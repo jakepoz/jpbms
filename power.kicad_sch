@@ -4394,7 +4394,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC_Code" "C15850"
+		(property "LCSC_Code" "C13585"
 			(at 185.42 90.17 0)
 			(effects
 				(font
@@ -5245,6 +5245,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC_Code" "C157925"
+			(at 44.45 41.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "3"
 			(uuid "b8b07346-50c3-4aa7-b0ed-408e69c3db6d")
 		)
@@ -5928,7 +5937,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC_Code" "C15850"
+		(property "LCSC_Code" "C13585"
 			(at 177.8 90.17 0)
 			(effects
 				(font
@@ -5996,6 +6005,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 163.83 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC_Code" "C1634"
 			(at 163.83 67.31 0)
 			(effects
 				(font
