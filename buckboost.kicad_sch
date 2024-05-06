@@ -2366,7 +2366,7 @@
 				)
 			)
 		)
-		(property "Value" "50"
+		(property "Value" "75"
 			(at 77.47 105.41 90)
 			(effects
 				(font
@@ -2393,6 +2393,15 @@
 			)
 		)
 		(property "Description" "Resistor"
+			(at 77.47 109.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC_Code" "C4275"
 			(at 77.47 109.22 0)
 			(effects
 				(font
@@ -2500,7 +2509,7 @@
 				)
 			)
 		)
-		(property "Value" "220uH"
+		(property "Value" "22uH"
 			(at 170.18 82.55 90)
 			(effects
 				(font
@@ -2527,6 +2536,15 @@
 			)
 		)
 		(property "Description" "Inductor"
+			(at 170.18 85.09 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC_Code" "C497873"
 			(at 170.18 85.09 0)
 			(effects
 				(font
@@ -3109,7 +3127,7 @@
 				)
 			)
 		)
-		(property "Value" "50"
+		(property "Value" "75"
 			(at 77.47 49.53 90)
 			(effects
 				(font
@@ -3136,6 +3154,15 @@
 			)
 		)
 		(property "Description" "Resistor"
+			(at 77.47 53.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC_Code" "C4275"
 			(at 77.47 53.34 0)
 			(effects
 				(font
@@ -3623,6 +3650,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC_Code" "C20917"
+			(at 142.24 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "c1491da6-2a7e-4289-af60-457aed324385")
 		)
@@ -3659,7 +3695,7 @@
 				)
 			)
 		)
-		(property "Value" "50"
+		(property "Value" "75"
 			(at 77.47 118.11 90)
 			(effects
 				(font
@@ -3686,6 +3722,15 @@
 			)
 		)
 		(property "Description" "Resistor"
+			(at 77.47 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC_Code" "C4275"
 			(at 77.47 121.92 0)
 			(effects
 				(font
@@ -3759,6 +3804,15 @@
 			)
 		)
 		(property "Description" "-4.0A Id, -30V Vds, P-Channel MOSFET, SOT-23"
+			(at 194.31 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC_Code" "C15127"
 			(at 194.31 73.66 0)
 			(effects
 				(font
@@ -3843,6 +3897,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC_Code" "C15127"
+			(at 142.24 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "3"
 			(uuid "bbd51b4c-d8a3-4131-8e9b-5ce9b07b27f4")
 		)
@@ -3911,6 +3974,15 @@
 			)
 		)
 		(property "Description" "30V Vds, 5.7A Id, N-Channel MOSFET, SOT-23"
+			(at 194.31 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC_Code" "C20917"
 			(at 194.31 93.98 0)
 			(effects
 				(font
@@ -4153,7 +4225,7 @@
 				)
 			)
 		)
-		(property "Value" "50"
+		(property "Value" "75"
 			(at 77.47 62.23 90)
 			(effects
 				(font
@@ -4180,6 +4252,15 @@
 			)
 		)
 		(property "Description" "Resistor"
+			(at 77.47 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC_Code" "C4275"
 			(at 77.47 66.04 0)
 			(effects
 				(font

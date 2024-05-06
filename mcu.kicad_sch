@@ -4425,6 +4425,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC_Code" "C2286"
+			(at 254 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "26c45ab8-6dd4-4ba4-92f4-0a9098f8ea8e")
 		)
@@ -4784,6 +4793,15 @@
 			)
 		)
 		(property "Description" "STMicroelectronics Arm Cortex-M0+ MCU, 64KB flash, 8KB RAM, 32 MHz, 1.65-3.6V, 51 GPIO, LQFP64"
+			(at 140.97 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC_Code" "C784738"
 			(at 140.97 93.98 0)
 			(effects
 				(font
@@ -5364,6 +5382,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC_Code" "C12624"
+			(at 254 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "7882fa0e-008a-498f-b68b-bdef71555315")
 		)
@@ -5854,6 +5881,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC_Code" "C2287"
+			(at 254 77.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "594d9e6f-034b-42c6-b1fc-662193ac31a9")
 		)
@@ -6135,6 +6171,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC_Code" "C22808"
+			(at 240.03 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "01dd8083-8d3d-4af8-b9ff-622dd087411c")
 		)
@@ -6268,6 +6313,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC_Code" "C22808"
+			(at 240.03 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "8d904cbd-48d6-45fb-87ab-7b4d63f05441")
 		)
@@ -6327,6 +6381,15 @@
 			)
 		)
 		(property "Description" "Resistor"
+			(at 240.03 77.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC_Code" "C22808"
 			(at 240.03 77.47 0)
 			(effects
 				(font

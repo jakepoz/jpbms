@@ -4042,6 +4042,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC_Code" "C78606"
+			(at 82.55 167.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "20078548-0b2b-4c7b-895c-66ce281addcf")
 		)
@@ -4181,6 +4190,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC_Code" "C23153"
+			(at 59.69 176.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "bd2c799e-0986-4643-8d5c-9ff123e34f52")
 		)
@@ -4240,6 +4258,15 @@
 			)
 		)
 		(property "Description" ""
+			(at 48.26 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC_Code" "C2832805"
 			(at 48.26 86.36 0)
 			(effects
 				(font
@@ -4316,6 +4343,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 69.85 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC_Code" "C1588"
 			(at 69.85 147.32 0)
 			(effects
 				(font
@@ -4615,6 +4651,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC_Code" "C25811"
+			(at 52.07 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "144bd658-b478-43f7-8b3a-4fd5f47528e4")
 		)
@@ -4752,6 +4797,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC_Code" "C82766"
+			(at 163.83 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "320ab85b-222b-42f8-ba6d-ade7047245c7")
 		)
@@ -4815,6 +4869,15 @@
 			)
 		)
 		(property "Description" "Resistor"
+			(at 50.8 143.51 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC_Code" "C25811"
 			(at 50.8 143.51 0)
 			(effects
 				(font
@@ -5100,6 +5163,15 @@
 			)
 		)
 		(property "Description" "Resistor"
+			(at 163.83 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC_Code" "C22765"
 			(at 163.83 46.99 0)
 			(effects
 				(font
@@ -5726,6 +5798,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC_Code" "C78606"
+			(at 81.28 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "3edbc83f-e206-4505-ac1e-a653503a987c")
 		)
@@ -5790,6 +5871,15 @@
 			)
 		)
 		(property "Description" "Vr 30V, If 200mA, Dual schottky barrier diode, in series, SOT-323"
+			(at 182.88 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC_Code" "C78606"
 			(at 182.88 48.26 0)
 			(effects
 				(font
@@ -6226,6 +6316,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC_Code" "C23162"
+			(at 158.75 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "335a0f0a-28fd-48a7-a420-8b122c168254")
 		)
@@ -6288,6 +6387,15 @@
 			)
 		)
 		(property "Description" "Resistor"
+			(at 58.42 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC_Code" "C23153"
 			(at 58.42 147.32 0)
 			(effects
 				(font
@@ -6704,6 +6812,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 71.12 176.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC_Code" "C1588"
 			(at 71.12 176.53 0)
 			(effects
 				(font
