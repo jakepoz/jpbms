@@ -5238,7 +5238,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "Conn_01x04"
+		(property "Value" "Conn_01x04 JST-XH"
 			(at 41.91 44.4499 0)
 			(effects
 				(font

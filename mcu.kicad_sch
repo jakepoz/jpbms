@@ -4390,7 +4390,7 @@
 				)
 			)
 		)
-		(property "Value" "LED"
+		(property "Value" "LED_R"
 			(at 252.4125 82.55 0)
 			(effects
 				(font
@@ -4535,7 +4535,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "Conn_01x04"
+		(property "Value" "Conn_01x04 Picoblade"
 			(at 57.15 67.3099 0)
 			(effects
 				(font
@@ -5347,7 +5347,7 @@
 				)
 			)
 		)
-		(property "Value" "LED"
+		(property "Value" "LED_G"
 			(at 252.4125 64.77 0)
 			(effects
 				(font
@@ -5846,7 +5846,7 @@
 				)
 			)
 		)
-		(property "Value" "LED"
+		(property "Value" "LED_Y"
 			(at 252.4125 73.66 0)
 			(effects
 				(font
