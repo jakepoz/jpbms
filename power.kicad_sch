@@ -2149,18 +2149,6 @@
 		(uuid "770e2939-20f4-4ff7-b568-a9a7c3494fa4")
 	)
 	(junction
-		(at 71.12 100.33)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "7bdef9b0-1a9a-4b07-83fd-e6a643ec00fa")
-	)
-	(junction
-		(at 76.2 88.9)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "858ee3b9-4e35-4ae3-a76c-9e188ecdef13")
-	)
-	(junction
 		(at 203.2 53.34)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -2370,16 +2358,6 @@
 	)
 	(wire
 		(pts
-			(xy 76.2 88.9) (xy 82.55 88.9)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "246869e8-4675-40fc-a756-ccc8ba0f8476")
-	)
-	(wire
-		(pts
 			(xy 194.31 96.52) (xy 200.66 96.52)
 		)
 		(stroke
@@ -2547,16 +2525,6 @@
 			(type default)
 		)
 		(uuid "642dfbb4-71fa-46b6-8621-ea556297604e")
-	)
-	(wire
-		(pts
-			(xy 82.55 100.33) (xy 82.55 97.79)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "65b083e0-38dc-462a-8c29-05540c478378")
 	)
 	(wire
 		(pts
@@ -2870,16 +2838,6 @@
 	)
 	(wire
 		(pts
-			(xy 82.55 88.9) (xy 82.55 90.17)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "bf7a14b6-9dc1-4418-a6c1-56456a8e3e0d")
-	)
-	(wire
-		(pts
 			(xy 46.99 143.51) (xy 43.18 143.51)
 		)
 		(stroke
@@ -2937,16 +2895,6 @@
 			(type default)
 		)
 		(uuid "d2d7f2c6-cd51-4e69-985c-1203786f1013")
-	)
-	(wire
-		(pts
-			(xy 71.12 100.33) (xy 82.55 100.33)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "dbadef61-c691-48da-9047-b5924e3cc524")
 	)
 	(wire
 		(pts
@@ -3306,7 +3254,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "470n"
+		(property "Value" "47u"
 			(at 74.93 95.2499 0)
 			(effects
 				(font
@@ -3334,6 +3282,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 71.12 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC_Code" "C96123"
 			(at 71.12 93.98 0)
 			(effects
 				(font
@@ -6438,7 +6395,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "470n"
+		(property "Value" "10u"
 			(at 43.18 95.2499 0)
 			(effects
 				(font
@@ -6466,6 +6423,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 39.37 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC_Code" "C13585"
 			(at 39.37 93.98 0)
 			(effects
 				(font
@@ -6617,85 +6583,6 @@
 			(project "JPBms2"
 				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/fda7e15b-dad1-4f54-abdb-4d4569bf33a6"
 					(reference "TP1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:C")
-		(at 82.55 93.98 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "f70da8d3-66ab-4b00-9935-5b09829115fb")
-		(property "Reference" "C3"
-			(at 86.36 92.7099 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" ".1u"
-			(at 86.36 95.2499 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
-			(at 83.5152 97.79 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 82.55 93.98 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Unpolarized capacitor"
-			(at 82.55 93.98 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCSC_Code" "C14663"
-			(at 82.55 93.98 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "119be98e-4682-449b-b85a-1033cf86a9fd")
-		)
-		(pin "2"
-			(uuid "1ebeb173-9ba2-40b4-adba-87a92513e8a4")
-		)
-		(instances
-			(project "JPBms2"
-				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/fda7e15b-dad1-4f54-abdb-4d4569bf33a6"
-					(reference "C3")
 					(unit 1)
 				)
 			)
