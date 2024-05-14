@@ -2061,6 +2061,16 @@
 		)
 		(uuid "ff58d47e-27ce-4ae7-90ec-703a67fedb49")
 	)
+	(text "No bootstrap circuit, we use P-Fets on the high side, so you can just use VBATT,\n\nPractically, the bootstrap would run off of the low-side switches and let\nyou use N-FEts. But I wanted to test this idea because it would let you\ncontrol the duty cycle to any range (ex. for motor drives later).\nAnd we already had the P-FETs on the BOM"
+		(exclude_from_sim no)
+		(at 110.998 37.084 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "da617a7d-cd12-4fa7-b66f-108dfa07a560")
+	)
 	(label "GATE_TOP_A"
 		(at 124.46 73.66 0)
 		(fields_autoplaced yes)

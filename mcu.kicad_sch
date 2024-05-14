@@ -2813,6 +2813,12 @@
 		(uuid "ba6ff4c8-4fa8-47bd-b6e2-70ef0ec823c9")
 	)
 	(junction
+		(at 264.16 86.36)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "bab4aa78-9b2e-44be-9840-1b050911a413")
+	)
+	(junction
 		(at 140.97 140.97)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -2823,12 +2829,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "dab4e06d-d43c-4c3b-a9f0-a9ce4decc193")
-	)
-	(junction
-		(at 264.16 68.58)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "dcd8c8ec-4671-4dfb-ae47-f8448d01857c")
 	)
 	(junction
 		(at 250.19 26.67)
@@ -3091,6 +3091,16 @@
 			(type default)
 		)
 		(uuid "2402cfae-c058-49a7-911d-963be8ea5d04")
+	)
+	(wire
+		(pts
+			(xy 264.16 88.9) (xy 264.16 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "286764b1-d002-4a7b-ac12-ab575ee11c2a")
 	)
 	(wire
 		(pts
@@ -3431,16 +3441,6 @@
 			(type default)
 		)
 		(uuid "9dea588a-4572-48e0-b76d-988fb3c30f82")
-	)
-	(wire
-		(pts
-			(xy 264.16 63.5) (xy 264.16 68.58)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9defb4f7-6b69-4073-9ea0-c651171dcb92")
 	)
 	(wire
 		(pts
@@ -3920,7 +3920,7 @@
 	)
 	(global_label "VBATT_ADC"
 		(shape input)
-		(at 166.37 53.34 0)
+		(at 166.37 50.8 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -3930,7 +3930,7 @@
 		)
 		(uuid "15d70c45-0fec-4365-b3d8-e8844fbb6f81")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 179.3338 53.34 0)
+			(at 179.3338 50.8 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4074,7 +4074,7 @@
 	)
 	(global_label "VSOLAR_ADC"
 		(shape input)
-		(at 166.37 50.8 0)
+		(at 166.37 53.34 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -4084,7 +4084,7 @@
 		)
 		(uuid "5c1a4e48-0ac2-4ed6-a9a2-2650e55b02a9")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 180.9667 50.8 0)
+			(at 180.9667 53.34 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4374,7 +4374,7 @@
 	)
 	(symbol
 		(lib_id "Device:LED")
-		(at 254 86.36 0)
+		(at 254 86.36 180)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -4383,7 +4383,7 @@
 		(fields_autoplaced yes)
 		(uuid "2077e60e-1ffa-48b8-8a9d-1b518bc7f708")
 		(property "Reference" "D3"
-			(at 252.4125 80.01 0)
+			(at 255.5875 78.74 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4391,7 +4391,7 @@
 			)
 		)
 		(property "Value" "LED_R"
-			(at 252.4125 82.55 0)
+			(at 255.5875 81.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5331,7 +5331,7 @@
 	)
 	(symbol
 		(lib_id "Device:LED")
-		(at 254 68.58 0)
+		(at 254 68.58 180)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -5340,7 +5340,7 @@
 		(fields_autoplaced yes)
 		(uuid "6f051f2d-f9e8-40f1-86f0-83a4e02bd2b6")
 		(property "Reference" "D1"
-			(at 252.4125 62.23 0)
+			(at 255.5875 60.96 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5348,7 +5348,7 @@
 			)
 		)
 		(property "Value" "LED_G"
-			(at 252.4125 64.77 0)
+			(at 255.5875 63.5 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5619,6 +5619,72 @@
 		)
 	)
 	(symbol
+		(lib_id "power:GND")
+		(at 264.16 88.9 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "8d0a3b02-9910-4271-9aab-9e32cdc9e579")
+		(property "Reference" "#PWR015"
+			(at 264.16 95.25 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 264.16 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 264.16 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 264.16 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 264.16 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "d27a5d32-1e76-4d0c-bbdb-7e134b5b9a09")
+		)
+		(instances
+			(project "JPBms2"
+				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/852788cb-2266-4d4a-865c-a7e0873e4190"
+					(reference "#PWR015")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:C_Small")
 		(at 148.59 38.1 180)
 		(unit 1)
@@ -5764,73 +5830,8 @@
 		)
 	)
 	(symbol
-		(lib_id "power:VDD")
-		(at 264.16 63.5 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "a62f5b5b-7bf1-4d7b-a18d-ac62bd0cc78b")
-		(property "Reference" "#PWR015"
-			(at 264.16 67.31 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "VDD"
-			(at 264.16 58.42 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 264.16 63.5 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 264.16 63.5 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"VDD\""
-			(at 264.16 63.5 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "5282acdd-0b09-45ec-8445-abf22b88c725")
-		)
-		(instances
-			(project "JPBms2"
-				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/852788cb-2266-4d4a-865c-a7e0873e4190"
-					(reference "#PWR015")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:LED")
-		(at 254 77.47 0)
+		(at 254 77.47 180)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -5839,7 +5840,7 @@
 		(fields_autoplaced yes)
 		(uuid "ace3769a-7ad0-45b2-8f01-18fa8fe2003f")
 		(property "Reference" "D2"
-			(at 252.4125 71.12 0)
+			(at 255.5875 69.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5847,7 +5848,7 @@
 			)
 		)
 		(property "Value" "LED_Y"
-			(at 252.4125 73.66 0)
+			(at 255.5875 72.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
