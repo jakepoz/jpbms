@@ -2783,6 +2783,18 @@
 		(uuid "25c2a7fc-3c71-4322-bb5a-74c400d6d1fc")
 	)
 	(junction
+		(at 143.51 43.18)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "2d500272-1944-4608-bdf0-f086e023b7ba")
+	)
+	(junction
+		(at 261.62 26.67)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "3e719de9-1518-44d9-bcea-962e67ba4054")
+	)
+	(junction
 		(at 138.43 43.18)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -2799,6 +2811,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "57c14c98-8475-49b1-b687-6b7f45a45e47")
+	)
+	(junction
+		(at 261.62 34.29)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "8aaf11d1-f0b2-4dab-8903-4917ae87d95e")
 	)
 	(junction
 		(at 135.89 43.18)
@@ -2963,10 +2981,6 @@
 		(uuid "db210843-7536-417a-81fe-3e4aa74650c9")
 	)
 	(no_connect
-		(at 146.05 45.72)
-		(uuid "dc4738bf-5d29-4d82-a67b-99803d4cac32")
-	)
-	(no_connect
 		(at 158.75 129.54)
 		(uuid "dfe7da05-58aa-42d5-9aa8-aa1ea5017c99")
 	)
@@ -2984,6 +2998,16 @@
 	)
 	(wire
 		(pts
+			(xy 146.05 45.72) (xy 146.05 43.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "03e968b4-667e-4ab0-8522-4a9dc4790d5d")
+	)
+	(wire
+		(pts
 			(xy 224.79 68.58) (xy 236.22 68.58)
 		)
 		(stroke
@@ -2991,6 +3015,16 @@
 			(type default)
 		)
 		(uuid "08b7a707-b7ed-40ed-b765-2d398c03ec8c")
+	)
+	(wire
+		(pts
+			(xy 146.05 43.18) (xy 143.51 43.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "08d7eb69-5134-4d4d-a7a2-468159b436d1")
 	)
 	(wire
 		(pts
@@ -3184,6 +3218,16 @@
 	)
 	(wire
 		(pts
+			(xy 265.43 26.67) (xy 261.62 26.67)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "46bafa44-d121-4d4a-a5df-a9ac413dcbcc")
+	)
+	(wire
+		(pts
 			(xy 256.54 33.02) (xy 256.54 34.29)
 		)
 		(stroke
@@ -3271,6 +3315,16 @@
 			(type default)
 		)
 		(uuid "68c7cedc-13e6-4093-8aeb-eb12a786d0cd")
+	)
+	(wire
+		(pts
+			(xy 265.43 27.94) (xy 265.43 26.67)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "69c928df-e2d7-4094-ad37-b85e2f81af61")
 	)
 	(wire
 		(pts
@@ -3524,6 +3578,16 @@
 	)
 	(wire
 		(pts
+			(xy 261.62 34.29) (xy 265.43 34.29)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c863257f-4e43-45f2-ab68-696541b620d0")
+	)
+	(wire
+		(pts
 			(xy 158.75 116.84) (xy 165.1 116.84)
 		)
 		(stroke
@@ -3661,6 +3725,16 @@
 			(type default)
 		)
 		(uuid "f7d9df6a-4869-49cc-a1ba-1522c9d957b0")
+	)
+	(wire
+		(pts
+			(xy 265.43 34.29) (xy 265.43 33.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fa0df5b4-7537-447a-adeb-dfe1807343d8")
 	)
 	(wire
 		(pts
@@ -6191,6 +6265,85 @@
 			(project "JPBms2"
 				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/852788cb-2266-4d4a-865c-a7e0873e4190"
 					(reference "R14")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C_Small")
+		(at 265.43 30.48 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "eca8c197-2876-4a73-b2de-97f46838a7d4")
+		(property "Reference" "C21"
+			(at 267.97 29.2162 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" ".1u"
+			(at 267.97 31.7562 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+			(at 265.43 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 265.43 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 265.43 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC_Code" "C14663"
+			(at 265.43 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "f6613dd7-033d-467f-87c9-4d997abf5dc3")
+		)
+		(pin "1"
+			(uuid "3cc01a5a-7261-4dc0-a9da-fb2549f98021")
+		)
+		(instances
+			(project "JPBms2"
+				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/852788cb-2266-4d4a-865c-a7e0873e4190"
+					(reference "C21")
 					(unit 1)
 				)
 			)
