@@ -25613,6 +25613,19 @@
 		(layer "Edge.Cuts")
 		(uuid "2bcb63dc-5069-403b-9976-e6ea9aa3eb1d")
 	)
+	(gr_text "V1.2\n - Move solar adc line to other layer for less noise?\n - Move adc sampling capacitors closest to stm32\n - stm power pins should be wired to capacitors, then those wired to vcc/gnd\n - multiple gnd vias around decoupling caps"
+		(at 182.4 68.4 0)
+		(layer "F.Cu")
+		(uuid "e087b897-86a0-4c44-a2cf-be59dda6f395")
+		(effects
+			(font
+				(size 1.5 1.5)
+				(thickness 0.3)
+				(bold yes)
+			)
+			(justify left bottom)
+		)
+	)
 	(gr_text "2.5V"
 		(at 113.2 65.4 0)
 		(layer "F.SilkS")
