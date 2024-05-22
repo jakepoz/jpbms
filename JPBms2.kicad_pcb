@@ -25825,7 +25825,7 @@
 		(layer "Edge.Cuts")
 		(uuid "2bcb63dc-5069-403b-9976-e6ea9aa3eb1d")
 	)
-	(gr_text "V1.2\n - Move solar adc line to other layer for less noise?\n - Move adc sampling capacitors closest to stm32\n - stm power pins should be wired to capacitors, then those wired to vcc/gnd\n - multiple gnd vias around decoupling caps\n - balance resistors are placed in a weird grouping\n - bootstrap diodes backwards"
+	(gr_text "V1.2\n - Move solar adc line to other layer for less noise?\n - Move adc sampling capacitors closest to stm32\n - stm power pins should be wired to capacitors, then those wired to vcc/gnd\n - multiple gnd vias around decoupling caps\n - balance resistors are placed in a weird grouping\n - bootstrap diodes backwards\n - Check, do I need vcc for level shifting on the BMP uart?"
 		(at 182.4 68.4 0)
 		(layer "F.Cu")
 		(uuid "e087b897-86a0-4c44-a2cf-be59dda6f395")

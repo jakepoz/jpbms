@@ -8,6 +8,7 @@
 #include <libopencm3/stm32/rcc.h>
 #include <libopencm3/stm32/gpio.h>
 #include <libopencm3/stm32/pwr.h>
+#include <libopencm3/stm32/usart.h>
 #include <libopencm3/stm32/timer.h>
 #include <libopencm3/stm32/adc.h>
 #include <libopencm3/stm32/dma.h>
@@ -26,6 +27,10 @@
 #define ADC_CFGR2_OVSR_1                    ((uint32_t)0x00000008U)     /*!< Bit 1 */
 #define ADC_CFGR2_OVSR_2                    ((uint32_t)0x00000010U)     /*!< Bit 2 */
 #define ADC_CFGR2_OVSE                      ((uint32_t)0x00000001U)     /*!< Oversampler Enable */
+
+#define USART1_PORT GPIOA
+#define USART1_TX_PIN GPIO9
+#define USART1_RX_PIN GPIO10
 
 #define BALANCE_PORT GPIOB
 #define BALANCE_1_PIN GPIO7
@@ -158,6 +163,28 @@ static void init_leds(void) {
     timer_enable_counter(TIM22);
 }
 
+static void init_usart(void) {
+    rcc_periph_clock_enable(RCC_GPIOA);
+    rcc_periph_clock_enable(RCC_USART1);
+
+    /* Setup GPIO pins for USART1 transmit and receive. */
+    gpio_mode_setup(USART1_PORT, GPIO_MODE_AF, GPIO_PUPD_NONE, USART1_RX_PIN | USART1_TX_PIN);
+
+    /* Setup USART1 TX pin as alternate function. */
+    gpio_set_af(USART1_PORT, GPIO_AF4, USART1_RX_PIN | USART1_TX_PIN);
+
+    /* Setup USART1 parameters. */
+    usart_set_baudrate(USART1, 9600);
+    usart_set_databits(USART1, 8);
+    usart_set_stopbits(USART1, USART_STOPBITS_1);
+    usart_set_mode(USART1, USART_MODE_TX_RX);
+    usart_set_parity(USART1, USART_PARITY_NONE);
+    usart_set_flow_control(USART1, USART_FLOWCONTROL_NONE);
+
+    /* Finally enable the USART. */
+    usart_enable(USART1);
+}
+
 //void dma1_channel1_isr(void)
 //{
 //    if (dma_get_interrupt_flag(DMA1, DMA_CHANNEL1, DMA_TCIF)) {
@@ -252,17 +279,17 @@ static void init_buck_boost(void) {
     timer_set_oc_mode(TIM2, TIM_OC1, TIM_OCM_PWM1);
     timer_set_oc_polarity_high(TIM2, TIM_OC1);
     timer_enable_oc_output(TIM2, TIM_OC1);
-    timer_set_oc_value(TIM2, TIM_OC1, 40);
+    timer_set_oc_value(TIM2, TIM_OC1, 5);
 
     timer_set_oc_mode(TIM2, TIM_OC2, TIM_OCM_PWM1);
-    timer_set_oc_polarity_low(TIM2, TIM_OC2);
+    timer_set_oc_polarity_high(TIM2, TIM_OC2);
     timer_enable_oc_output(TIM2, TIM_OC2);
-    timer_set_oc_value(TIM2, TIM_OC2, 0);
+    timer_set_oc_value(TIM2, TIM_OC2, 5);
 
     timer_set_oc_mode(TIM2, TIM_OC3, TIM_OCM_PWM1);
     timer_set_oc_polarity_high(TIM2, TIM_OC3);
     timer_enable_oc_output(TIM2, TIM_OC3);
-    timer_set_oc_value(TIM2, TIM_OC3, 40);
+    timer_set_oc_value(TIM2, TIM_OC3, 0);
 
     timer_set_oc_mode(TIM2, TIM_OC4, TIM_OCM_PWM1);
     timer_set_oc_polarity_high(TIM2, TIM_OC4);
@@ -272,6 +299,30 @@ static void init_buck_boost(void) {
     timer_set_period(TIM2, 200);
     timer_enable_counter(TIM2);
 
+}
+
+int _write(int fd, char *ptr, int len)
+{
+    int i = 0;
+
+    /*
+     * Write "len" of char from "ptr" to file id "fd"
+     * Return number of char written.
+     *
+     * Only work for STDOUT, STDIN, and STDERR
+     */
+    if (fd > 2) {
+        return -1;
+    }
+    while (*ptr && (i < len)) {
+        usart_send_blocking(USART1, *ptr);
+        if (*ptr == '\n') {
+            usart_send_blocking(USART1, '\r');
+        }
+        i++;
+        ptr++;
+    }
+    return i;
 }
 
 static float read_vbatt(void) {
@@ -290,20 +341,21 @@ int main(void) {
     init_gpios();
     init_leds();
     init_systick();
+    init_usart();
+
     init_adc();
     init_buck_boost();
+
 
     // Sleep mode tests
     rcc_periph_clock_enable(RCC_PWR);
     pwr_disable_backup_domain_write_protect();
 
     // Lowest possible internal voltage scaling to save power, limits to 4mhz clock
-    pwr_set_vos_scale(PWR_SCALE3);
+    //pwr_set_vos_scale(PWR_SCALE3);
 
-    initialise_monitor_handles();
+//    initialise_monitor_handles();
     printf("starting\n");
-
-
 
 
     while (1) {
@@ -311,9 +363,11 @@ int main(void) {
         float c2 = read_cell8v() - c1;
         float c3 = read_vbatt() - c2 - c1;
 
-        printf("%f %f %f\n", c1, c2, c3);
+        //printf("%f %f %f\n", c1, c2, c3);
 
 
+
+        gpio_toggle(LED_ERROR_PORT, LED_ERROR_PIN);
 
         uint32_t millis = systick_get_value() * 1000 / systick_get_reload();
 //        timer_set_oc_value(TIM22, TIM_OC1, (millis % 1000 > 500) ? 1000 - (millis % 1000) : millis % 1000);

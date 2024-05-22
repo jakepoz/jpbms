@@ -8,9 +8,9 @@ DEFS		+= -DSTM32L0
 FP_FLAGS	?= -msoft-float
 ARCH_FLAGS	= -mthumb -mcpu=cortex-m0plus $(FP_FLAGS)
 
-# For semihosting uart output
-LDFLAGS		+= --specs=rdimon.specs
-LDLIBS		+= -lrdimon
+# Uncomment For semihosting uart output
+#LDFLAGS		+= --specs=rdimon.specs
+#LDLIBS		+= -lrdimon
 
 ################################################################################
 # OpenOCD specific variables
