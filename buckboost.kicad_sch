@@ -3768,13 +3768,13 @@
 	)
 	(symbol
 		(lib_id "Diode:1N4148WS")
-		(at 76.2 106.68 180)
+		(at 76.2 106.68 0)
+		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "9544f9df-b3bd-407f-a76f-482148ba6747")
 		(property "Reference" "D10"
 			(at 76.2 100.33 0)
@@ -4536,13 +4536,13 @@
 	)
 	(symbol
 		(lib_id "Diode:1N4148WS")
-		(at 76.2 50.8 180)
+		(at 76.2 50.8 0)
+		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "f8ef1ffd-5584-4546-9a15-4b73ce7b7b95")
 		(property "Reference" "D9"
 			(at 76.2 44.45 0)

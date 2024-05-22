@@ -24,7 +24,6 @@ Things todo:
  - Check voltage drop on cells while balancing, could be a divider between fuse and balance resistor?
  - Write code for the buck boost, you should be able to pump power into a resistor from the battery as a test
  - Have a way to wake on solar panel plugged in?
- - get debug uart working
  - Check current sense
 
 Code:
