@@ -2855,6 +2855,12 @@
 		(uuid "f49ac370-9e7c-418a-9d9f-cb3568eb51f7")
 	)
 	(junction
+		(at 193.04 96.52)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "fc7a90fc-c1c0-49b5-a518-2d14e6a7ad97")
+	)
+	(junction
 		(at 148.59 41.91)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -2883,10 +2889,6 @@
 	(no_connect
 		(at 158.75 78.74)
 		(uuid "390715c6-ce6a-4070-94a5-91fbc0b7d493")
-	)
-	(no_connect
-		(at 158.75 96.52)
-		(uuid "4373f131-e748-4895-9510-e66279b35055")
 	)
 	(no_connect
 		(at 68.58 41.91)
@@ -3045,6 +3047,16 @@
 			(type default)
 		)
 		(uuid "0bcc3740-4f59-4b90-b2df-730aefe9e73d")
+	)
+	(wire
+		(pts
+			(xy 158.75 96.52) (xy 193.04 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0f51202c-6b40-4bbf-8d89-fd92feeb86b1")
 	)
 	(wire
 		(pts
@@ -3658,6 +3670,16 @@
 	)
 	(wire
 		(pts
+			(xy 193.04 96.52) (xy 196.85 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e69fe8cd-f09c-412f-bf37-586d760eae1a")
+	)
+	(wire
+		(pts
 			(xy 250.19 34.29) (xy 250.19 33.02)
 		)
 		(stroke
@@ -4159,6 +4181,28 @@
 		(uuid "5c1a4e48-0ac2-4ed6-a9a2-2650e55b02a9")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 180.9667 53.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "SOLAR_PLUG"
+		(shape input)
+		(at 196.85 96.52 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "5f518754-9b50-4801-b9db-494448ac4d73")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 211.6281 96.52 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5626,6 +5670,76 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:R")
+		(at 193.04 92.71 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "8775ada1-58f3-49b2-b23b-6584c27dfa36")
+		(property "Reference" "R39"
+			(at 195.58 91.4399 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10M"
+			(at 195.58 93.9799 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+			(at 191.262 92.71 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 193.04 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 193.04 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "d62cafc1-e522-4c27-924a-157b14bdc014")
+		)
+		(pin "2"
+			(uuid "077aa310-7c69-4c03-86b9-683c233d7e1d")
+		)
+		(instances
+			(project "JPBms2"
+				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/852788cb-2266-4d4a-865c-a7e0873e4190"
+					(reference "R39")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:PWR_FLAG")
 		(at 148.59 41.91 270)
 		(unit 1)
@@ -5687,6 +5801,72 @@
 			(project "JPBms2"
 				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/852788cb-2266-4d4a-865c-a7e0873e4190"
 					(reference "#FLG04")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:VDD")
+		(at 193.04 88.9 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "8cfd0011-5e8e-4339-9bd2-f8be486414f1")
+		(property "Reference" "#PWR053"
+			(at 193.04 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "VDD"
+			(at 193.04 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 193.04 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 193.04 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"VDD\""
+			(at 193.04 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "c755c8fa-af52-478d-93ec-77ba56d87633")
+		)
+		(instances
+			(project "JPBms2"
+				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/852788cb-2266-4d4a-865c-a7e0873e4190"
+					(reference "#PWR053")
 					(unit 1)
 				)
 			)

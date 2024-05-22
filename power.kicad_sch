@@ -145,7 +145,7 @@
 				)
 			)
 		)
-		(symbol "Connector:Barrel_Jack_MountingPin"
+		(symbol "Connector:Barrel_Jack_Switch"
 			(pin_names hide)
 			(exclude_from_sim no)
 			(in_bom yes)
@@ -158,13 +158,12 @@
 					)
 				)
 			)
-			(property "Value" "Barrel_Jack_MountingPin"
-				(at 1.27 -6.35 0)
+			(property "Value" "Barrel_Jack_Switch"
+				(at 0 -5.08 0)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
-					(justify left)
 				)
 			)
 			(property "Footprint" ""
@@ -185,7 +184,7 @@
 					(hide yes)
 				)
 			)
-			(property "Description" "DC Barrel Jack with a mounting pin"
+			(property "Description" "DC Barrel Jack with an internal switch"
 				(at 0 0 0)
 				(effects
 					(font
@@ -212,7 +211,7 @@
 					(hide yes)
 				)
 			)
-			(symbol "Barrel_Jack_MountingPin_0_1"
+			(symbol "Barrel_Jack_Switch_0_1"
 				(rectangle
 					(start -5.08 3.81)
 					(end 5.08 -3.81)
@@ -250,7 +249,31 @@
 				)
 				(polyline
 					(pts
+						(xy 1.27 -2.286) (xy 1.905 -1.651)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
 						(xy 5.08 2.54) (xy 3.81 2.54)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 5.08 0) (xy 1.27 0) (xy 1.27 -2.286) (xy 0.635 -1.651)
 					)
 					(stroke
 						(width 0.254)
@@ -284,27 +307,7 @@
 					)
 				)
 			)
-			(symbol "Barrel_Jack_MountingPin_1_1"
-				(polyline
-					(pts
-						(xy -1.016 -4.572) (xy 1.016 -4.572)
-					)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(text "Mounting"
-					(at 0 -4.191 0)
-					(effects
-						(font
-							(size 0.381 0.381)
-						)
-					)
-				)
+			(symbol "Barrel_Jack_Switch_1_1"
 				(pin passive line
 					(at 7.62 2.54 180)
 					(length 2.54)
@@ -342,16 +345,16 @@
 					)
 				)
 				(pin passive line
-					(at 0 -7.62 90)
-					(length 3.048)
-					(name "MountPin"
+					(at 7.62 0 180)
+					(length 2.54)
+					(name "~"
 						(effects
 							(font
 								(size 1.27 1.27)
 							)
 						)
 					)
-					(number "MP"
+					(number "3"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -2706,6 +2709,16 @@
 	)
 	(wire
 		(pts
+			(xy 194.31 88.9) (xy 194.31 74.93)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "701d9bbd-dcbb-4b31-afbe-6182bbc92cd1")
+	)
+	(wire
+		(pts
 			(xy 59.69 180.34) (xy 60.96 180.34)
 		)
 		(stroke
@@ -2926,6 +2939,16 @@
 	)
 	(wire
 		(pts
+			(xy 194.31 74.93) (xy 210.82 74.93)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "abe053e3-5e24-48a4-b398-772c1ec20db1")
+	)
+	(wire
+		(pts
 			(xy 144.78 80.01) (xy 144.78 83.82)
 		)
 		(stroke
@@ -3096,6 +3119,16 @@
 	)
 	(wire
 		(pts
+			(xy 196.85 88.9) (xy 194.31 88.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ecc19fd7-5edd-43d0-b114-214644977be6")
+	)
+	(wire
+		(pts
 			(xy 163.83 50.8) (xy 163.83 53.34)
 		)
 		(stroke
@@ -3230,6 +3263,16 @@
 		)
 		(uuid "7e71cf23-c8ff-463f-add0-515afd1ffc63")
 	)
+	(text "SOLAR_PLUG is GND when not plugged in\nand floating when plugged in"
+		(exclude_from_sim no)
+		(at 223.012 69.088 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "b8a965ee-6056-429e-b452-0d2208b53e65")
+	)
 	(text "Using || higher precision resistors to reduce absolute error on balancing\nAlso, each divider uses the same range (even the 1S and 2S ones), so that\nyou have consistency.\n\n110k || 23.75k => 19.5k impedance\n19.5k ohm * 0.1u cap = 2ms \n\n12*(47.5/(47.5+220)) ~= 2.1V"
 		(exclude_from_sim no)
 		(at 135.382 136.398 0)
@@ -3286,6 +3329,28 @@
 				(font
 					(size 1.27 1.27)
 				)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "SOLAR_PLUG"
+		(shape output)
+		(at 210.82 74.93 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "751671e1-5436-4f5b-b653-5449c40ec81e")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 225.5981 74.93 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
 				(hide yes)
 			)
 		)
@@ -4964,7 +5029,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:Barrel_Jack_MountingPin")
+		(lib_id "Connector:Barrel_Jack_Switch")
 		(at 204.47 88.9 0)
 		(mirror y)
 		(unit 1)
@@ -5009,7 +5074,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "DC Barrel Jack with a mounting pin"
+		(property "Description" "DC Barrel Jack with switch"
 			(at 204.47 88.9 0)
 			(effects
 				(font
@@ -5033,7 +5098,7 @@
 		(pin "2"
 			(uuid "5eae09d1-4b23-4520-8937-e5ef8d538422")
 		)
-		(pin "MP"
+		(pin "3"
 			(uuid "fdd4219f-7812-44e3-9890-2dc093412246")
 		)
 		(instances
