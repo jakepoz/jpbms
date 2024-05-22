@@ -6510,7 +6510,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 240.03 88.138 90)
 			(effects
 				(font
@@ -6537,7 +6537,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC_Code" "C22808"
+		(property "LCSC_Code" "C25082"
 			(at 240.03 86.36 0)
 			(effects
 				(font
@@ -6802,7 +6802,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 240.03 70.358 90)
 			(effects
 				(font
@@ -6829,7 +6829,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC_Code" "C22808"
+		(property "LCSC_Code" "C25082"
 			(at 240.03 68.58 0)
 			(effects
 				(font
@@ -6878,7 +6878,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 240.03 79.248 90)
 			(effects
 				(font
@@ -6905,7 +6905,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC_Code" "C22808"
+		(property "LCSC_Code" "C25082"
 			(at 240.03 77.47 0)
 			(effects
 				(font

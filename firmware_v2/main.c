@@ -337,6 +337,46 @@ static float read_cell8v(void) {
     return adc_buffer[2] * 2.5f / 4095 * (220.0f + 47.5f) / 47.5f;
 }
 
+
+/*
+* Startup
+    * Set up the most basic peripherals, 2Mhz MSE clock
+* Sample
+    * Measure VBATT and VSOLAR
+    * If VSOLAR > threshold and vbatt needs to charge, goto Charge
+    * If VBATT is full, goto BalanceCheck
+    * If VBATT below threshold, go to LowBattSleep
+* LowBattSleep
+    * Flash error led once
+    * Turn off all peripherals
+    * Wake up after 10 seconds, goto Sample
+* NormalSleep
+    * Turn off all peripherals
+    * Wake up after 2 seconds, goto Sample
+* Charge
+    * Might need to increase CPU frequency to have more PWM resolution
+    * Turn on buckboost
+    * Sample VSolar and VBatt at X Hz
+    * Need to run MPPT, basically increase/decrease duty cycle to see which way is most power
+    * Green LED frequency will show charge state
+    * Yellow LED frequency will show solar power input
+    * If VBatt is full, goto BalanceCheck
+    * If Vsolar drops too low, goto NormalSleep
+    * Can still do sleep mode in between measurements, etc.
+    * Revert to lower clock speed when leaving this state
+* BalanceCheck
+    * Turn yellow LED solid on
+    * Sample VBATT, CELL4, and CELL8V with many samples
+    * If any cell has dangerously low voltage, goto LowBattSleep
+    * If one cell is > threshold above both others, goto Balance against highest cell
+    * If one cell is < threshold below both others, goto Balance against highest cell
+    * Turn off Yellow LED when leaving state, so you have yellow light blinking during balancing
+    * Idea, could blink yellow LED N times, depending on which cell is being balanced
+    * Or better yet, put an LED on the balancer itself to indicate
+* Balance
+    * Turn on balance pin
+    * Sleep 10 seconds, turn off balance pin, goto BalanceCheck
+
 int main(void) {
     init_gpios();
     init_leds();
