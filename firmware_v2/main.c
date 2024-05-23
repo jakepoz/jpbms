@@ -78,20 +78,21 @@
 #define BB_D_B_PORT GPIOB
 #define BB_D_B_PIN GPIO11
 
-#define ADC_BUFFER_SIZE 3
+#define BUCK_BOOST_PERIOD 200
+
+#define VOLTAGE_TO_ADC(voltage) ((int)((voltage) * 4095 * 47.5 / (2.5 * (220.0 + 47.5)) + 0.5))
+
+#define SINGLE_CELL_LOW_THRESHOLD VOLTAGE_TO_ADC(3.6f)
+#define VBATT_LOW_THRESHOLD VOLTAGE_TO_ADC(11.0f)
+#define VSOLAR_START_CHARGING_THRESHOLD VOLTAGE_TO_ADC(8.0f)
+
+#define ADC_BUFFER_SIZE 5
 volatile uint16_t adc_buffer[ADC_BUFFER_SIZE];
 
 volatile uint32_t system_secs;
-extern void initialise_monitor_handles(void);
 
 // The MSI at 2.1Mhz is the default startup clock speed
 
-
-
-static inline __attribute__((always_inline)) void __wfi(void)
-{
-    __asm volatile ("wfi");
-}
 
 void sys_tick_handler(void)
 {
@@ -106,7 +107,7 @@ static void enter_sleep_mode(void) {
 //    PWR_CR |= PWR_CR_PDDS;
 //    SCB_SCR |= SCB_SCR_SLEEPDEEP;
 
-    __asm__("wfi");
+    __asm__ volatile ("wfi");
 }
 
 
@@ -127,12 +128,6 @@ static void init_gpios(void) {
     // Setup the LEDs
     gpio_clear(GPIOB, LED_ERROR_PIN);
     gpio_mode_setup(GPIOB, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, LED_ERROR_PIN);
-
-
-//    // Setup the Charge/discharge gates
-//    gpio_clear(GATE_PORT, GATE_DISCHARGE_PIN | GATE_CHARGE_PIN);
-//    gpio_mode_setup(GATE_PORT, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GATE_DISCHARGE_PIN | GATE_CHARGE_PIN);
-//
 
     // Setup the balance pins
     gpio_clear(BALANCE_PORT, BALANCE_1_PIN | BALANCE_2_PIN | BALANCE_3_PIN);
@@ -174,7 +169,7 @@ static void init_usart(void) {
     gpio_set_af(USART1_PORT, GPIO_AF4, USART1_RX_PIN | USART1_TX_PIN);
 
     /* Setup USART1 parameters. */
-    usart_set_baudrate(USART1, 9600);
+    usart_set_baudrate(USART1, 115200);
     usart_set_databits(USART1, 8);
     usart_set_stopbits(USART1, USART_STOPBITS_1);
     usart_set_mode(USART1, USART_MODE_TX_RX);
@@ -193,13 +188,13 @@ static void init_usart(void) {
 //    }
 //}
 
-//void adc_comp_isr(void)
-//{
+// void adc_comp_isr(void)
+// {
 //    if (adc_eos(ADC1)) {
 //        ADC_ISR(ADC1) = ADC_ISR_EOS;
 //
 //    }
-//}
+// }
 
 static void init_adc(void) {
     rcc_periph_clock_enable(RCC_ADC1);
@@ -222,18 +217,14 @@ static void init_adc(void) {
     adc_set_continuous_conversion_mode(ADC1);
 
     adc_power_on(ADC1);
+}
 
-    // Longest possible sampling, since we have a high input impedance
-    // But to be fair, maybe its too long?
+static void adc_do_conversion(uint16_t channel_mask) {
+    // Set the sample rate
     ADC_SMPR1(ADC1) = ADC_SMPR_SMP_160DOT5CYC;
 
-
     // Select which channels to read
-//    ADC_CHSELR(ADC1) |= ADC_CHSELR_CHSEL(VBATT_ADC_CH) | ADC_CHSELR_CHSEL(VSOLAR_ADC_CH) |
-//                        ADC_CHSELR_CHSEL(SOLAR_CURRENT_ADC_CH) |
-//                        ADC_CHSELR_CHSEL(CELL_4V_ADC_CH) | ADC_CHSELR_CHSEL(CELL_8V_ADC_CH);
-    ADC_CHSELR(ADC1) |= ADC_CHSELR_CHSEL(VBATT_ADC_CH) |
-                        ADC_CHSELR_CHSEL(CELL_4V_ADC_CH) | ADC_CHSELR_CHSEL(CELL_8V_ADC_CH);
+    ADC_CHSELR(ADC1) |= channel_mask;
 
     // ADC DMA
     dma_channel_reset(DMA1, DMA_CHANNEL1);
@@ -245,18 +236,27 @@ static void init_adc(void) {
     dma_set_peripheral_size(DMA1, DMA_CHANNEL1, DMA_CCR_PSIZE_16BIT);
     dma_set_memory_size(DMA1, DMA_CHANNEL1, DMA_CCR_MSIZE_16BIT);
     dma_set_priority(DMA1, DMA_CHANNEL1, DMA_CCR_PL_HIGH);
-    dma_enable_circular_mode(DMA1, DMA_CHANNEL1);
     dma_enable_channel(DMA1, DMA_CHANNEL1);
 
-    // Uncomment this to enable ADC ISR
-//    ADC_IER(ADC1) |= ADC_IER_EOSIE;
-//    nvic_enable_irq(NVIC_ADC_COMP_IRQ);
+    // Clear end of sequence flag
+    ADC_ISR(ADC1) |= ADC_ISR_EOS;
 
-    adc_enable_dma_circular_mode(ADC1);
+    adc_disable_dma_circular_mode(ADC1);
     adc_enable_dma(ADC1);
 
     // Start converting in a loop into the buffer
     adc_start_conversion_regular(ADC1);
+}
+
+/*
+ * The problem is that the STM32L053 doesn't have a way to generate PWM pulses with a phase offset.
+ * We need to make a pulse on OC1/OC2, then, once that pulse is done, start a pulse on OC3/OC4.
+ */
+static void set_buck_boost_duty(uint16_t dc) {
+    timer_set_oc_value(TIM2, TIM_OC1, BUCK_BOOST_PERIOD - dc);
+    timer_set_oc_value(TIM2, TIM_OC2, BUCK_BOOST_PERIOD - dc);
+    timer_set_oc_value(TIM2, TIM_OC3, dc);
+    timer_set_oc_value(TIM2, TIM_OC4, dc);
 }
 
 static void init_buck_boost(void) {
@@ -276,62 +276,35 @@ static void init_buck_boost(void) {
 
     timer_set_mode(TIM2, TIM_CR1_CKD_CK_INT, TIM_CR1_CMS_EDGE, TIM_CR1_DIR_UP);
 
-
     timer_set_oc_mode(TIM2, TIM_OC1, TIM_OCM_PWM1);
     timer_set_oc_polarity_high(TIM2, TIM_OC1);
     timer_enable_oc_output(TIM2, TIM_OC1);
-    timer_set_oc_value(TIM2, TIM_OC1, 5);
+    timer_set_oc_value(TIM2, TIM_OC1, 0);
 
     timer_set_oc_mode(TIM2, TIM_OC2, TIM_OCM_PWM1);
     timer_set_oc_polarity_high(TIM2, TIM_OC2);
     timer_enable_oc_output(TIM2, TIM_OC2);
-    timer_set_oc_value(TIM2, TIM_OC2, 5);
+    timer_set_oc_value(TIM2, TIM_OC2, 0);
 
     timer_set_oc_mode(TIM2, TIM_OC3, TIM_OCM_PWM1);
-    timer_set_oc_polarity_high(TIM2, TIM_OC3);
+    timer_set_oc_polarity_low(TIM2, TIM_OC3);
     timer_enable_oc_output(TIM2, TIM_OC3);
-    timer_set_oc_value(TIM2, TIM_OC3, 0);
+    timer_set_oc_value(TIM2, TIM_OC3, BUCK_BOOST_PERIOD);
 
     timer_set_oc_mode(TIM2, TIM_OC4, TIM_OCM_PWM1);
-    timer_set_oc_polarity_high(TIM2, TIM_OC4);
+    timer_set_oc_polarity_low(TIM2, TIM_OC4);
     timer_enable_oc_output(TIM2, TIM_OC4);
-    timer_set_oc_value(TIM2, TIM_OC4, 0);
+    timer_set_oc_value(TIM2, TIM_OC4, BUCK_BOOST_PERIOD);
 
-    timer_set_period(TIM2, 200);
+    timer_set_period(TIM2, BUCK_BOOST_PERIOD);
 
     // Enable update interrupt
-    timer_enable_irq(TIM2, TIM_DIER_UIE);
-    nvic_enable_irq(NVIC_TIM2_IRQ);
+//     timer_enable_irq(TIM2, TIM_DIER_UIE);
+//     nvic_enable_irq(NVIC_TIM2_IRQ);
 
     timer_enable_counter(TIM2);
 }
 
-static volatile tim2_state = 0;
-
-void tim2_isr(void) {
-    gpio_set(LED_ERROR_PORT, LED_ERROR_PIN);
-
-    // Check for update interrupt flag
-    if (timer_get_flag(TIM2, TIM_SR_UIF)) {
-        timer_clear_flag(TIM2, TIM_SR_UIF);
-
-        if (++tim2_state % 2 == 0) {
-            timer_set_oc_value(TIM2, TIM_OC1, 5);
-            timer_set_oc_value(TIM2, TIM_OC2, 5);
-            timer_set_oc_value(TIM2, TIM_OC3, 0);
-            timer_set_oc_value(TIM2, TIM_OC4, 0);
-        }
-        else {
-            timer_set_oc_value(TIM2, TIM_OC1, 0);
-            timer_set_oc_value(TIM2, TIM_OC2, 0);
-            timer_set_oc_value(TIM2, TIM_OC3, 5);
-            timer_set_oc_value(TIM2, TIM_OC4, 5);
-        }
-
-    }
-
-    gpio_clear(LED_ERROR_PORT, LED_ERROR_PIN);
-}
 
 int _write(int fd, char *ptr, int len)
 {
@@ -355,18 +328,6 @@ int _write(int fd, char *ptr, int len)
         ptr++;
     }
     return i;
-}
-
-static float read_vbatt(void) {
-    return adc_buffer[0] * 2.5f / 4095 * (220.0f + 47.5f) / 47.5f;
-}
-
-static float read_cell4v(void) {
-    return adc_buffer[1] * 2.5f / 4095 * (220.0f + 47.5f) / 47.5f;
-}
-
-static float read_cell8v(void) {
-    return adc_buffer[2] * 2.5f / 4095 * (220.0f + 47.5f) / 47.5f;
 }
 
 
@@ -409,6 +370,19 @@ static float read_cell8v(void) {
     * Turn on balance pin
     * Sleep 10 seconds, turn off balance pin, goto BalanceCheck
 */
+enum main_state {
+    STATE_STARTUP=0,
+    STATE_START_SAMPLE,
+    STATE_SAMPLE,
+    STATE_LOW_BATT_SLEEP,
+    STATE_NORMAL_SLEEP,
+    STATE_CHARGE,
+    STATE_BALANCE_CHECK,
+    STATE_BALANCE
+};
+
+volatile enum main_state cur_state = STATE_STARTUP;
+
 int main(void) {
     init_gpios();
     init_leds();
@@ -431,20 +405,70 @@ int main(void) {
 
 
     while (1) {
-        float c1 = read_cell4v();
-        float c2 = read_cell8v() - c1;
-        float c3 = read_vbatt() - c2 - c1;
+        if (cur_state == STATE_STARTUP) {
+            cur_state = STATE_START_SAMPLE;
+        }
+        else if (cur_state == STATE_START_SAMPLE) {
+            // Do a single, non-oversampled read of all battery and solar voltages
+            adc_do_conversion(ADC_CHSELR_CHSEL(VBATT_ADC_CH) | ADC_CHSELR_CHSEL(VSOLAR_ADC_CH) |
+                              ADC_CHSELR_CHSEL(CELL_4V_ADC_CH) | ADC_CHSELR_CHSEL(CELL_8V_ADC_CH));
 
-        //printf("%f %f %f\n", c1, c2, c3);
+            cur_state = STATE_SAMPLE;
+        }
+        else if (cur_state == STATE_SAMPLE) {
+            if (ADC_ISR(ADC1) & ADC_ISR_EOC) {
+                // voltages will be in adc_buffer in the order of their channel index
+                uint16_t vbatt = adc_buffer[0];
+                uint16_t vsolar = adc_buffer[1];
+                uint16_t cell_4v = adc_buffer[2];
+                uint16_t cell_8v = adc_buffer[3];
+
+                if (vbatt < VBATT_LOW_THRESHOLD) {
+                    cur_state = STATE_LOW_BATT_SLEEP;
+                }
+                else if (cell_4v < VBATT_LOW_THRESHOLD || cell_8v - cell_4v < SINGLE_CELL_LOW_THRESHOLD || vbatt - cell_8v < SINGLE_CELL_LOW_THRESHOLD) {
+                    cur_state = STATE_LOW_BATT_SLEEP;
+                }
+                else if (vsolar > VSOLAR_START_CHARGING_THRESHOLD) {
+                    cur_state = STATE_CHARGE;
+                }
+                else {
+                    cur_state = STATE_NORMAL_SLEEP;
+                }
+            }
+        }
+        else if (cur_state == STATE_LOW_BATT_SLEEP) {
+            gpio_set(LED_ERROR_PORT, LED_ERROR_PIN);
+        }
+        else if (cur_state == STATE_NORMAL_SLEEP) {
+            // Do nothing for now
+        }
+        else if (cur_state == STATE_CHARGE) {
+            // Probably increase the clock speed, setup the buckboost
+            // Be checking the MPPT levels here
+            // If you are in this state, then you are continously sampling the ADC
+        }
+        else if (cur_state == STATE_BALANCE_CHECK) {
+
+        }
 
 
 
-        //gpio_toggle(LED_ERROR_PORT, LED_ERROR_PIN);
 
-        uint32_t millis = systick_get_value() * 1000 / systick_get_reload();
-//        timer_set_oc_value(TIM22, TIM_OC1, (millis % 1000 > 500) ? 1000 - (millis % 1000) : millis % 1000);
-//        timer_set_oc_value(TIM22, TIM_OC2, millis % 500);
-
-        //enter_sleep_mode();
+//         float c1 = read_cell4v();
+//         float c2 = read_cell8v() - c1;
+//         float c3 = read_vbatt() - c2 - c1;
+//
+//         //printf("%f %f %f\n", c1, c2, c3);
+//
+//
+//
+//         //gpio_toggle(LED_ERROR_PORT, LED_ERROR_PIN);
+//
+//         uint32_t millis = systick_get_value() * 1000 / systick_get_reload();
+// //        timer_set_oc_value(TIM22, TIM_OC1, (millis % 1000 > 500) ? 1000 - (millis % 1000) : millis % 1000);
+// //        timer_set_oc_value(TIM22, TIM_OC2, millis % 500);
+//
+//         //enter_sleep_mode();
     }
 }
