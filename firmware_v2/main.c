@@ -36,7 +36,6 @@
 volatile uint16_t adc_buffer[ADC_BUFFER_SIZE];
 
 volatile uint32_t system_secs;
-
 // The MSI at 2.1Mhz is the default startup clock speed
 
 
@@ -292,11 +291,13 @@ enum main_state {
     STATE_LOW_BATT_SLEEP,
     STATE_NORMAL_SLEEP,
     STATE_CHARGE,
+    STATE_START_BALANCE_CHECK,
     STATE_BALANCE_CHECK,
     STATE_BALANCE
 };
 
 volatile enum main_state cur_state = STATE_STARTUP;
+volatile uint8_t balance_cell = 0;
 
 int main(void) {
     init_gpios();
@@ -331,25 +332,27 @@ int main(void) {
             cur_state = STATE_SAMPLE;
         }
         else if (cur_state == STATE_SAMPLE) {
-            if (ADC_ISR(ADC1) & ADC_ISR_EOC) {
-                // voltages will be in adc_buffer in the order of their channel index
-                uint16_t vbatt = adc_buffer[0];
-                uint16_t vsolar = adc_buffer[1];
-                uint16_t cell_4v = adc_buffer[2];
-                uint16_t cell_8v = adc_buffer[3];
+            if (!(ADC_ISR(ADC1) & ADC_ISR_EOC)) {
+                continue;
+            }
 
-                if (vbatt < VBATT_LOW_THRESHOLD) {
-                    cur_state = STATE_LOW_BATT_SLEEP;
-                }
-                else if (cell_4v < VBATT_LOW_THRESHOLD || cell_8v - cell_4v < SINGLE_CELL_LOW_THRESHOLD || vbatt - cell_8v < SINGLE_CELL_LOW_THRESHOLD) {
-                    cur_state = STATE_LOW_BATT_SLEEP;
-                }
-                else if (vsolar > VSOLAR_START_CHARGING_THRESHOLD) {
-                    cur_state = STATE_CHARGE;
-                }
-                else {
-                    cur_state = STATE_NORMAL_SLEEP;
-                }
+            // voltages will be in adc_buffer in the order of their channel index
+            uint16_t vbatt = adc_buffer[0];
+            uint16_t vsolar = adc_buffer[1];
+            uint16_t cell_4v = adc_buffer[2];
+            uint16_t cell_8v = adc_buffer[3];
+
+            if (vbatt < VBATT_LOW_THRESHOLD) {
+                cur_state = STATE_LOW_BATT_SLEEP;
+            }
+            else if (cell_4v < VBATT_LOW_THRESHOLD || cell_8v - cell_4v < SINGLE_CELL_LOW_THRESHOLD || vbatt - cell_8v < SINGLE_CELL_LOW_THRESHOLD) {
+                cur_state = STATE_LOW_BATT_SLEEP;
+            }
+            else if (vsolar > VSOLAR_START_CHARGING_THRESHOLD) {
+                cur_state = STATE_CHARGE;
+            }
+            else {
+                cur_state = STATE_NORMAL_SLEEP;
             }
         }
         else if (cur_state == STATE_LOW_BATT_SLEEP) {
@@ -363,10 +366,46 @@ int main(void) {
             // Be checking the MPPT levels here
             // If you are in this state, then you are continously sampling the ADC
         }
-        else if (cur_state == STATE_BALANCE_CHECK) {
-
+        else if (cur_state == STATE_START_BALANCE_CHECK) {
             adc_do_conversion(ADC_CHSELR_CHSEL(VBATT_ADC_CH) | ADC_CHSELR_CHSEL(CELL_4V_ADC_CH) | ADC_CHSELR_CHSEL(CELL_8V_ADC_CH), true);
 
+            cur_state = STATE_BALANCE_CHECK;
+        }
+        else if (cur_state == STATE_BALANCE_CHECK) {
+            if (!(ADC_ISR(ADC1) & ADC_ISR_EOC)) {
+                continue;
+            }
+
+            uint16_t vbatt = adc_buffer[0];
+            uint16_t cell_4v = adc_buffer[1];
+            uint16_t cell_8v = adc_buffer[2];
+
+            uint16_t cell1 = cell_4v;
+            uint16_t cell2 = cell_8v - cell_4v;
+            uint16_t cell3 = vbatt - cell_8v;
+
+            if (cell1 > cell2 && cell1 > cell3 && ((cell1 - cell2) > MIN_BALANCE_DIFF_THRESHOLD || (cell1 - cell3) > MIN_BALANCE_DIFF_THRESHOLD)) {
+                cur_state = STATE_BALANCE;
+                balance_cell = 1;
+            }
+            else if (cell2 > cell1 && cell2 > cell3 && ((cell2 - cell1) > MIN_BALANCE_DIFF_THRESHOLD || (cell2 - cell3) > MIN_BALANCE_DIFF_THRESHOLD)) {
+                cur_state = STATE_BALANCE;
+                balance_cell = 2;
+            }
+            else if (cell3 > cell1 && cell3 > cell2 && ((cell3 - cell1) > MIN_BALANCE_DIFF_THRESHOLD || (cell3 - cell2) > MIN_BALANCE_DIFF_THRESHOLD)) {
+                cur_state = STATE_BALANCE;
+                balance_cell = 3;
+            }
+        }
+        else if (cur_state == STATE_BALANCE) {
+            gpio_clear(BALANCE_PORT, BALANCE_1_PIN | BALANCE_2_PIN | BALANCE_3_PIN);
+
+            if (balance_cell == 1)
+                gpio_set(BALANCE_PORT, BALANCE_1_PIN);
+            else if (balance_cell == 2)
+                gpio_set(BALANCE_PORT, BALANCE_2_PIN);
+            else if (balance_cell == 3)
+                gpio_set(BALANCE_PORT, BALANCE_3_PIN);
         }
 
 

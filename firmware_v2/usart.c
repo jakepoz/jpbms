@@ -1,4 +1,7 @@
 #include <stdio.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <errno.h>
 
 #include "usart.h"
 #include "pins.h"
@@ -56,4 +59,27 @@ int _write(int fd, char *ptr, int len)
         ptr++;
     }
     return i;
+}
+
+
+int _close(int file __attribute__((unused))) {
+    return -1;
+}
+
+int _fstat(int file __attribute__((unused)), struct stat *st) {
+    st->st_mode = S_IFCHR;
+    return 0;
+}
+
+int _isatty(int file __attribute__((unused))) {
+    return 1;
+}
+
+int _lseek(int file __attribute__((unused)), int ptr __attribute__((unused)), int dir __attribute__((unused))) {
+    return 0;
+}
+
+int _read(int file __attribute__((unused)), char *ptr __attribute__((unused)), int len __attribute__((unused))) {
+    errno = EIO;
+    return -1;
 }
