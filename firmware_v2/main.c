@@ -280,6 +280,11 @@ static void init_buck_boost(void) {
 * Balance
     * Turn on balance pin
     * Sleep 10 seconds, turn off balance pin, goto BalanceCheck
+    *
+    *
+TODO: Add watchdog timer
+TODO: Add power brownout monitor etc
+TODO: Add reset on Hardfaults, etc
 */
 enum main_state {
     STATE_STARTUP=0,
