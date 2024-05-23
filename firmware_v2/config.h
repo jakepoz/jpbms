@@ -1,0 +1,14 @@
+#ifndef CONFIG_H
+#define CONFIG_H
+
+#define USART1_BAUDRATE 115200
+
+#define BUCK_BOOST_PERIOD 200
+
+#define VOLTAGE_TO_ADC(voltage) ((int)((voltage) * 4095 * 47.5 / (2.5 * (220.0 + 47.5)) + 0.5))
+
+#define SINGLE_CELL_LOW_THRESHOLD VOLTAGE_TO_ADC(3.6f)
+#define VBATT_LOW_THRESHOLD VOLTAGE_TO_ADC(11.0f)
+#define VSOLAR_START_CHARGING_THRESHOLD VOLTAGE_TO_ADC(8.0f)
+
+#endif

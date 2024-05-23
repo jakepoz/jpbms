@@ -1,5 +1,9 @@
 #include <stdio.h>
 
+#include "pins.h"
+#include "config.h"
+#include "usart.h"
+
 #include <libopencm3/cm3/scb.h>
 #include <libopencm3/cm3/nvic.h>
 #include <libopencm3/cm3/systick.h>
@@ -27,64 +31,6 @@
 #define ADC_CFGR2_OVSR_1                    ((uint32_t)0x00000008U)     /*!< Bit 1 */
 #define ADC_CFGR2_OVSR_2                    ((uint32_t)0x00000010U)     /*!< Bit 2 */
 #define ADC_CFGR2_OVSE                      ((uint32_t)0x00000001U)     /*!< Oversampler Enable */
-
-#define USART1_PORT GPIOA
-#define USART1_TX_PIN GPIO9
-#define USART1_RX_PIN GPIO10
-
-#define BALANCE_PORT GPIOB
-#define BALANCE_1_PIN GPIO7
-#define BALANCE_2_PIN GPIO8
-#define BALANCE_3_PIN GPIO9
-
-#define LED_ON_PORT GPIOB
-#define LED_ON_PIN GPIO4
-
-#define LED_ACTIVE_PORT GPIOB
-#define LED_ACTIVE_PIN GPIO5
-
-#define LED_ERROR_PORT GPIOB
-#define LED_ERROR_PIN GPIO6
-
-#define VBATT_ADC_PORT GPIOA
-#define VBATT_ADC_PIN GPIO0
-#define VBATT_ADC_CH 0
-
-#define VSOLAR_ADC_PORT GPIOA
-#define VSOLAR_ADC_PIN GPIO1
-#define VSOLAR_ADC_CH 1
-
-#define SOLAR_CURRENT_ADC_PORT GPIOA
-#define SOLAR_CURRENT_ADC_PIN GPIO2
-#define SOLAR_CURRENT_ADC_CH 2
-
-#define CELL_4V_ADC_PORT GPIOA
-#define CELL_4V_ADC_PIN GPIO3
-#define CELL_4V_ADC_CH 3
-
-#define CELL_8V_ADC_PORT GPIOA
-#define CELL_8V_ADC_PIN GPIO4
-#define CELL_8V_ADC_CH 4
-
-#define BB_SW_A_PORT GPIOA
-#define BB_SW_A_PIN GPIO15
-
-#define BB_D_A_PORT GPIOB
-#define BB_D_A_PIN GPIO3
-
-#define BB_SW_B_PORT GPIOB
-#define BB_SW_B_PIN GPIO10
-
-#define BB_D_B_PORT GPIOB
-#define BB_D_B_PIN GPIO11
-
-#define BUCK_BOOST_PERIOD 200
-
-#define VOLTAGE_TO_ADC(voltage) ((int)((voltage) * 4095 * 47.5 / (2.5 * (220.0 + 47.5)) + 0.5))
-
-#define SINGLE_CELL_LOW_THRESHOLD VOLTAGE_TO_ADC(3.6f)
-#define VBATT_LOW_THRESHOLD VOLTAGE_TO_ADC(11.0f)
-#define VSOLAR_START_CHARGING_THRESHOLD VOLTAGE_TO_ADC(8.0f)
 
 #define ADC_BUFFER_SIZE 5
 volatile uint16_t adc_buffer[ADC_BUFFER_SIZE];
@@ -158,27 +104,7 @@ static void init_leds(void) {
     timer_enable_counter(TIM22);
 }
 
-static void init_usart(void) {
-    rcc_periph_clock_enable(RCC_GPIOA);
-    rcc_periph_clock_enable(RCC_USART1);
 
-    /* Setup GPIO pins for USART1 transmit and receive. */
-    gpio_mode_setup(USART1_PORT, GPIO_MODE_AF, GPIO_PUPD_NONE, USART1_RX_PIN | USART1_TX_PIN);
-
-    /* Setup USART1 TX pin as alternate function. */
-    gpio_set_af(USART1_PORT, GPIO_AF4, USART1_RX_PIN | USART1_TX_PIN);
-
-    /* Setup USART1 parameters. */
-    usart_set_baudrate(USART1, 115200);
-    usart_set_databits(USART1, 8);
-    usart_set_stopbits(USART1, USART_STOPBITS_1);
-    usart_set_mode(USART1, USART_MODE_TX_RX);
-    usart_set_parity(USART1, USART_PARITY_NONE);
-    usart_set_flow_control(USART1, USART_FLOWCONTROL_NONE);
-
-    /* Finally enable the USART. */
-    usart_enable(USART1);
-}
 
 //void dma1_channel1_isr(void)
 //{
@@ -219,12 +145,25 @@ static void init_adc(void) {
     adc_power_on(ADC1);
 }
 
-static void adc_do_conversion(uint16_t channel_mask) {
+static void adc_do_conversion(uint16_t channel_mask, bool oversample) {
     // Set the sample rate
     ADC_SMPR1(ADC1) = ADC_SMPR_SMP_160DOT5CYC;
 
     // Select which channels to read
     ADC_CHSELR(ADC1) |= channel_mask;
+
+    // Configure oversampling
+    ADC_CFGR2(ADC1) &= ~ADC_CFGR2_OVSS;
+    ADC_CFGR2(ADC1) &= ~ADC_CFGR2_OVSR;
+
+    if (oversample) {
+        ADC_CFGR2(ADC1) |= ADC_CFGR2_OVSR_0 | ADC_CFGR2_OVSR_1 | ADC_CFGR2_OVSR_2; // 256x oversampling
+        ADC_CFGR2(ADC1) |= ADC_CFGR2_OVSS_3; // Divide by 256 afterwards;
+        ADC_CFGR2(ADC1) |= ADC_CFGR2_OVSE;
+    }
+    else {
+        ADC_CFGR2(ADC1) &= ~ADC_CFGR2_OVSE;
+    }
 
     // ADC DMA
     dma_channel_reset(DMA1, DMA_CHANNEL1);
@@ -305,30 +244,6 @@ static void init_buck_boost(void) {
     timer_enable_counter(TIM2);
 }
 
-
-int _write(int fd, char *ptr, int len)
-{
-    int i = 0;
-
-    /*
-     * Write "len" of char from "ptr" to file id "fd"
-     * Return number of char written.
-     *
-     * Only work for STDOUT, STDIN, and STDERR
-     */
-    if (fd > 2) {
-        return -1;
-    }
-    while (*ptr && (i < len)) {
-        usart_send_blocking(USART1, *ptr);
-        if (*ptr == '\n') {
-            usart_send_blocking(USART1, '\r');
-        }
-        i++;
-        ptr++;
-    }
-    return i;
-}
 
 
 /*
@@ -411,7 +326,7 @@ int main(void) {
         else if (cur_state == STATE_START_SAMPLE) {
             // Do a single, non-oversampled read of all battery and solar voltages
             adc_do_conversion(ADC_CHSELR_CHSEL(VBATT_ADC_CH) | ADC_CHSELR_CHSEL(VSOLAR_ADC_CH) |
-                              ADC_CHSELR_CHSEL(CELL_4V_ADC_CH) | ADC_CHSELR_CHSEL(CELL_8V_ADC_CH));
+                              ADC_CHSELR_CHSEL(CELL_4V_ADC_CH) | ADC_CHSELR_CHSEL(CELL_8V_ADC_CH), false);
 
             cur_state = STATE_SAMPLE;
         }
@@ -449,6 +364,8 @@ int main(void) {
             // If you are in this state, then you are continously sampling the ADC
         }
         else if (cur_state == STATE_BALANCE_CHECK) {
+
+            adc_do_conversion(ADC_CHSELR_CHSEL(VBATT_ADC_CH) | ADC_CHSELR_CHSEL(CELL_4V_ADC_CH) | ADC_CHSELR_CHSEL(CELL_8V_ADC_CH), true);
 
         }
 

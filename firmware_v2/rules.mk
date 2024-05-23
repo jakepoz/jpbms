@@ -51,6 +51,7 @@ CSTD		?= -std=c99
 # Source files
 
 OBJS		+= $(BINARY).o
+OBJS		+= usart.o
 
 
 ifeq ($(strip $(OPENCM3_DIR)),)
