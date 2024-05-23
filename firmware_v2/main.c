@@ -193,13 +193,13 @@ static void init_usart(void) {
 //    }
 //}
 
-void adc_comp_isr(void)
-{
-    if (adc_eos(ADC1)) {
-        ADC_ISR(ADC1) = ADC_ISR_EOS;
-
-    }
-}
+//void adc_comp_isr(void)
+//{
+//    if (adc_eos(ADC1)) {
+//        ADC_ISR(ADC1) = ADC_ISR_EOS;
+//
+//    }
+//}
 
 static void init_adc(void) {
     rcc_periph_clock_enable(RCC_ADC1);
@@ -248,8 +248,9 @@ static void init_adc(void) {
     dma_enable_circular_mode(DMA1, DMA_CHANNEL1);
     dma_enable_channel(DMA1, DMA_CHANNEL1);
 
-    ADC_IER(ADC1) |= ADC_IER_EOSIE;
-    nvic_enable_irq(NVIC_ADC_COMP_IRQ);
+    // Uncomment this to enable ADC ISR
+//    ADC_IER(ADC1) |= ADC_IER_EOSIE;
+//    nvic_enable_irq(NVIC_ADC_COMP_IRQ);
 
     adc_enable_dma_circular_mode(ADC1);
     adc_enable_dma(ADC1);
@@ -297,8 +298,39 @@ static void init_buck_boost(void) {
     timer_set_oc_value(TIM2, TIM_OC4, 0);
 
     timer_set_period(TIM2, 200);
-    timer_enable_counter(TIM2);
 
+    // Enable update interrupt
+    timer_enable_irq(TIM2, TIM_DIER_UIE);
+    nvic_enable_irq(NVIC_TIM2_IRQ);
+
+    timer_enable_counter(TIM2);
+}
+
+static volatile tim2_state = 0;
+
+void tim2_isr(void) {
+    gpio_set(LED_ERROR_PORT, LED_ERROR_PIN);
+
+    // Check for update interrupt flag
+    if (timer_get_flag(TIM2, TIM_SR_UIF)) {
+        timer_clear_flag(TIM2, TIM_SR_UIF);
+
+        if (++tim2_state % 2 == 0) {
+            timer_set_oc_value(TIM2, TIM_OC1, 5);
+            timer_set_oc_value(TIM2, TIM_OC2, 5);
+            timer_set_oc_value(TIM2, TIM_OC3, 0);
+            timer_set_oc_value(TIM2, TIM_OC4, 0);
+        }
+        else {
+            timer_set_oc_value(TIM2, TIM_OC1, 0);
+            timer_set_oc_value(TIM2, TIM_OC2, 0);
+            timer_set_oc_value(TIM2, TIM_OC3, 5);
+            timer_set_oc_value(TIM2, TIM_OC4, 5);
+        }
+
+    }
+
+    gpio_clear(LED_ERROR_PORT, LED_ERROR_PIN);
 }
 
 int _write(int fd, char *ptr, int len)
@@ -376,7 +408,7 @@ static float read_cell8v(void) {
 * Balance
     * Turn on balance pin
     * Sleep 10 seconds, turn off balance pin, goto BalanceCheck
-
+*/
 int main(void) {
     init_gpios();
     init_leds();
@@ -407,7 +439,7 @@ int main(void) {
 
 
 
-        gpio_toggle(LED_ERROR_PORT, LED_ERROR_PIN);
+        //gpio_toggle(LED_ERROR_PORT, LED_ERROR_PIN);
 
         uint32_t millis = systick_get_value() * 1000 / systick_get_reload();
 //        timer_set_oc_value(TIM22, TIM_OC1, (millis % 1000 > 500) ? 1000 - (millis % 1000) : millis % 1000);
