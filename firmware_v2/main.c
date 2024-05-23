@@ -98,9 +98,6 @@ static void init_leds(void) {
     // Enable TIM22 output compare channels
     timer_enable_oc_output(TIM22, TIM_OC1);
     timer_enable_oc_output(TIM22, TIM_OC2);
-
-    // Enable the timer counter
-    timer_enable_counter(TIM22);
 }
 
 
@@ -144,7 +141,7 @@ static void init_adc(void) {
     adc_power_on(ADC1);
 }
 
-static void adc_do_conversion(uint16_t channel_mask, bool oversample) {
+static void adc_start_conversion_dma(uint16_t channel_mask, bool oversample) {
     // Set the sample rate
     ADC_SMPR1(ADC1) = ADC_SMPR_SMP_160DOT5CYC;
 
@@ -286,18 +283,40 @@ static void init_buck_boost(void) {
 */
 enum main_state {
     STATE_STARTUP=0,
+
     STATE_START_SAMPLE,
+    STATE_WAIT_SAMPLE,
     STATE_SAMPLE,
+
     STATE_LOW_BATT_SLEEP,
     STATE_NORMAL_SLEEP,
+
+    STATE_START_CHARGE,
     STATE_CHARGE,
+    STATE_END_CHARGE,
+
     STATE_START_BALANCE_CHECK,
+    STATE_WAIT_BALANCE_CHECK,
     STATE_BALANCE_CHECK,
-    STATE_BALANCE
+    STATE_BALANCE,
 };
 
 volatile enum main_state cur_state = STATE_STARTUP;
-volatile uint8_t balance_cell = 0;
+volatile uint8_t cur_balance_cell = 0;
+volatile uint32_t cur_state_start_secs = 0;
+volatile uint32_t last_balance_check = 0xffffffff;
+
+static void change_state(enum main_state new_state) {
+    cur_state = new_state;
+    cur_state_start_secs = system_secs;
+
+    // In debug mode, we pulse the LED to indicate which state we are in
+    for (uint8_t i = 0; i < new_state; i++) {
+        gpio_set(LED_ERROR_PORT, LED_ERROR_PIN);
+        gpio_clear(LED_ERROR_PORT, LED_ERROR_PIN);
+    }
+}
+
 
 int main(void) {
     init_gpios();
@@ -322,20 +341,24 @@ int main(void) {
 
     while (1) {
         if (cur_state == STATE_STARTUP) {
-            cur_state = STATE_START_SAMPLE;
+            change_state(STATE_START_SAMPLE);
         }
         else if (cur_state == STATE_START_SAMPLE) {
             // Do a single, non-oversampled read of all battery and solar voltages
-            adc_do_conversion(ADC_CHSELR_CHSEL(VBATT_ADC_CH) | ADC_CHSELR_CHSEL(VSOLAR_ADC_CH) |
-                              ADC_CHSELR_CHSEL(CELL_4V_ADC_CH) | ADC_CHSELR_CHSEL(CELL_8V_ADC_CH), false);
+            adc_start_conversion_dma(ADC_CHSELR_CHSEL(VBATT_ADC_CH) | ADC_CHSELR_CHSEL(VSOLAR_ADC_CH) |
+                                    ADC_CHSELR_CHSEL(CELL_4V_ADC_CH) | ADC_CHSELR_CHSEL(CELL_8V_ADC_CH), false);
 
-            cur_state = STATE_SAMPLE;
+            change_state(STATE_WAIT_SAMPLE);
+        }
+        else if (cur_state == STATE_WAIT_SAMPLE) {
+            if (ADC_ISR(ADC1) & ADC_ISR_EOC) {
+                change_state(STATE_SAMPLE);
+            }
+            else {
+                enter_sleep_mode();
+            }
         }
         else if (cur_state == STATE_SAMPLE) {
-            if (!(ADC_ISR(ADC1) & ADC_ISR_EOC)) {
-                continue;
-            }
-
             // voltages will be in adc_buffer in the order of their channel index
             uint16_t vbatt = adc_buffer[0];
             uint16_t vsolar = adc_buffer[1];
@@ -343,39 +366,72 @@ int main(void) {
             uint16_t cell_8v = adc_buffer[3];
 
             if (vbatt < VBATT_LOW_THRESHOLD) {
-                cur_state = STATE_LOW_BATT_SLEEP;
+                change_state(STATE_LOW_BATT_SLEEP);
             }
             else if (cell_4v < VBATT_LOW_THRESHOLD || cell_8v - cell_4v < SINGLE_CELL_LOW_THRESHOLD || vbatt - cell_8v < SINGLE_CELL_LOW_THRESHOLD) {
-                cur_state = STATE_LOW_BATT_SLEEP;
+                change_state(STATE_LOW_BATT_SLEEP);
             }
             else if (vsolar > VSOLAR_START_CHARGING_THRESHOLD) {
-                cur_state = STATE_CHARGE;
+                change_state(STATE_START_CHARGE);
             }
             else {
-                cur_state = STATE_NORMAL_SLEEP;
+                change_state(STATE_NORMAL_SLEEP);
             }
         }
         else if (cur_state == STATE_LOW_BATT_SLEEP) {
             gpio_set(LED_ERROR_PORT, LED_ERROR_PIN);
+
+            enter_sleep_mode();
+
+            if (system_secs - cur_state_start_secs > 10) {
+                change_state(STATE_SAMPLE);
+            }
         }
         else if (cur_state == STATE_NORMAL_SLEEP) {
-            // Do nothing for now
+            enter_sleep_mode();
+
+            if (system_secs - cur_state_start_secs > 2) {
+
+                if (system_secs - last_balance_check > 60) {
+                    change_state(STATE_START_BALANCE_CHECK);
+                }
+                else {
+                    change_state(STATE_SAMPLE);
+                }
+            }
+        }
+        else if (cur_state == STATE_START_CHARGE) {
+             timer_enable_counter(TIM22);
+             change_state(STATE_CHARGE);
         }
         else if (cur_state == STATE_CHARGE) {
             // Probably increase the clock speed, setup the buckboost
             // Be checking the MPPT levels here
             // If you are in this state, then you are continously sampling the ADC
+
+            uint32_t millis = systick_get_value() * 1000 / systick_get_reload();
+            timer_set_oc_value(TIM22, TIM_OC1, (millis % 1000 > 500) ? 1000 - (millis % 1000) : millis % 1000);
+            timer_set_oc_value(TIM22, TIM_OC2, millis % 500);
+        }
+        else if (cur_state == STATE_END_CHARGE) {
+            timer_disable_counter(TIM22);
+            change_state(STATE_NORMAL_SLEEP);
         }
         else if (cur_state == STATE_START_BALANCE_CHECK) {
-            adc_do_conversion(ADC_CHSELR_CHSEL(VBATT_ADC_CH) | ADC_CHSELR_CHSEL(CELL_4V_ADC_CH) | ADC_CHSELR_CHSEL(CELL_8V_ADC_CH), true);
+            adc_start_conversion_dma(ADC_CHSELR_CHSEL(VBATT_ADC_CH) | ADC_CHSELR_CHSEL(CELL_4V_ADC_CH) | ADC_CHSELR_CHSEL(CELL_8V_ADC_CH), true);
+            last_balance_check = system_secs;
 
-            cur_state = STATE_BALANCE_CHECK;
+            change_state(STATE_WAIT_BALANCE_CHECK);
+        }
+        else if (cur_state == STATE_WAIT_BALANCE_CHECK) {
+            if (ADC_ISR(ADC1) & ADC_ISR_EOC) {
+                change_state(STATE_BALANCE_CHECK);
+            }
+            else {
+                enter_sleep_mode();
+            }
         }
         else if (cur_state == STATE_BALANCE_CHECK) {
-            if (!(ADC_ISR(ADC1) & ADC_ISR_EOC)) {
-                continue;
-            }
-
             uint16_t vbatt = adc_buffer[0];
             uint16_t cell_4v = adc_buffer[1];
             uint16_t cell_8v = adc_buffer[2];
@@ -385,27 +441,37 @@ int main(void) {
             uint16_t cell3 = vbatt - cell_8v;
 
             if (cell1 > cell2 && cell1 > cell3 && ((cell1 - cell2) > MIN_BALANCE_DIFF_THRESHOLD || (cell1 - cell3) > MIN_BALANCE_DIFF_THRESHOLD)) {
-                cur_state = STATE_BALANCE;
-                balance_cell = 1;
+                change_state(STATE_BALANCE);
+                cur_balance_cell = 1;
             }
             else if (cell2 > cell1 && cell2 > cell3 && ((cell2 - cell1) > MIN_BALANCE_DIFF_THRESHOLD || (cell2 - cell3) > MIN_BALANCE_DIFF_THRESHOLD)) {
-                cur_state = STATE_BALANCE;
-                balance_cell = 2;
+                change_state(STATE_BALANCE);
+                cur_balance_cell = 2;
             }
             else if (cell3 > cell1 && cell3 > cell2 && ((cell3 - cell1) > MIN_BALANCE_DIFF_THRESHOLD || (cell3 - cell2) > MIN_BALANCE_DIFF_THRESHOLD)) {
-                cur_state = STATE_BALANCE;
-                balance_cell = 3;
+                change_state(STATE_BALANCE);
+                cur_balance_cell = 3;
+            }
+            else {
+                change_state(STATE_NORMAL_SLEEP);
             }
         }
         else if (cur_state == STATE_BALANCE) {
             gpio_clear(BALANCE_PORT, BALANCE_1_PIN | BALANCE_2_PIN | BALANCE_3_PIN);
 
-            if (balance_cell == 1)
+            if (cur_balance_cell == 1)
                 gpio_set(BALANCE_PORT, BALANCE_1_PIN);
-            else if (balance_cell == 2)
+            else if (cur_balance_cell == 2)
                 gpio_set(BALANCE_PORT, BALANCE_2_PIN);
-            else if (balance_cell == 3)
+            else if (cur_balance_cell == 3)
                 gpio_set(BALANCE_PORT, BALANCE_3_PIN);
+
+            if (system_secs - cur_state_start_secs > 10) {
+                change_state(STATE_SAMPLE);
+            }
+            else {
+                enter_sleep_mode();
+            }
         }
 
 
