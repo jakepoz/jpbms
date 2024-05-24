@@ -136,7 +136,8 @@ static void init_adc(void) {
     adc_calibrate(ADC1);
     adc_set_right_aligned(ADC1);
     adc_set_resolution(ADC1, ADC_CFGR1_RES_12_BIT);
-    adc_set_continuous_conversion_mode(ADC1);
+    adc_set_single_conversion_mode(ADC1);
+
 
     adc_power_on(ADC1);
 }
@@ -146,20 +147,20 @@ static void adc_start_conversion_dma(uint16_t channel_mask, bool oversample) {
     ADC_SMPR1(ADC1) = ADC_SMPR_SMP_160DOT5CYC;
 
     // Select which channels to read
-    ADC_CHSELR(ADC1) |= channel_mask;
+    ADC_CHSELR(ADC1) = channel_mask;
 
     // Configure oversampling
-    ADC_CFGR2(ADC1) &= ~ADC_CFGR2_OVSS;
-    ADC_CFGR2(ADC1) &= ~ADC_CFGR2_OVSR;
-
-    if (oversample) {
-        ADC_CFGR2(ADC1) |= ADC_CFGR2_OVSR_0 | ADC_CFGR2_OVSR_1 | ADC_CFGR2_OVSR_2; // 256x oversampling
-        ADC_CFGR2(ADC1) |= ADC_CFGR2_OVSS_3; // Divide by 256 afterwards;
-        ADC_CFGR2(ADC1) |= ADC_CFGR2_OVSE;
-    }
-    else {
-        ADC_CFGR2(ADC1) &= ~ADC_CFGR2_OVSE;
-    }
+//    ADC_CFGR2(ADC1) &= ~ADC_CFGR2_OVSS;
+//    ADC_CFGR2(ADC1) &= ~ADC_CFGR2_OVSR;
+//
+//    if (oversample) {
+//        ADC_CFGR2(ADC1) |= ADC_CFGR2_OVSR_0 | ADC_CFGR2_OVSR_1 | ADC_CFGR2_OVSR_2; // 256x oversampling
+//        ADC_CFGR2(ADC1) |= ADC_CFGR2_OVSS_3; // Divide by 256 afterwards;
+//        ADC_CFGR2(ADC1) |= ADC_CFGR2_OVSE;
+//    }
+//    else {
+//        ADC_CFGR2(ADC1) &= ~ADC_CFGR2_OVSE;
+//    }
 
     // ADC DMA
     dma_channel_reset(DMA1, DMA_CHANNEL1);
@@ -174,7 +175,7 @@ static void adc_start_conversion_dma(uint16_t channel_mask, bool oversample) {
     dma_enable_channel(DMA1, DMA_CHANNEL1);
 
     // Clear end of sequence flag
-    ADC_ISR(ADC1) |= ADC_ISR_EOS;
+    ADC_ISR(ADC1) = ADC_ISR_EOS;
 
     adc_disable_dma_circular_mode(ADC1);
     adc_enable_dma(ADC1);
@@ -212,26 +213,29 @@ static void init_buck_boost(void) {
     timer_set_mode(TIM2, TIM_CR1_CKD_CK_INT, TIM_CR1_CMS_EDGE, TIM_CR1_DIR_UP);
 
     timer_set_oc_mode(TIM2, TIM_OC1, TIM_OCM_PWM1);
-    timer_set_oc_polarity_high(TIM2, TIM_OC1);
+    timer_set_oc_polarity_low(TIM2, TIM_OC1);
     timer_enable_oc_output(TIM2, TIM_OC1);
-    timer_set_oc_value(TIM2, TIM_OC1, 0);
+    timer_set_oc_value(TIM2, TIM_OC1, BUCK_BOOST_PERIOD);
 
     timer_set_oc_mode(TIM2, TIM_OC2, TIM_OCM_PWM1);
-    timer_set_oc_polarity_high(TIM2, TIM_OC2);
+    timer_set_oc_polarity_low(TIM2, TIM_OC2);
     timer_enable_oc_output(TIM2, TIM_OC2);
-    timer_set_oc_value(TIM2, TIM_OC2, 0);
+    timer_set_oc_value(TIM2, TIM_OC2, BUCK_BOOST_PERIOD);
 
     timer_set_oc_mode(TIM2, TIM_OC3, TIM_OCM_PWM1);
-    timer_set_oc_polarity_low(TIM2, TIM_OC3);
+    timer_set_oc_polarity_high(TIM2, TIM_OC3);
     timer_enable_oc_output(TIM2, TIM_OC3);
-    timer_set_oc_value(TIM2, TIM_OC3, BUCK_BOOST_PERIOD);
+    timer_set_oc_value(TIM2, TIM_OC3, 0);
 
     timer_set_oc_mode(TIM2, TIM_OC4, TIM_OCM_PWM1);
-    timer_set_oc_polarity_low(TIM2, TIM_OC4);
+    timer_set_oc_polarity_high(TIM2, TIM_OC4);
     timer_enable_oc_output(TIM2, TIM_OC4);
-    timer_set_oc_value(TIM2, TIM_OC4, BUCK_BOOST_PERIOD);
+    timer_set_oc_value(TIM2, TIM_OC4, 0);
 
-    timer_set_period(TIM2, BUCK_BOOST_PERIOD);
+
+    // Set the period to N - 1, because the overflow happens on a match, so it's like a >= loop
+    // Then, setting an oc_value to be equal to N means it will never have a pulse
+    timer_set_period(TIM2, BUCK_BOOST_PERIOD - 1);
 
     // Enable update interrupt
 //     timer_enable_irq(TIM2, TIM_DIER_UIE);
@@ -340,103 +344,105 @@ int main(void) {
     // Lowest possible internal voltage scaling to save power, limits to 4mhz clock
     //pwr_set_vos_scale(PWR_SCALE3);
 
-//    initialise_monitor_handles();
-    printf("starting\n");
+
+    printf("startup\n");
 
 
     while (1) {
         if (cur_state == STATE_STARTUP) {
-            change_state(STATE_START_SAMPLE);
-        }
-        else if (cur_state == STATE_START_SAMPLE) {
+            // Give one second to startup, so all voltages can stabilize
+            if (system_secs > 1) {
+                change_state(STATE_START_SAMPLE);
+                //change_state(STATE_START_CHARGE);
+            }
+        } else if (cur_state == STATE_START_SAMPLE) {
             // Do a single, non-oversampled read of all battery and solar voltages
             adc_start_conversion_dma(ADC_CHSELR_CHSEL(VBATT_ADC_CH) | ADC_CHSELR_CHSEL(VSOLAR_ADC_CH) |
-                                    ADC_CHSELR_CHSEL(CELL_4V_ADC_CH) | ADC_CHSELR_CHSEL(CELL_8V_ADC_CH), false);
+                                     ADC_CHSELR_CHSEL(CELL_4V_ADC_CH) | ADC_CHSELR_CHSEL(CELL_8V_ADC_CH), false);
 
             change_state(STATE_WAIT_SAMPLE);
-        }
-        else if (cur_state == STATE_WAIT_SAMPLE) {
-            if (ADC_ISR(ADC1) & ADC_ISR_EOC) {
+        } else if (cur_state == STATE_WAIT_SAMPLE) {
+            if (adc_eos(ADC1)){
                 change_state(STATE_SAMPLE);
-            }
-            else {
+            } else {
                 enter_sleep_mode();
             }
-        }
-        else if (cur_state == STATE_SAMPLE) {
+        } else if (cur_state == STATE_SAMPLE) {
             // voltages will be in adc_buffer in the order of their channel index
             uint16_t vbatt = adc_buffer[0];
             uint16_t vsolar = adc_buffer[1];
             uint16_t cell_4v = adc_buffer[2];
             uint16_t cell_8v = adc_buffer[3];
 
+            printf("sample %d %d %d %d\n", vbatt, vsolar, cell_4v, cell_8v);
+
+            adc_buffer[0] = 0;
+
             if (vbatt < VBATT_LOW_THRESHOLD) {
                 change_state(STATE_LOW_BATT_SLEEP);
-            }
-            else if (cell_4v < VBATT_LOW_THRESHOLD || cell_8v - cell_4v < SINGLE_CELL_LOW_THRESHOLD || vbatt - cell_8v < SINGLE_CELL_LOW_THRESHOLD) {
+            } else if (cell_4v < SINGLE_CELL_LOW_THRESHOLD || cell_8v - cell_4v < SINGLE_CELL_LOW_THRESHOLD ||
+                       vbatt - cell_8v < SINGLE_CELL_LOW_THRESHOLD) {
                 change_state(STATE_LOW_BATT_SLEEP);
-            }
-            else if (vsolar > VSOLAR_START_CHARGING_THRESHOLD) {
+            } else if (vsolar > VSOLAR_START_CHARGING_THRESHOLD) {
                 change_state(STATE_START_CHARGE);
-            }
-            else {
+            } else {
                 change_state(STATE_NORMAL_SLEEP);
             }
-        }
-        else if (cur_state == STATE_LOW_BATT_SLEEP) {
+        } else if (cur_state == STATE_LOW_BATT_SLEEP) {
             gpio_set(LED_ERROR_PORT, LED_ERROR_PIN);
 
             enter_sleep_mode();
 
             if (system_secs - cur_state_start_secs > 10) {
-                change_state(STATE_SAMPLE);
+                change_state(STATE_START_SAMPLE);
             }
-        }
-        else if (cur_state == STATE_NORMAL_SLEEP) {
+        } else if (cur_state == STATE_NORMAL_SLEEP) {
             enter_sleep_mode();
 
             if (system_secs - cur_state_start_secs > 2) {
 
                 if (system_secs - last_balance_check > 60) {
                     change_state(STATE_START_BALANCE_CHECK);
-                }
-                else {
-                    change_state(STATE_SAMPLE);
+                } else {
+                    change_state(STATE_START_SAMPLE);
                 }
             }
-        }
-        else if (cur_state == STATE_START_CHARGE) {
-             timer_enable_counter(TIM22);
-             change_state(STATE_CHARGE);
-        }
-        else if (cur_state == STATE_CHARGE) {
+        } else if (cur_state == STATE_START_CHARGE) {
+            timer_enable_counter(TIM22);
+
+            change_state(STATE_CHARGE);
+        } else if (cur_state == STATE_CHARGE) {
             // Probably increase the clock speed, setup the buckboost
             // Be checking the MPPT levels here
             // If you are in this state, then you are continously sampling the ADC
+            //set_buck_boost_duty(5);
+//            timer_set_oc_value(TIM2, TIM_OC1, BUCK_BOOST_PERIOD - 5);
+//            timer_set_oc_value(TIM2, TIM_OC2, BUCK_BOOST_PERIOD - 5);
+//            timer_set_oc_value(TIM2, TIM_OC3, 20);
+//            timer_set_oc_value(TIM2, TIM_OC4, 20);
+
 
             uint32_t millis = systick_get_value() * 1000 / systick_get_reload();
             timer_set_oc_value(TIM22, TIM_OC1, (millis % 1000 > 500) ? 1000 - (millis % 1000) : millis % 1000);
             timer_set_oc_value(TIM22, TIM_OC2, millis % 500);
-        }
-        else if (cur_state == STATE_END_CHARGE) {
+        } else if (cur_state == STATE_END_CHARGE) {
+            set_buck_boost_duty(0);
             timer_disable_counter(TIM22);
+
             change_state(STATE_NORMAL_SLEEP);
-        }
-        else if (cur_state == STATE_START_BALANCE_CHECK) {
-            adc_start_conversion_dma(ADC_CHSELR_CHSEL(VBATT_ADC_CH) | ADC_CHSELR_CHSEL(CELL_4V_ADC_CH) | ADC_CHSELR_CHSEL(CELL_8V_ADC_CH), true);
+        } else if (cur_state == STATE_START_BALANCE_CHECK) {
+            adc_start_conversion_dma(ADC_CHSELR_CHSEL(VBATT_ADC_CH) | ADC_CHSELR_CHSEL(CELL_4V_ADC_CH) |
+                                     ADC_CHSELR_CHSEL(CELL_8V_ADC_CH), true);
             last_balance_check = system_secs;
 
             change_state(STATE_WAIT_BALANCE_CHECK);
-        }
-        else if (cur_state == STATE_WAIT_BALANCE_CHECK) {
-            if (ADC_ISR(ADC1) & ADC_ISR_EOC) {
+        } else if (cur_state == STATE_WAIT_BALANCE_CHECK) {
+            if (adc_eos(ADC1)) {
                 change_state(STATE_BALANCE_CHECK);
-            }
-            else {
+            } else {
                 enter_sleep_mode();
             }
-        }
-        else if (cur_state == STATE_BALANCE_CHECK) {
+        } else if (cur_state == STATE_BALANCE_CHECK) {
             uint16_t vbatt = adc_buffer[0];
             uint16_t cell_4v = adc_buffer[1];
             uint16_t cell_8v = adc_buffer[2];
@@ -445,23 +451,22 @@ int main(void) {
             uint16_t cell2 = cell_8v - cell_4v;
             uint16_t cell3 = vbatt - cell_8v;
 
-            if (cell1 > cell2 && cell1 > cell3 && ((cell1 - cell2) > MIN_BALANCE_DIFF_THRESHOLD || (cell1 - cell3) > MIN_BALANCE_DIFF_THRESHOLD)) {
+            if (cell1 > cell2 && cell1 > cell3 &&
+                ((cell1 - cell2) > MIN_BALANCE_DIFF_THRESHOLD || (cell1 - cell3) > MIN_BALANCE_DIFF_THRESHOLD)) {
                 change_state(STATE_BALANCE);
                 cur_balance_cell = 1;
-            }
-            else if (cell2 > cell1 && cell2 > cell3 && ((cell2 - cell1) > MIN_BALANCE_DIFF_THRESHOLD || (cell2 - cell3) > MIN_BALANCE_DIFF_THRESHOLD)) {
+            } else if (cell2 > cell1 && cell2 > cell3 &&
+                       ((cell2 - cell1) > MIN_BALANCE_DIFF_THRESHOLD || (cell2 - cell3) > MIN_BALANCE_DIFF_THRESHOLD)) {
                 change_state(STATE_BALANCE);
                 cur_balance_cell = 2;
-            }
-            else if (cell3 > cell1 && cell3 > cell2 && ((cell3 - cell1) > MIN_BALANCE_DIFF_THRESHOLD || (cell3 - cell2) > MIN_BALANCE_DIFF_THRESHOLD)) {
+            } else if (cell3 > cell1 && cell3 > cell2 &&
+                       ((cell3 - cell1) > MIN_BALANCE_DIFF_THRESHOLD || (cell3 - cell2) > MIN_BALANCE_DIFF_THRESHOLD)) {
                 change_state(STATE_BALANCE);
                 cur_balance_cell = 3;
-            }
-            else {
+            } else {
                 change_state(STATE_NORMAL_SLEEP);
             }
-        }
-        else if (cur_state == STATE_BALANCE) {
+        } else if (cur_state == STATE_BALANCE) {
             gpio_clear(BALANCE_PORT, BALANCE_1_PIN | BALANCE_2_PIN | BALANCE_3_PIN);
 
             if (cur_balance_cell == 1)
@@ -472,14 +477,12 @@ int main(void) {
                 gpio_set(BALANCE_PORT, BALANCE_3_PIN);
 
             if (system_secs - cur_state_start_secs > 10) {
-                change_state(STATE_SAMPLE);
-            }
-            else {
+                change_state(STATE_START_SAMPLE);
+            } else {
                 enter_sleep_mode();
             }
         }
-
-
+    }
 
 
 //         float c1 = read_cell4v();
@@ -497,5 +500,4 @@ int main(void) {
 // //        timer_set_oc_value(TIM22, TIM_OC2, millis % 500);
 //
 //         //enter_sleep_mode();
-    }
 }
