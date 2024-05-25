@@ -26034,7 +26034,7 @@
 		(layer "Edge.Cuts")
 		(uuid "2bcb63dc-5069-403b-9976-e6ea9aa3eb1d")
 	)
-	(gr_text "V1.2\n - Move solar adc line to other layer for less noise?\n - Move adc sampling capacitors closest to stm32\n - stm power pins should be wired to capacitors, then those wired to vcc/gnd\n - multiple gnd vias around decoupling caps\n - balance resistors are placed in a weird grouping\n - bootstrap diodes backwards\n - Check, do I need vcc for level shifting on the BMP uart?\n - Could I make the uart only turn on if the cable is plugged in?\n - Multiplex ADCs for sampling battery voltage\n - Add fake {dblquote}noise{dblquote} generator to ADC noise line\n - VSolar plug has swapped +/-, can I make it so it accepts any polarity?\n - Add button to show battery charge level?"
+	(gr_text "V1.2\n - Move solar adc line to other layer for less noise?\n - Move adc sampling capacitors closest to stm32\n - stm power pins should be wired to capacitors, then those wired to vcc/gnd\n - multiple gnd vias around decoupling caps\n - balance resistors are placed in a weird grouping\n - bootstrap diodes backwards\n - Check, do I need vcc for level shifting on the BMP uart?\n - Could I make the uart only turn on if the cable is plugged in?\n - Multiplex ADCs for sampling battery voltage\n - Add fake {dblquote}noise{dblquote} generator to ADC noise line\n - VSolar plug has swapped +/-, can I make it so it accepts any polarity?\n - Add button to show battery charge level?\n - ESD protection"
 		(at 182.4 68.4 0)
 		(layer "F.Cu")
 		(uuid "e087b897-86a0-4c44-a2cf-be59dda6f395")

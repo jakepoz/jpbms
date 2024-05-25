@@ -2813,12 +2813,6 @@
 		(uuid "57c14c98-8475-49b1-b687-6b7f45a45e47")
 	)
 	(junction
-		(at 200.66 93.98)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "5f6ec7c2-6fe4-4070-8ecf-8d6d39eef199")
-	)
-	(junction
 		(at 261.62 34.29)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -3039,16 +3033,6 @@
 			(type default)
 		)
 		(uuid "0bcc3740-4f59-4b90-b2df-730aefe9e73d")
-	)
-	(wire
-		(pts
-			(xy 158.75 93.98) (xy 200.66 93.98)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "0f51202c-6b40-4bbf-8d89-fd92feeb86b1")
 	)
 	(wire
 		(pts
@@ -3462,16 +3446,6 @@
 	)
 	(wire
 		(pts
-			(xy 200.66 93.98) (xy 204.47 93.98)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "96007b27-a684-4d44-b155-afac7a3c5c86")
-	)
-	(wire
-		(pts
 			(xy 68.58 36.83) (xy 73.66 36.83)
 		)
 		(stroke
@@ -3772,16 +3746,6 @@
 	)
 	(wire
 		(pts
-			(xy 158.75 96.52) (xy 189.23 96.52)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "fbbd2ce1-8d48-48d4-96ee-9b43338f1f05")
-	)
-	(wire
-		(pts
 			(xy 76.2 67.31) (xy 64.77 67.31)
 		)
 		(stroke
@@ -3830,7 +3794,7 @@
 	)
 	(text "input pins current = 50nA \nSo we can afford up to 15M pullup,\nto stay above .7 * Vdd"
 		(exclude_from_sim no)
-		(at 213.868 104.394 0)
+		(at 215.138 108.204 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3947,17 +3911,6 @@
 			(justify left bottom)
 		)
 		(uuid "8b4c6297-0164-4b90-ab32-ad8bea2a4e34")
-	)
-	(label "USART1_VCC_DETECT"
-		(at 165.1 96.52 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "943e935f-55e3-4d43-b5e1-f2840e685ba5")
 	)
 	(label "LED_ERROR"
 		(at 166.37 109.22 0)
@@ -4225,28 +4178,6 @@
 		(uuid "5c1a4e48-0ac2-4ed6-a9a2-2650e55b02a9")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 180.9667 53.34 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-				(hide yes)
-			)
-		)
-	)
-	(global_label "SOLAR_PLUG"
-		(shape input)
-		(at 204.47 93.98 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "5f518754-9b50-4801-b9db-494448ac4d73")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 219.2481 93.98 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4823,73 +4754,6 @@
 			(project "JPBms2"
 				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/852788cb-2266-4d4a-865c-a7e0873e4190"
 					(reference "#PWR019")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 189.23 104.14 0)
-		(mirror y)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "3fa394d6-425c-4f7f-b149-2ee8b47e6ca9")
-		(property "Reference" "#PWR054"
-			(at 189.23 110.49 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 191.77 103.632 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" ""
-			(at 189.23 104.14 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 189.23 104.14 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 189.23 104.14 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "e8719d0c-55c6-4eb8-93c3-f8e5f1894731")
-		)
-		(instances
-			(project "JPBms2"
-				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/852788cb-2266-4d4a-865c-a7e0873e4190"
-					(reference "#PWR054")
 					(unit 1)
 				)
 			)
@@ -5781,76 +5645,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:R")
-		(at 200.66 90.17 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "8775ada1-58f3-49b2-b23b-6584c27dfa36")
-		(property "Reference" "R39"
-			(at 203.2 88.8999 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "10M"
-			(at 203.2 91.4399 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
-			(at 198.882 90.17 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 200.66 90.17 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Resistor"
-			(at 200.66 90.17 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "d62cafc1-e522-4c27-924a-157b14bdc014")
-		)
-		(pin "2"
-			(uuid "077aa310-7c69-4c03-86b9-683c233d7e1d")
-		)
-		(instances
-			(project "JPBms2"
-				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/852788cb-2266-4d4a-865c-a7e0873e4190"
-					(reference "R39")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:PWR_FLAG")
 		(at 148.59 41.91 270)
 		(unit 1)
@@ -5912,72 +5706,6 @@
 			(project "JPBms2"
 				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/852788cb-2266-4d4a-865c-a7e0873e4190"
 					(reference "#FLG04")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:VDD")
-		(at 200.66 86.36 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "8cfd0011-5e8e-4339-9bd2-f8be486414f1")
-		(property "Reference" "#PWR053"
-			(at 200.66 90.17 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "VDD"
-			(at 200.66 81.28 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 200.66 86.36 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 200.66 86.36 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"VDD\""
-			(at 200.66 86.36 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "c755c8fa-af52-478d-93ec-77ba56d87633")
-		)
-		(instances
-			(project "JPBms2"
-				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/852788cb-2266-4d4a-865c-a7e0873e4190"
-					(reference "#PWR053")
 					(unit 1)
 				)
 			)
@@ -6635,77 +6363,6 @@
 			(project "JPBms2"
 				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/852788cb-2266-4d4a-865c-a7e0873e4190"
 					(reference "C21")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R")
-		(at 189.23 100.33 0)
-		(mirror x)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "ecbe0123-681a-4d73-949f-03d2f7d34b4a")
-		(property "Reference" "R40"
-			(at 191.77 101.6001 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "10M"
-			(at 191.77 99.0601 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
-			(at 187.452 100.33 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 189.23 100.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Resistor"
-			(at 189.23 100.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "d31ef7e5-92a3-47f9-81b2-9295ab602b20")
-		)
-		(pin "2"
-			(uuid "d317dd10-8090-4767-9b21-74798822ac8b")
-		)
-		(instances
-			(project "JPBms2"
-				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/852788cb-2266-4d4a-865c-a7e0873e4190"
-					(reference "R40")
 					(unit 1)
 				)
 			)

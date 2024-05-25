@@ -52,7 +52,7 @@ static void enter_sleep_mode(void) {
 //    PWR_CR |= PWR_CR_PDDS;
 //    SCB_SCR |= SCB_SCR_SLEEPDEEP;
 
-    __asm__ volatile ("wfi");
+   __asm__ volatile ("wfi");
 }
 
 
@@ -150,17 +150,27 @@ static void adc_start_conversion_dma(uint16_t channel_mask, bool oversample) {
     ADC_CHSELR(ADC1) = channel_mask;
 
     // Configure oversampling
-//    ADC_CFGR2(ADC1) &= ~ADC_CFGR2_OVSS;
-//    ADC_CFGR2(ADC1) &= ~ADC_CFGR2_OVSR;
-//
-//    if (oversample) {
-//        ADC_CFGR2(ADC1) |= ADC_CFGR2_OVSR_0 | ADC_CFGR2_OVSR_1 | ADC_CFGR2_OVSR_2; // 256x oversampling
-//        ADC_CFGR2(ADC1) |= ADC_CFGR2_OVSS_3; // Divide by 256 afterwards;
-//        ADC_CFGR2(ADC1) |= ADC_CFGR2_OVSE;
-//    }
-//    else {
-//        ADC_CFGR2(ADC1) &= ~ADC_CFGR2_OVSE;
-//    }
+    // Oversampling can only be configured if the adc is off
+    if (!!oversample != !!(ADC_CFGR2(ADC1) & ADC_CFGR2_OVSS)) {
+        printf("adc restart\n");
+
+        adc_power_off(ADC1);
+
+        ADC_CFGR2(ADC1) &= ~ADC_CFGR2_OVSS;
+        ADC_CFGR2(ADC1) &= ~ADC_CFGR2_OVSR;
+
+        if (oversample) {
+            ADC_CFGR2(ADC1) |= ADC_CFGR2_OVSR_0 | ADC_CFGR2_OVSR_1 | ADC_CFGR2_OVSR_2; // 256x oversampling
+            ADC_CFGR2(ADC1) |= ADC_CFGR2_OVSS_3; // Divide by 256 afterwards;
+            ADC_CFGR2(ADC1) |= ADC_CFGR2_OVSE;
+        }
+        else {
+            ADC_CFGR2(ADC1) &= ~ADC_CFGR2_OVSE;
+        }
+
+        adc_power_on(ADC1);
+    }
+
 
     // ADC DMA
     dma_channel_reset(DMA1, DMA_CHANNEL1);
@@ -320,10 +330,10 @@ static void change_state(enum main_state new_state) {
     cur_state_start_secs = system_secs;
 
     // In debug mode, we pulse the LED to indicate which state we are in
-    for (uint8_t i = 0; i < new_state; i++) {
-        gpio_set(LED_ERROR_PORT, LED_ERROR_PIN);
-        gpio_clear(LED_ERROR_PORT, LED_ERROR_PIN);
-    }
+//    for (uint8_t i = 0; i < new_state; i++) {
+//        gpio_set(LED_ERROR_PORT, LED_ERROR_PIN);
+//        gpio_clear(LED_ERROR_PORT, LED_ERROR_PIN);
+//    }
 }
 
 
@@ -342,7 +352,7 @@ int main(void) {
     pwr_disable_backup_domain_write_protect();
 
     // Lowest possible internal voltage scaling to save power, limits to 4mhz clock
-    //pwr_set_vos_scale(PWR_SCALE3);
+    pwr_set_vos_scale(PWR_SCALE3);
 
 
     printf("startup\n");
@@ -450,6 +460,8 @@ int main(void) {
             uint16_t cell1 = cell_4v;
             uint16_t cell2 = cell_8v - cell_4v;
             uint16_t cell3 = vbatt - cell_8v;
+
+            printf("balance %d %d %d\n", cell1, cell2, cell3);
 
             if (cell1 > cell2 && cell1 > cell3 &&
                 ((cell1 - cell2) > MIN_BALANCE_DIFF_THRESHOLD || (cell1 - cell3) > MIN_BALANCE_DIFF_THRESHOLD)) {

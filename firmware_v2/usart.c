@@ -14,8 +14,23 @@
 #include <libopencm3/stm32/gpio.h>
 
 
+static bool usart_enabled(uint32_t usart) {
+    return !!(USART_CR1(usart) & USART_CR1_UE);
+}
+
 void init_usart(void) {
     rcc_periph_clock_enable(RCC_GPIOA);
+
+    // First, set up the pins as input, if our RX pin is pulled up
+    // That means there is a device on the other end, so we enable our usart
+    // Otherwise, we don't enable it to save power
+    gpio_mode_setup(USART1_PORT, GPIO_MODE_INPUT, GPIO_PUPD_NONE, USART1_RX_PIN | USART1_TX_PIN);
+
+    if (!gpio_get(USART1_PORT, USART1_RX_PIN)) {
+        // Check the TX pin, if it's not on, then turn everything off
+        return;
+    }
+
     rcc_periph_clock_enable(RCC_USART1);
 
     /* Setup GPIO pins for USART1 transmit and receive. */
@@ -39,6 +54,10 @@ void init_usart(void) {
 
 int _write(int fd, char *ptr, int len)
 {
+    if (!usart_enabled(USART1)) {
+        return -1;
+    }
+
     int i = 0;
 
     /*
