@@ -357,6 +357,44 @@
 		)
 	)
 	(sheet
+		(at 107.95 85.09)
+		(size 16.51 38.1)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "4f52082d-cd8b-4070-bfed-876b38f927ef")
+		(property "Sheetname" "ADC"
+			(at 107.95 84.3784 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "adc.kicad_sch"
+			(at 107.95 123.7746 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "JPBms2"
+				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766"
+					(page "6")
+				)
+			)
+		)
+	)
+	(sheet
 		(at 104.14 44.45)
 		(size 16.51 27.94)
 		(fields_autoplaced yes)
