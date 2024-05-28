@@ -4265,28 +4265,6 @@
 			)
 		)
 	)
-	(global_label "CELL_8V_ADC"
-		(shape input)
-		(at 166.37 60.96 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "2023b6d2-4619-4e0f-9b7c-e131bb10d0db")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 181.6923 60.96 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-				(hide yes)
-			)
-		)
-	)
 	(global_label "NBAL_2"
 		(shape output)
 		(at 165.1 114.3 0)
@@ -4366,28 +4344,6 @@
 		(uuid "530ebd33-341d-4d23-bc45-e6705c58f834")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 177.3985 119.38 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-				(hide yes)
-			)
-		)
-	)
-	(global_label "CELL_4V_ADC"
-		(shape input)
-		(at 166.37 58.42 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "532a58a6-a685-452f-8f31-2767e37f7dc1")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 181.6923 58.42 0)
 			(effects
 				(font
 					(size 1.27 1.27)
