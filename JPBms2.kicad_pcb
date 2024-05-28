@@ -6815,7 +6815,7 @@
 			)
 		)
 		(property "Value" "H5VL10B"
-			(at 0 1.35 270)
+			(at 0 1.35 -90)
 			(layer "F.Fab")
 			(uuid "5f6febf1-3d45-4f64-86c7-aede89fc0e7d")
 			(effects
@@ -7050,7 +7050,7 @@
 			(uuid "66b87529-d8fe-423b-87b7-5eca756413d6")
 		)
 		(fp_text user "${REFERENCE}"
-			(at -0.127 -1.35 270)
+			(at -0.127 -1.35 -90)
 			(layer "F.Fab")
 			(uuid "71b052c3-c366-442a-9116-293f94bc4113")
 			(effects
@@ -8227,7 +8227,7 @@
 			)
 		)
 		(property "Value" "H5VL10B"
-			(at 0 1.35 270)
+			(at 0 1.35 -90)
 			(layer "F.Fab")
 			(uuid "8382ce35-f016-4b79-8a1c-2afe0af614a6")
 			(effects
@@ -8462,7 +8462,7 @@
 			(uuid "fcc063b3-be3e-4f64-823a-d0690c860dcc")
 		)
 		(fp_text user "${REFERENCE}"
-			(at -0.127 -1.35 270)
+			(at -0.127 -1.35 -90)
 			(layer "F.Fab")
 			(uuid "282e4111-463f-4bb2-90dd-71b0384c4d79")
 			(effects
@@ -12079,7 +12079,7 @@
 			)
 		)
 		(property "Value" "H5VL10B"
-			(at 0 1.35 270)
+			(at 0 1.35 -90)
 			(layer "F.Fab")
 			(uuid "3e3baa96-f796-455a-9e64-7e8bed5293fd")
 			(effects
@@ -12314,7 +12314,7 @@
 			(uuid "9a66daa3-ef9f-4231-9c39-63c335bf6960")
 		)
 		(fp_text user "${REFERENCE}"
-			(at -0.127 -1.35 270)
+			(at -0.127 -1.35 -90)
 			(layer "F.Fab")
 			(uuid "87d3923a-1ad3-45a5-a409-b0955cf5d460")
 			(effects
@@ -32517,7 +32517,7 @@
 		(layer "Edge.Cuts")
 		(uuid "2bcb63dc-5069-403b-9976-e6ea9aa3eb1d")
 	)
-	(gr_text "V1.2\n - Move solar adc line to other layer for less noise?\n - Move adc sampling capacitors closest to stm32\n - stm power pins should be wired to capacitors, then those wired to vcc/gnd\n - multiple gnd vias around decoupling caps\n - balance resistors are placed in a weird grouping\n X bootstrap diodes backwards\n X Check, do I need vcc for level shifting on the BMP uart?\n X Could I make the uart only turn on if the cable is plugged in?\n X Multiplex ADCs for sampling battery voltage\n - Add fake {dblquote}noise{dblquote} generator to ADC noise line\n X Switch to XT30 connector for solar\n X Add button to show battery charge level?\n X ESD protection\n - larger decoulping caps on drivers\n - larger caps on vsolar\n - larger caps on vbatt at entrance?\n - ability to turn off driver chips"
+	(gr_text "V1.2\n - Move solar adc line to other layer for less noise?\n - Move adc sampling capacitors closest to stm32\n - stm power pins should be wired to capacitors, then those wired to vcc/gnd\n - multiple gnd vias around decoupling caps\n X balance resistors are placed in a weird grouping\n X bootstrap diodes backwards\n X Check, do I need vcc for level shifting on the BMP uart?\n X Could I make the uart only turn on if the cable is plugged in?\n X Multiplex ADCs for sampling battery voltage\n - Add fake {dblquote}noise{dblquote} generator to ADC noise line\n X Switch to XT30 connector for solar\n X Add button to show battery charge level?\n X ESD protection\n - larger decoulping caps on drivers\n - larger caps on vsolar\n - larger caps on vbatt at entrance?\n - ability to turn off driver chips"
 		(at 182.4 68.4 0)
 		(layer "F.Cu")
 		(uuid "e087b897-86a0-4c44-a2cf-be59dda6f395")
