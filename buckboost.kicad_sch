@@ -682,40 +682,28 @@
 				)
 			)
 		)
-		(symbol "Driver_FET:IRS2003"
+		(symbol "JakeLib:L6388E"
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
 			(property "Reference" "U"
-				(at 1.27 13.335 0)
+				(at 3.302 11.938 0)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
-					(justify left)
 				)
 			)
-			(property "Value" "IRS2003"
-				(at 1.27 11.43 0)
+			(property "Value" "L6388E"
+				(at 6.35 9.906 0)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
-					(justify left)
 				)
 			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-						(italic yes)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" "https://www.infineon.com/dgdl/irs2003pbf.pdf?fileId=5546d462533600a401535675afec2780"
-				(at 0 0 0)
+			(property "Footprint" "Package_SO:SO-8_5.3x6.2mm_P1.27mm"
+				(at -2.286 -8.382 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -723,8 +711,8 @@
 					(hide yes)
 				)
 			)
-			(property "Description" "Half-Bridge Driver, 200V, 290/600mA, PDIP-8/SOIC-8"
-				(at 0 0 0)
+			(property "Datasheet" "https://www.st.com/resource/en/datasheet/l6388e.pdf"
+				(at 0 -6.35 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -732,7 +720,7 @@
 					(hide yes)
 				)
 			)
-			(property "ki_keywords" "Gate Driver"
+			(property "Description" ""
 				(at 0 0 0)
 				(effects
 					(font
@@ -741,33 +729,22 @@
 					(hide yes)
 				)
 			)
-			(property "ki_fp_filters" "SOIC*3.9x4.9mm*P1.27mm* DIP*W7.62mm*"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "IRS2003_0_1"
+			(symbol "L6388E_1_1"
 				(rectangle
-					(start -5.08 -10.16)
-					(end 5.08 10.16)
+					(start -5.08 8.89)
+					(end 6.35 -5.08)
 					(stroke
-						(width 0.254)
+						(width 0)
 						(type default)
 					)
 					(fill
 						(type background)
 					)
 				)
-			)
-			(symbol "IRS2003_1_1"
-				(pin power_in line
-					(at 0 12.7 270)
+				(pin input line
+					(at -7.62 6.35 0)
 					(length 2.54)
-					(name "VCC"
+					(name "LIN"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -783,7 +760,7 @@
 					)
 				)
 				(pin input line
-					(at -7.62 0 0)
+					(at -7.62 3.81 0)
 					(length 2.54)
 					(name "HIN"
 						(effects
@@ -800,10 +777,10 @@
 						)
 					)
 				)
-				(pin input line
-					(at -7.62 -2.54 0)
+				(pin power_in line
+					(at -7.62 0 0)
 					(length 2.54)
-					(name "~{LIN}"
+					(name "VCC"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -819,9 +796,9 @@
 					)
 				)
 				(pin power_in line
-					(at 0 -12.7 90)
+					(at -7.62 -2.54 0)
 					(length 2.54)
-					(name "COM"
+					(name "GND"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -837,9 +814,9 @@
 					)
 				)
 				(pin output line
-					(at 7.62 -7.62 180)
+					(at 8.89 -2.54 180)
 					(length 2.54)
-					(name "LO"
+					(name "LVG"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -854,10 +831,10 @@
 						)
 					)
 				)
-				(pin passive line
-					(at 7.62 -5.08 180)
+				(pin output line
+					(at 8.89 0 180)
 					(length 2.54)
-					(name "VS"
+					(name "OUT"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -873,9 +850,9 @@
 					)
 				)
 				(pin output line
-					(at 7.62 5.08 180)
+					(at 8.89 2.54 180)
 					(length 2.54)
-					(name "HO"
+					(name "HVG"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -890,10 +867,10 @@
 						)
 					)
 				)
-				(pin passive line
-					(at 7.62 7.62 180)
+				(pin bidirectional line
+					(at 8.89 6.35 180)
 					(length 2.54)
-					(name "VB"
+					(name "VBOOT"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -3410,6 +3387,92 @@
 		)
 	)
 	(symbol
+		(lib_id "JakeLib:L6388E")
+		(at 31.75 78.74 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "7116affc-14ca-4e37-b95f-cc7ec959fec6")
+		(property "Reference" "U6"
+			(at 32.385 64.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "L6388E"
+			(at 32.385 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Package_SO:SO-8_3.9x4.9mm_P1.27mm"
+			(at 29.464 87.122 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.st.com/resource/en/datasheet/l6388e.pdf"
+			(at 31.75 85.09 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 31.75 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "e8a562c0-eda9-4df0-b0bc-137e3ed3c671")
+		)
+		(pin "4"
+			(uuid "266742a0-9eae-47d8-b588-e73b6899528f")
+		)
+		(pin "6"
+			(uuid "9083e31a-714d-4ea5-a584-9099c713e46e")
+		)
+		(pin "3"
+			(uuid "fc27beaa-5b21-4d76-a711-b08fc5aa4f78")
+		)
+		(pin "5"
+			(uuid "0ae1cc3d-2076-460a-b68b-925e5f3a4ea2")
+		)
+		(pin "8"
+			(uuid "073688f6-d277-466f-8756-36a04c4e9350")
+		)
+		(pin "7"
+			(uuid "b81d7f13-1e9f-4657-a649-145f7ad00d3a")
+		)
+		(pin "2"
+			(uuid "5a5a43d8-44a9-4bb2-8549-d5616dc06771")
+		)
+		(instances
+			(project "JPBms2"
+				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/0f5ad211-c4ad-40eb-a8ac-82970ee8fac9"
+					(reference "U6")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Transistor_FET:AO3400A")
 		(at 142.24 73.66 0)
 		(unit 1)
@@ -3495,104 +3558,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Driver_FET:IRS2003")
-		(at 62.23 58.42 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "87a6f540-0fad-46c1-b913-72ec792b5d1c")
-		(property "Reference" "U4"
-			(at 64.4241 43.18 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "IRS2003"
-			(at 64.4241 45.72 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm"
-			(at 62.23 58.42 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-					(italic yes)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "https://www.infineon.com/dgdl/irs2003pbf.pdf?fileId=5546d462533600a401535675afec2780"
-			(at 62.23 58.42 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Half-Bridge Driver, 200V, 290/600mA, PDIP-8/SOIC-8"
-			(at 62.23 58.42 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCSC_Code" "C40009"
-			(at 62.23 58.42 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "7"
-			(uuid "f45df62a-fbc8-4a30-b9b4-4112f98bcd32")
-		)
-		(pin "8"
-			(uuid "193b83f2-6d55-435c-b80a-4f32313b3bcd")
-		)
-		(pin "1"
-			(uuid "bb3d8b0b-6f7c-4db2-aaa9-a6b4483bb4af")
-		)
-		(pin "3"
-			(uuid "b22574d2-25b3-430b-8221-d5e287e1f3c7")
-		)
-		(pin "5"
-			(uuid "1e964c4d-6ddf-40d7-b2f4-3a29c8de9d08")
-		)
-		(pin "6"
-			(uuid "5111795b-9251-437d-8c71-0eba3d903e0d")
-		)
-		(pin "2"
-			(uuid "25805a82-5064-41aa-919e-8be33a2aae80")
-		)
-		(pin "4"
-			(uuid "17a96c3a-60a4-416e-a7e0-152f19227cb4")
-		)
-		(instances
-			(project "JPBms2"
-				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/0f5ad211-c4ad-40eb-a8ac-82970ee8fac9"
-					(reference "U4")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:C_Small")
 		(at 72.39 57.15 180)
 		(unit 1)
@@ -3663,104 +3628,6 @@
 			(project "JPBms2"
 				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/0f5ad211-c4ad-40eb-a8ac-82970ee8fac9"
 					(reference "C19")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Driver_FET:IRS2003")
-		(at 62.23 114.3 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "8bcdbb64-0080-4e30-bfcf-e8aba5b25447")
-		(property "Reference" "U5"
-			(at 64.4241 99.06 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "IRS2003"
-			(at 64.4241 101.6 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm"
-			(at 62.23 114.3 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-					(italic yes)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "https://www.infineon.com/dgdl/irs2003pbf.pdf?fileId=5546d462533600a401535675afec2780"
-			(at 62.23 114.3 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Half-Bridge Driver, 200V, 290/600mA, PDIP-8/SOIC-8"
-			(at 62.23 114.3 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCSC_Code" "C40009"
-			(at 62.23 114.3 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "7"
-			(uuid "0fb0d1f3-1053-4a25-bb9d-f29ec40dd9c1")
-		)
-		(pin "8"
-			(uuid "31e9700a-6201-40f4-a933-d4bd5e91ad98")
-		)
-		(pin "1"
-			(uuid "6e8e1257-5b92-4053-836b-349bca69b121")
-		)
-		(pin "3"
-			(uuid "7e129440-577b-4d95-8bc6-f961284eff2a")
-		)
-		(pin "5"
-			(uuid "09f590c1-0882-4cdb-b494-bc46f3c68da7")
-		)
-		(pin "6"
-			(uuid "6ea132bc-f394-405d-a834-870c6082b5e6")
-		)
-		(pin "2"
-			(uuid "45dd787c-58a4-4469-90df-38e02125c441")
-		)
-		(pin "4"
-			(uuid "c2e220b7-ae79-4331-8cf4-9f5eed1c6587")
-		)
-		(instances
-			(project "JPBms2"
-				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/0f5ad211-c4ad-40eb-a8ac-82970ee8fac9"
-					(reference "U5")
 					(unit 1)
 				)
 			)

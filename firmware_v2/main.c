@@ -199,10 +199,10 @@ static void adc_start_conversion_dma(uint16_t channel_mask, bool oversample) {
  * We need to make a pulse on OC1/OC2, then, once that pulse is done, start a pulse on OC3/OC4.
  */
 static void set_buck_boost_duty(uint16_t dc) {
-    timer_set_oc_value(TIM2, TIM_OC1, BUCK_BOOST_PERIOD - dc);
-    timer_set_oc_value(TIM2, TIM_OC2, BUCK_BOOST_PERIOD - dc);
-    timer_set_oc_value(TIM2, TIM_OC3, dc);
-    timer_set_oc_value(TIM2, TIM_OC4, dc);
+    timer_set_oc_value(TIM2, TIM_OC1, dc);
+    timer_set_oc_value(TIM2, TIM_OC2, dc);
+    timer_set_oc_value(TIM2, TIM_OC3, BUCK_BOOST_PERIOD - dc);
+    timer_set_oc_value(TIM2, TIM_OC4, BUCK_BOOST_PERIOD - dc);
 }
 
 static void init_buck_boost(void) {
@@ -223,24 +223,24 @@ static void init_buck_boost(void) {
     timer_set_mode(TIM2, TIM_CR1_CKD_CK_INT, TIM_CR1_CMS_EDGE, TIM_CR1_DIR_UP);
 
     timer_set_oc_mode(TIM2, TIM_OC1, TIM_OCM_PWM1);
-    timer_set_oc_polarity_low(TIM2, TIM_OC1);
+    timer_set_oc_polarity_high(TIM2, TIM_OC1);
     timer_enable_oc_output(TIM2, TIM_OC1);
-    timer_set_oc_value(TIM2, TIM_OC1, BUCK_BOOST_PERIOD);
+    timer_set_oc_value(TIM2, TIM_OC1, 0);
 
     timer_set_oc_mode(TIM2, TIM_OC2, TIM_OCM_PWM1);
-    timer_set_oc_polarity_low(TIM2, TIM_OC2);
+    timer_set_oc_polarity_high(TIM2, TIM_OC2);
     timer_enable_oc_output(TIM2, TIM_OC2);
-    timer_set_oc_value(TIM2, TIM_OC2, BUCK_BOOST_PERIOD);
+    timer_set_oc_value(TIM2, TIM_OC2, 0);
 
     timer_set_oc_mode(TIM2, TIM_OC3, TIM_OCM_PWM1);
-    timer_set_oc_polarity_high(TIM2, TIM_OC3);
+    timer_set_oc_polarity_low(TIM2, TIM_OC3);
     timer_enable_oc_output(TIM2, TIM_OC3);
-    timer_set_oc_value(TIM2, TIM_OC3, 0);
+    timer_set_oc_value(TIM2, TIM_OC3, BUCK_BOOST_PERIOD);
 
     timer_set_oc_mode(TIM2, TIM_OC4, TIM_OCM_PWM1);
-    timer_set_oc_polarity_high(TIM2, TIM_OC4);
+    timer_set_oc_polarity_low(TIM2, TIM_OC4);
     timer_enable_oc_output(TIM2, TIM_OC4);
-    timer_set_oc_value(TIM2, TIM_OC4, 0);
+    timer_set_oc_value(TIM2, TIM_OC4, BUCK_BOOST_PERIOD);
 
 
     // Set the period to N - 1, because the overflow happens on a match, so it's like a >= loop
@@ -362,8 +362,8 @@ int main(void) {
         if (cur_state == STATE_STARTUP) {
             // Give one second to startup, so all voltages can stabilize
             if (system_secs > 1) {
-                change_state(STATE_START_SAMPLE);
-                //change_state(STATE_START_CHARGE);
+                //change_state(STATE_START_SAMPLE);
+                change_state(STATE_START_CHARGE);
             }
         } else if (cur_state == STATE_START_SAMPLE) {
             // Do a single, non-oversampled read of all battery and solar voltages
@@ -425,11 +425,11 @@ int main(void) {
             // Probably increase the clock speed, setup the buckboost
             // Be checking the MPPT levels here
             // If you are in this state, then you are continously sampling the ADC
-            //set_buck_boost_duty(5);
-//            timer_set_oc_value(TIM2, TIM_OC1, BUCK_BOOST_PERIOD - 5);
-//            timer_set_oc_value(TIM2, TIM_OC2, BUCK_BOOST_PERIOD - 5);
-//            timer_set_oc_value(TIM2, TIM_OC3, 20);
-//            timer_set_oc_value(TIM2, TIM_OC4, 20);
+            //set_buck_boost_duty(10);
+            timer_set_oc_value(TIM2, TIM_OC1, 5);
+            timer_set_oc_value(TIM2, TIM_OC2, 5);
+            timer_set_oc_value(TIM2, TIM_OC3, BUCK_BOOST_PERIOD - 20);
+            timer_set_oc_value(TIM2, TIM_OC4, BUCK_BOOST_PERIOD - 20);
 
 
             uint32_t millis = systick_get_value() * 1000 / systick_get_reload();
