@@ -232,19 +232,19 @@ static void init_buck_boost(void) {
     timer_set_oc_mode(TIM2, TIM_OC2, TIM_OCM_PWM1);
     timer_set_oc_polarity_high(TIM2, TIM_OC2);
     timer_enable_oc_output(TIM2, TIM_OC2);
-    timer_set_oc_value(TIM2, TIM_OC2, BUCK_BOOST_PERIOD - 25);
+    timer_set_oc_value(TIM2, TIM_OC2, BUCK_BOOST_PERIOD - 30);
 
     // HB
     timer_set_oc_mode(TIM2, TIM_OC3, TIM_OCM_PWM1);
     timer_set_oc_polarity_low(TIM2, TIM_OC3);
     timer_enable_oc_output(TIM2, TIM_OC3);
-    timer_set_oc_value(TIM2, TIM_OC3, BUCK_BOOST_PERIOD - 25);
+    timer_set_oc_value(TIM2, TIM_OC3, BUCK_BOOST_PERIOD - 30);
 
     // LB, needs to be set logic high to turn off LB gate
     timer_set_oc_mode(TIM2, TIM_OC4, TIM_OCM_PWM1);
     timer_set_oc_polarity_low(TIM2, TIM_OC4);
     timer_enable_oc_output(TIM2, TIM_OC4);
-    timer_set_oc_value(TIM2, TIM_OC4, 100);
+    timer_set_oc_value(TIM2, TIM_OC4, 5);
 
     // Also remember that you can only turn on HA or HB if corresponding LA/LB have been on recently
     // Because the charge pump needs to operate to get the gate voltage high enough
@@ -369,8 +369,8 @@ int main(void) {
         if (cur_state == STATE_STARTUP) {
             // Give one second to startup, so all voltages can stabilize
             if (system_secs > 1) {
-                //change_state(STATE_START_SAMPLE);
-                change_state(STATE_START_CHARGE);
+                change_state(STATE_START_SAMPLE);
+                //change_state(STATE_START_CHARGE);
             }
         } else if (cur_state == STATE_START_SAMPLE) {
             // Do a single, non-oversampled read of all battery and solar voltages
@@ -400,7 +400,7 @@ int main(void) {
             } else if (cell_4v < SINGLE_CELL_LOW_THRESHOLD || cell_8v - cell_4v < SINGLE_CELL_LOW_THRESHOLD ||
                        vbatt - cell_8v < SINGLE_CELL_LOW_THRESHOLD) {
                 change_state(STATE_LOW_BATT_SLEEP);
-            } else if (vsolar > VSOLAR_START_CHARGING_THRESHOLD) {
+            } else if (vsolar > VSOLAR_START_CHARGING_THRESHOLD && vbatt < VBATT_MAX_THRESHOLD) {
                 change_state(STATE_START_CHARGE);
             } else {
                 change_state(STATE_NORMAL_SLEEP);
@@ -425,6 +425,7 @@ int main(void) {
                 }
             }
         } else if (cur_state == STATE_START_CHARGE) {
+            timer_enable_counter(TIM2);
             timer_enable_counter(TIM22);
 
             change_state(STATE_CHARGE);
@@ -442,11 +443,16 @@ int main(void) {
             uint32_t millis = systick_get_value() * 1000 / systick_get_reload();
             timer_set_oc_value(TIM22, TIM_OC1, (millis % 1000 > 500) ? 1000 - (millis % 1000) : millis % 1000);
             timer_set_oc_value(TIM22, TIM_OC2, millis % 500);
+
+            if (system_secs - cur_state_start_secs > 20) {
+                change_state(STATE_END_CHARGE);
+            }
+
         } else if (cur_state == STATE_END_CHARGE) {
-            set_buck_boost_duty(0);
+            timer_disable_counter(TIM2);
             timer_disable_counter(TIM22);
 
-            change_state(STATE_NORMAL_SLEEP);
+            change_state(STATE_START_SAMPLE);
         } else if (cur_state == STATE_START_BALANCE_CHECK) {
             adc_start_conversion_dma(ADC_CHSELR_CHSEL(VBATT_ADC_CH) | ADC_CHSELR_CHSEL(CELL_4V_ADC_CH) |
                                      ADC_CHSELR_CHSEL(CELL_8V_ADC_CH), true);
