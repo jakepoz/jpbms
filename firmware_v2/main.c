@@ -199,10 +199,10 @@ static void adc_start_conversion_dma(uint16_t channel_mask, bool oversample) {
  * We need to make a pulse on OC1/OC2, then, once that pulse is done, start a pulse on OC3/OC4.
  */
 static void set_buck_boost_duty(uint16_t dc) {
-    timer_set_oc_value(TIM2, TIM_OC1, dc);
-    timer_set_oc_value(TIM2, TIM_OC2, dc);
-    timer_set_oc_value(TIM2, TIM_OC3, BUCK_BOOST_PERIOD - dc);
-    timer_set_oc_value(TIM2, TIM_OC4, BUCK_BOOST_PERIOD - dc);
+//    timer_set_oc_value(TIM2, TIM_OC1, dc);
+//    timer_set_oc_value(TIM2, TIM_OC2, dc);
+//    timer_set_oc_value(TIM2, TIM_OC3, BUCK_BOOST_PERIOD - dc);
+//    timer_set_oc_value(TIM2, TIM_OC4, BUCK_BOOST_PERIOD - dc);
 }
 
 static void init_buck_boost(void) {
@@ -222,25 +222,32 @@ static void init_buck_boost(void) {
 
     timer_set_mode(TIM2, TIM_CR1_CKD_CK_INT, TIM_CR1_CMS_EDGE, TIM_CR1_DIR_UP);
 
+    // HA,
     timer_set_oc_mode(TIM2, TIM_OC1, TIM_OCM_PWM1);
     timer_set_oc_polarity_high(TIM2, TIM_OC1);
     timer_enable_oc_output(TIM2, TIM_OC1);
     timer_set_oc_value(TIM2, TIM_OC1, 0);
 
+    // LA, which is wired to NOT LIN, needs to be set logic high to turn off LA gate
     timer_set_oc_mode(TIM2, TIM_OC2, TIM_OCM_PWM1);
     timer_set_oc_polarity_high(TIM2, TIM_OC2);
     timer_enable_oc_output(TIM2, TIM_OC2);
-    timer_set_oc_value(TIM2, TIM_OC2, 0);
+    timer_set_oc_value(TIM2, TIM_OC2, BUCK_BOOST_PERIOD - 25);
 
+    // HB
     timer_set_oc_mode(TIM2, TIM_OC3, TIM_OCM_PWM1);
     timer_set_oc_polarity_low(TIM2, TIM_OC3);
     timer_enable_oc_output(TIM2, TIM_OC3);
-    timer_set_oc_value(TIM2, TIM_OC3, BUCK_BOOST_PERIOD);
+    timer_set_oc_value(TIM2, TIM_OC3, BUCK_BOOST_PERIOD - 25);
 
+    // LB, needs to be set logic high to turn off LB gate
     timer_set_oc_mode(TIM2, TIM_OC4, TIM_OCM_PWM1);
     timer_set_oc_polarity_low(TIM2, TIM_OC4);
     timer_enable_oc_output(TIM2, TIM_OC4);
-    timer_set_oc_value(TIM2, TIM_OC4, BUCK_BOOST_PERIOD);
+    timer_set_oc_value(TIM2, TIM_OC4, 100);
+
+    // Also remember that you can only turn on HA or HB if corresponding LA/LB have been on recently
+    // Because the charge pump needs to operate to get the gate voltage high enough
 
 
     // Set the period to N - 1, because the overflow happens on a match, so it's like a >= loop
@@ -426,10 +433,10 @@ int main(void) {
             // Be checking the MPPT levels here
             // If you are in this state, then you are continously sampling the ADC
             //set_buck_boost_duty(10);
-            timer_set_oc_value(TIM2, TIM_OC1, 5);
-            timer_set_oc_value(TIM2, TIM_OC2, 5);
-            timer_set_oc_value(TIM2, TIM_OC3, BUCK_BOOST_PERIOD - 20);
-            timer_set_oc_value(TIM2, TIM_OC4, BUCK_BOOST_PERIOD - 20);
+//            timer_set_oc_value(TIM2, TIM_OC1, 0); //HA
+//            timer_set_oc_value(TIM2, TIM_OC2, 0); //LA
+//            timer_set_oc_value(TIM2, TIM_OC3, BUCK_BOOST_PERIOD - 0); //HB
+//            timer_set_oc_value(TIM2, TIM_OC4, BUCK_BOOST_PERIOD - 0); //LB
 
 
             uint32_t millis = systick_get_value() * 1000 / systick_get_reload();

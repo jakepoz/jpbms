@@ -5888,8 +5888,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x04")
-		(at 44.45 41.91 0)
-		(mirror y)
+		(at 44.45 44.45 180)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -5897,7 +5896,7 @@
 		(dnp no)
 		(uuid "a78d6b11-0b8b-4a49-b7d2-3e5939a4d92f")
 		(property "Reference" "BAL1"
-			(at 41.91 41.9099 0)
+			(at 41.91 44.4501 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5906,7 +5905,7 @@
 			)
 		)
 		(property "Value" "Conn_01x04 JST-XH"
-			(at 41.91 44.4499 0)
+			(at 41.91 41.9101 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5915,7 +5914,7 @@
 			)
 		)
 		(property "Footprint" "JakeLib:JST_XH_S4B-XH-A_1x04_P2.50mm_Horizontal_Tight"
-			(at 44.45 41.91 0)
+			(at 44.45 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5924,7 +5923,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 44.45 41.91 0)
+			(at 44.45 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5933,7 +5932,7 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)"
-			(at 44.45 41.91 0)
+			(at 44.45 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5942,7 +5941,7 @@
 			)
 		)
 		(property "LCSC_Code" "C157925"
-			(at 44.45 41.91 0)
+			(at 44.45 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
