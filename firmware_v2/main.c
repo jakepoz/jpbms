@@ -42,6 +42,8 @@ volatile uint32_t system_secs;
 
 void sys_tick_handler(void)
 {
+    gpio_toggle(LED_ERROR_PORT, LED_ERROR_PIN);
+
 //    gpio_clear(LED_ERROR_PORT, LED_ERROR_PIN);
 //    gpio_set(LED_ERROR_PORT, LED_ERROR_PIN);
 //    gpio_toggle(BALANCE_PORT, BALANCE_3_PIN);
@@ -58,8 +60,10 @@ static void enter_sleep_mode(void) {
 
 
 /* Set up a timer to create 1mS ticks. */
-static void init_systick(void)
+static void systick_init(void)
 {
+    systick_counter_disable();
+
     /* clock rate / 1000 to get 1sec interrupt rate */
     systick_set_reload(rcc_ahb_frequency - 1);
     systick_set_clocksource(STK_CSR_CLKSOURCE_AHB);
@@ -68,7 +72,7 @@ static void init_systick(void)
     systick_interrupt_enable();
 }
 
-static void init_gpios(void) {
+static void gpiob_init(void) {
     rcc_periph_clock_enable(RCC_GPIOB);
 
     // Setup the LEDs
@@ -80,7 +84,7 @@ static void init_gpios(void) {
     gpio_mode_setup(BALANCE_PORT, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, BALANCE_1_PIN | BALANCE_2_PIN | BALANCE_3_PIN);
 }
 
-static void init_leds(void) {
+static void leds_init(void) {
     rcc_periph_clock_enable(RCC_TIM22);
 
     gpio_mode_setup(GPIOB, GPIO_MODE_AF, GPIO_PUPD_NONE, LED_ON_PIN | LED_ACTIVE_PIN);
@@ -96,11 +100,22 @@ static void init_leds(void) {
     timer_set_oc_mode(TIM22, TIM_OC1, TIM_OCM_PWM1);
     timer_set_oc_mode(TIM22, TIM_OC2, TIM_OCM_PWM1);
 
-    // Enable TIM22 output compare channels
-    timer_enable_oc_output(TIM22, TIM_OC1);
-    timer_enable_oc_output(TIM22, TIM_OC2);
+
 }
 
+static void leds_enable(void) {
+    timer_enable_oc_output(TIM22, TIM_OC1);
+    timer_enable_oc_output(TIM22, TIM_OC2);
+
+    timer_enable_counter(TIM22);
+}
+
+static void leds_disable(void) {
+    timer_disable_oc_output(TIM22, TIM_OC1);
+    timer_disable_oc_output(TIM22, TIM_OC2);
+
+    timer_disable_counter(TIM22);
+}
 
 
 //void dma1_channel1_isr(void)
@@ -119,7 +134,7 @@ static void init_leds(void) {
 //    }
 // }
 
-static void init_adc(void) {
+static void adc_init(void) {
     rcc_periph_clock_enable(RCC_ADC1);
     rcc_periph_clock_enable(RCC_GPIOA);
     rcc_periph_clock_enable(RCC_DMA);
@@ -199,14 +214,14 @@ static void adc_start_conversion_dma(uint16_t channel_mask, bool oversample) {
  * The problem is that the STM32L053 doesn't have a way to generate PWM pulses with a phase offset.
  * We need to make a pulse on OC1/OC2, then, once that pulse is done, start a pulse on OC3/OC4.
  */
-static void set_buck_boost_duty(uint16_t dc) {
+static void buck_boost_set_duty(uint16_t dc) {
 //    timer_set_oc_value(TIM2, TIM_OC1, dc);
 //    timer_set_oc_value(TIM2, TIM_OC2, dc);
 //    timer_set_oc_value(TIM2, TIM_OC3, BUCK_BOOST_PERIOD - dc);
 //    timer_set_oc_value(TIM2, TIM_OC4, BUCK_BOOST_PERIOD - dc);
 }
 
-static void init_buck_boost(void) {
+static void buck_boost_init(void) {
     rcc_periph_clock_enable(RCC_TIM2);
     rcc_periph_clock_enable(RCC_GPIOA);
     rcc_periph_clock_enable(RCC_GPIOB);
@@ -231,17 +246,17 @@ static void init_buck_boost(void) {
     // LA, which is wired to NOT LIN, needs to be set logic high to turn off LA gate
     timer_set_oc_mode(TIM2, TIM_OC2, TIM_OCM_PWM1);
     timer_set_oc_polarity_high(TIM2, TIM_OC2);
-    timer_set_oc_value(TIM2, TIM_OC2, BUCK_BOOST_PERIOD - 30);
+    timer_set_oc_value(TIM2, TIM_OC2, BUCK_BOOST_PERIOD - 180);
 
     // HB
     timer_set_oc_mode(TIM2, TIM_OC3, TIM_OCM_PWM1);
     timer_set_oc_polarity_low(TIM2, TIM_OC3);
-    timer_set_oc_value(TIM2, TIM_OC3, BUCK_BOOST_PERIOD - 30);
+    timer_set_oc_value(TIM2, TIM_OC3, BUCK_BOOST_PERIOD - 180);
 
     // LB, needs to be set logic high to turn off LB gate
     timer_set_oc_mode(TIM2, TIM_OC4, TIM_OCM_PWM1);
     timer_set_oc_polarity_low(TIM2, TIM_OC4);
-    timer_set_oc_value(TIM2, TIM_OC4, 5);
+    timer_set_oc_value(TIM2, TIM_OC4, 15);
 
     // Also remember that you can only turn on HA or HB if corresponding LA/LB have been on recently
     // Because the charge pump needs to operate to get the gate voltage high enough
@@ -257,7 +272,7 @@ static void init_buck_boost(void) {
 
 }
 
-static void enable_buck_boost(void) {
+static void buck_boost_enable(void) {
     timer_enable_oc_output(TIM2, TIM_OC1);
     timer_enable_oc_output(TIM2, TIM_OC2);
     timer_enable_oc_output(TIM2, TIM_OC3);
@@ -266,7 +281,7 @@ static void enable_buck_boost(void) {
     timer_enable_counter(TIM2);
 }
 
-static void disable_buck_boost(void) {
+static void buck_boost_disable(void) {
     timer_disable_counter(TIM2);
     timer_disable_oc_output(TIM2, TIM_OC1);
     timer_disable_oc_output(TIM2, TIM_OC2);
@@ -288,10 +303,21 @@ static void buck_boost_enable_clock(void) {
 
     rcc_set_hpre(RCC_CFGR_HPRE_NODIV);
     rcc_set_ppre1(RCC_CFGR_PPRE1_NODIV);
-    rcc_set_ppre2(RCC_CFGR_PPRE2_NODIV);
+    rcc_set_ppre2(RCC_CFGR_PPRE2_DIV8); // Divide by 8 to keep USART operating
+
+    rcc_ahb_frequency = 16000000;
+    rcc_apb1_frequency = 16000000;
+    rcc_apb2_frequency = 2000000;
+
+    // Setup systick again with new AHB frequency
+    systick_init();
 
     rcc_set_sysclk_source(RCC_HSI16);
     while (((RCC_CFGR >> RCC_CFGR_SWS_SHIFT) & RCC_CFGR_SWS_MASK) != RCC_CFGR_SWS_HSI16);
+}
+
+static void buck_boost_disable_clock(void) {
+
 }
 
 /*
@@ -376,13 +402,13 @@ static void change_state(enum main_state new_state) {
 
 
 int main(void) {
-    init_gpios();
-    init_leds();
-    init_systick();
-    init_usart();
+    gpiob_init();
+    leds_init();
+    systick_init();
+    usart_comm_init();
 
-    init_adc();
-    init_buck_boost();
+    adc_init();
+    buck_boost_init();
 
 
     // Sleep mode tests
@@ -394,8 +420,6 @@ int main(void) {
 
 
     printf("startup\n");
-
-    buck_boost_enable_clock();
 
 
     while (1) {
@@ -459,9 +483,9 @@ int main(void) {
             }
         } else if (cur_state == STATE_START_CHARGE) {
             buck_boost_enable_clock();
+            buck_boost_enable();
 
-            enable_buck_boost();
-            timer_enable_counter(TIM22);
+            leds_enable();
 
             printf("charge\n");
 
@@ -486,8 +510,10 @@ int main(void) {
             }
 
         } else if (cur_state == STATE_END_CHARGE) {
-            disable_buck_boost();
-            timer_disable_counter(TIM22);
+            buck_boost_disable();
+            buck_boost_enable_clock();
+
+            leds_disable();
 
             change_state(STATE_START_SAMPLE);
         } else if (cur_state == STATE_START_BALANCE_CHECK) {
@@ -545,21 +571,4 @@ int main(void) {
             }
         }
     }
-
-
-//         float c1 = read_cell4v();
-//         float c2 = read_cell8v() - c1;
-//         float c3 = read_vbatt() - c2 - c1;
-//
-//         //printf("%f %f %f\n", c1, c2, c3);
-//
-//
-//
-//         //gpio_toggle(LED_ERROR_PORT, LED_ERROR_PIN);
-//
-//         uint32_t millis = systick_get_value() * 1000 / systick_get_reload();
-// //        timer_set_oc_value(TIM22, TIM_OC1, (millis % 1000 > 500) ? 1000 - (millis % 1000) : millis % 1000);
-// //        timer_set_oc_value(TIM22, TIM_OC2, millis % 500);
-//
-//         //enter_sleep_mode();
 }

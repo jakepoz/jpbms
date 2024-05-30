@@ -1,0 +1,6 @@
+Gate bounce:
+ - I'm seeing this effect where, I charge up the inductor via VSolar (off of power supply for now)
+ - There is definitely current in the inductor, because then I briefly enable VBatt + GND on the other side, and then turn those gates off again
+ - and I see the spike in voltage where the inductor goes just above VBATT charging it
+ - but then, the inductor current shrinks, and there is a big osilation.
+ - And you see the high side gates of the mosfets take on the same oscillating waveform

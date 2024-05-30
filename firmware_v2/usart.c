@@ -18,7 +18,7 @@ static bool usart_enabled(uint32_t usart) {
     return !!(USART_CR1(usart) & USART_CR1_UE);
 }
 
-void init_usart(void) {
+void usart_comm_init(void) {
     rcc_periph_clock_enable(RCC_GPIOA);
 
     // First, set up the pins as input, if our RX pin is pulled up
@@ -31,6 +31,7 @@ void init_usart(void) {
         return;
     }
 
+    rcc_periph_clock_enable(RCC_USART1);
     rcc_periph_clock_enable(RCC_USART1);
 
     /* Setup GPIO pins for USART1 transmit and receive. */
@@ -100,5 +101,13 @@ int _lseek(int file __attribute__((unused)), int ptr __attribute__((unused)), in
 
 int _read(int file __attribute__((unused)), char *ptr __attribute__((unused)), int len __attribute__((unused))) {
     errno = EIO;
+    return -1;
+}
+
+int _getpid(void) {
+    return -1;
+}
+
+int _kill(int pid __attribute__((unused)), int sig __attribute__((unused))) {
     return -1;
 }
