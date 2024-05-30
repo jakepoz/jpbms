@@ -10,6 +10,7 @@
 #include <libopencm3/cm3/cortex.h> // Include this header for __WFI
 
 #include <libopencm3/stm32/rcc.h>
+#include <libopencm3/stm32/flash.h>
 #include <libopencm3/stm32/gpio.h>
 #include <libopencm3/stm32/pwr.h>
 #include <libopencm3/stm32/usart.h>
@@ -225,25 +226,21 @@ static void init_buck_boost(void) {
     // HA,
     timer_set_oc_mode(TIM2, TIM_OC1, TIM_OCM_PWM1);
     timer_set_oc_polarity_high(TIM2, TIM_OC1);
-    timer_enable_oc_output(TIM2, TIM_OC1);
     timer_set_oc_value(TIM2, TIM_OC1, 0);
 
     // LA, which is wired to NOT LIN, needs to be set logic high to turn off LA gate
     timer_set_oc_mode(TIM2, TIM_OC2, TIM_OCM_PWM1);
     timer_set_oc_polarity_high(TIM2, TIM_OC2);
-    timer_enable_oc_output(TIM2, TIM_OC2);
     timer_set_oc_value(TIM2, TIM_OC2, BUCK_BOOST_PERIOD - 30);
 
     // HB
     timer_set_oc_mode(TIM2, TIM_OC3, TIM_OCM_PWM1);
     timer_set_oc_polarity_low(TIM2, TIM_OC3);
-    timer_enable_oc_output(TIM2, TIM_OC3);
     timer_set_oc_value(TIM2, TIM_OC3, BUCK_BOOST_PERIOD - 30);
 
     // LB, needs to be set logic high to turn off LB gate
     timer_set_oc_mode(TIM2, TIM_OC4, TIM_OCM_PWM1);
     timer_set_oc_polarity_low(TIM2, TIM_OC4);
-    timer_enable_oc_output(TIM2, TIM_OC4);
     timer_set_oc_value(TIM2, TIM_OC4, 5);
 
     // Also remember that you can only turn on HA or HB if corresponding LA/LB have been on recently
@@ -258,10 +255,44 @@ static void init_buck_boost(void) {
 //     timer_enable_irq(TIM2, TIM_DIER_UIE);
 //     nvic_enable_irq(NVIC_TIM2_IRQ);
 
+}
+
+static void enable_buck_boost(void) {
+    timer_enable_oc_output(TIM2, TIM_OC1);
+    timer_enable_oc_output(TIM2, TIM_OC2);
+    timer_enable_oc_output(TIM2, TIM_OC3);
+    timer_enable_oc_output(TIM2, TIM_OC4);
+    timer_set_counter(TIM2, 0);
     timer_enable_counter(TIM2);
 }
 
+static void disable_buck_boost(void) {
+    timer_disable_counter(TIM2);
+    timer_disable_oc_output(TIM2, TIM_OC1);
+    timer_disable_oc_output(TIM2, TIM_OC2);
+    timer_disable_oc_output(TIM2, TIM_OC3);
+    timer_disable_oc_output(TIM2, TIM_OC4);
+}
 
+// Switches us over to a higher speed clock for more PWM precision
+// when running the buck boost
+static void buck_boost_enable_clock(void) {
+    // You need to start using more power at a higher clock speed
+    pwr_set_vos_scale(PWR_SCALE1);
+
+    rcc_osc_on(RCC_HSI16);
+    rcc_wait_for_osc_ready(RCC_HSI16);
+
+    flash_prefetch_enable();
+    flash_set_ws(FLASH_ACR_LATENCY_1WS);
+
+    rcc_set_hpre(RCC_CFGR_HPRE_NODIV);
+    rcc_set_ppre1(RCC_CFGR_PPRE1_NODIV);
+    rcc_set_ppre2(RCC_CFGR_PPRE2_NODIV);
+
+    rcc_set_sysclk_source(RCC_HSI16);
+    while (((RCC_CFGR >> RCC_CFGR_SWS_SHIFT) & RCC_CFGR_SWS_MASK) != RCC_CFGR_SWS_HSI16);
+}
 
 /*
 * Startup
@@ -364,6 +395,8 @@ int main(void) {
 
     printf("startup\n");
 
+    buck_boost_enable_clock();
+
 
     while (1) {
         if (cur_state == STATE_STARTUP) {
@@ -425,8 +458,12 @@ int main(void) {
                 }
             }
         } else if (cur_state == STATE_START_CHARGE) {
-            timer_enable_counter(TIM2);
+            buck_boost_enable_clock();
+
+            enable_buck_boost();
             timer_enable_counter(TIM22);
+
+            printf("charge\n");
 
             change_state(STATE_CHARGE);
         } else if (cur_state == STATE_CHARGE) {
@@ -449,7 +486,7 @@ int main(void) {
             }
 
         } else if (cur_state == STATE_END_CHARGE) {
-            timer_disable_counter(TIM2);
+            disable_buck_boost();
             timer_disable_counter(TIM22);
 
             change_state(STATE_START_SAMPLE);
