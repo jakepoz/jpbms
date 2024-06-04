@@ -255,17 +255,22 @@ static void adc_convert_tim2_trigger(uint16_t channel_mask) {
     dma_channel_reset(DMA1, DMA_CHANNEL1);
     dma_set_peripheral_address(DMA1, DMA_CHANNEL1, (uint32_t)&ADC_DR(ADC1));
     dma_set_memory_address(DMA1, DMA_CHANNEL1, (uint32_t)adc_buffer);
-    dma_set_number_of_data(DMA1, DMA_CHANNEL1, ADC_BUFFER_SIZE);
+    if (__builtin_popcount(channel_mask) < ADC_BUFFER_SIZE)
+        dma_set_number_of_data(DMA1, DMA_CHANNEL1, __builtin_popcount(channel_mask));
+    else
+        dma_set_number_of_data(DMA1, DMA_CHANNEL1, ADC_BUFFER_SIZE);
     dma_set_read_from_peripheral(DMA1, DMA_CHANNEL1);
     dma_enable_memory_increment_mode(DMA1, DMA_CHANNEL1);
     dma_set_peripheral_size(DMA1, DMA_CHANNEL1, DMA_CCR_PSIZE_16BIT);
     dma_set_memory_size(DMA1, DMA_CHANNEL1, DMA_CCR_MSIZE_16BIT);
     dma_set_priority(DMA1, DMA_CHANNEL1, DMA_CCR_PL_HIGH);
+    dma_enable_circular_mode(DMA1, DMA_CHANNEL1);
     dma_enable_channel(DMA1, DMA_CHANNEL1);
 
+    adc_enable_dma_circular_mode(ADC1);
     adc_enable_dma(ADC1);
 
-    adc_set_continuous_conversion_mode(ADC1);
+    adc_start_conversion_regular(ADC1);
 }
 
 /*
@@ -562,7 +567,7 @@ int main(void) {
                 }
             }
         } else if (cur_state == STATE_START_CHARGE) {
-            adc_convert_tim2_trigger(ADC_CHSELR_CHSEL(VSOLAR_ADC_CH));
+            adc_convert_tim2_trigger(ADC_CHSELR_CHSEL(VBATT_ADC_CH) | ADC_CHSELR_CHSEL(VSOLAR_ADC_CH) | ADC_CHSELR_CHSEL(SOLAR_CURRENT_ADC_CH)) ;
 
             buck_boost_enable_clock();
             buck_boost_enable();
@@ -585,7 +590,7 @@ int main(void) {
 //
 
 
-            printf("charge %d %ld\n", adc_buffer[0], ADC_DR(ADC1));
+            printf("charge %d %d %d\n", adc_buffer[0], adc_buffer[1], adc_buffer[2]);
 
             uint32_t millis = systick_get_value() / (systick_get_reload() / 1000);
             timer_set_oc_value(TIM22, TIM_OC1, (millis % 1000 > 500) ? 1000 - (millis % 1000) : millis % 1000);
