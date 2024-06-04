@@ -42,7 +42,7 @@ volatile uint32_t system_secs;
 
 void sys_tick_handler(void)
 {
-    gpio_toggle(LED_ERROR_PORT, LED_ERROR_PIN);
+//    gpio_toggle(LED_ERROR_PORT, LED_ERROR_PIN);
 
 //    gpio_clear(LED_ERROR_PORT, LED_ERROR_PIN);
 //    gpio_set(LED_ERROR_PORT, LED_ERROR_PIN);
@@ -126,13 +126,18 @@ static void leds_disable(void) {
 //    }
 //}
 
-// void adc_comp_isr(void)
-// {
-//    if (adc_eos(ADC1)) {
-//        ADC_ISR(ADC1) = ADC_ISR_EOS;
-//
-//    }
-// }
+static volatile bool adc_conversion_finished = false;
+
+ void adc_comp_isr(void)
+ {
+    if (adc_eos(ADC1)) {
+        ADC_ISR(ADC1) = ADC_ISR_EOS;
+        adc_conversion_finished = true;
+
+        gpio_set(LED_ERROR_PORT, LED_ERROR_PIN);
+        gpio_clear(LED_ERROR_PORT, LED_ERROR_PIN);
+    }
+ }
 
 static void adc_init(void) {
     rcc_periph_clock_enable(RCC_ADC1);
@@ -158,13 +163,7 @@ static void adc_init(void) {
     adc_power_on(ADC1);
 }
 
-static void adc_start_conversion_dma(uint16_t channel_mask, bool oversample) {
-    // Set the sample rate
-    ADC_SMPR1(ADC1) = ADC_SMPR_SMP_160DOT5CYC;
-
-    // Select which channels to read
-    ADC_CHSELR(ADC1) = channel_mask;
-
+static void adc_set_oversample_256(bool oversample) {
     // Configure oversampling
     // Oversampling can only be configured if the adc is off
     if (!!oversample != !!(ADC_CFGR2(ADC1) & ADC_CFGR2_OVSS)) {
@@ -179,14 +178,22 @@ static void adc_start_conversion_dma(uint16_t channel_mask, bool oversample) {
             ADC_CFGR2(ADC1) |= ADC_CFGR2_OVSR_0 | ADC_CFGR2_OVSR_1 | ADC_CFGR2_OVSR_2; // 256x oversampling
             ADC_CFGR2(ADC1) |= ADC_CFGR2_OVSS_3; // Divide by 256 afterwards;
             ADC_CFGR2(ADC1) |= ADC_CFGR2_OVSE;
-        }
-        else {
+        } else {
             ADC_CFGR2(ADC1) &= ~ADC_CFGR2_OVSE;
         }
 
         adc_power_on(ADC1);
     }
+}
 
+static void adc_start_conversion_dma(uint16_t channel_mask, bool oversample) {
+    // Set the sample rate
+    ADC_SMPR1(ADC1) = ADC_SMPR_SMP_160DOT5CYC;
+
+    // Select which channels to read
+    ADC_CHSELR(ADC1) = channel_mask;
+
+    adc_set_oversample_256(oversample);
 
     // ADC DMA
     dma_channel_reset(DMA1, DMA_CHANNEL1);
@@ -201,13 +208,67 @@ static void adc_start_conversion_dma(uint16_t channel_mask, bool oversample) {
     dma_enable_channel(DMA1, DMA_CHANNEL1);
 
     // Clear end of sequence flag
-    ADC_ISR(ADC1) = ADC_ISR_EOS;
+    adc_conversion_finished = false;
+
+    // Enable interrupt for testing
+    ADC_IER(ADC1) |= ADC_IER_EOSIE;
+    nvic_enable_irq(NVIC_ADC_COMP_IRQ);
+
 
     adc_disable_dma_circular_mode(ADC1);
     adc_enable_dma(ADC1);
 
     // Start converting in a loop into the buffer
     adc_start_conversion_regular(ADC1);
+}
+
+static void adc_convert_tim2_trigger(uint16_t channel_mask) {
+    // This function is meant to start ADC conversions on TIM2 triggers
+    // on TIM2 overflow, we start a conversion, so we are synced to always get it during the same
+    // point in the cycle
+
+    // The result is still DMAed into the same buffer as usual
+
+    // The ADC needs to be powered off to adjust the trigger mechanism
+    adc_power_off(ADC1);
+
+    // Set the sample rate
+    ADC_SMPR1(ADC1) = ADC_SMPR_SMP_3DOT5CYC;
+
+    // Select which channels to read
+    ADC_CHSELR(ADC1) = channel_mask;
+
+    // Turn off oversampling
+    ADC_CFGR2(ADC1) &= ~ADC_CFGR2_OVSS;
+    ADC_CFGR2(ADC1) &= ~ADC_CFGR2_OVSR;
+
+    // Configure ADC to use TIM2 TRGO event as an external trigger
+    ADC_CFGR1(ADC1) |= ADC_CFGR1_EXTSEL_TIM2_TRGO; // Select TIM2 TRGO as external event for regular group
+    ADC_CFGR1(ADC1) |= ADC_CFGR1_EXTEN_RISING_EDGE;
+
+    adc_power_on(ADC1);
+
+    // Clear end of sequence flag
+    ADC_ISR(ADC1) = ADC_ISR_EOS;
+
+    // Enable ADC DMA
+    dma_channel_reset(DMA1, DMA_CHANNEL1);
+    dma_set_peripheral_address(DMA1, DMA_CHANNEL1, (uint32_t)&ADC_DR(ADC1));
+    dma_set_memory_address(DMA1, DMA_CHANNEL1, (uint32_t)adc_buffer);
+    dma_set_number_of_data(DMA1, DMA_CHANNEL1, ADC_BUFFER_SIZE);
+    dma_set_read_from_peripheral(DMA1, DMA_CHANNEL1);
+    dma_enable_memory_increment_mode(DMA1, DMA_CHANNEL1);
+    dma_set_peripheral_size(DMA1, DMA_CHANNEL1, DMA_CCR_PSIZE_16BIT);
+    dma_set_memory_size(DMA1, DMA_CHANNEL1, DMA_CCR_MSIZE_16BIT);
+    dma_set_priority(DMA1, DMA_CHANNEL1, DMA_CCR_PL_HIGH);
+    dma_enable_channel(DMA1, DMA_CHANNEL1);
+
+
+    adc_enable_dma(ADC1);
+
+    adc_start_conversion_regular(ADC1);
+
+
 }
 
 /*
@@ -238,6 +299,9 @@ static void buck_boost_init(void) {
 
     timer_set_mode(TIM2, TIM_CR1_CKD_CK_INT, TIM_CR1_CMS_EDGE, TIM_CR1_DIR_UP);
 
+    // Send out triggers on updates to sync the ADC during charging
+    timer_set_master_mode(TIM2, TIM_CR2_MMS_UPDATE);
+
     // HA,
     timer_set_oc_mode(TIM2, TIM_OC1, TIM_OCM_PWM1);
     timer_set_oc_polarity_high(TIM2, TIM_OC1);
@@ -246,12 +310,12 @@ static void buck_boost_init(void) {
     // LA, which is wired to NOT LIN, needs to be set logic high to turn off LA gate
     timer_set_oc_mode(TIM2, TIM_OC2, TIM_OCM_PWM1);
     timer_set_oc_polarity_high(TIM2, TIM_OC2);
-    timer_set_oc_value(TIM2, TIM_OC2, BUCK_BOOST_PERIOD - 180);
+    timer_set_oc_value(TIM2, TIM_OC2, BUCK_BOOST_PERIOD - 50);
 
     // HB
     timer_set_oc_mode(TIM2, TIM_OC3, TIM_OCM_PWM1);
     timer_set_oc_polarity_low(TIM2, TIM_OC3);
-    timer_set_oc_value(TIM2, TIM_OC3, BUCK_BOOST_PERIOD - 180);
+    timer_set_oc_value(TIM2, TIM_OC3, BUCK_BOOST_PERIOD - 50);
 
     // LB, needs to be set logic high to turn off LB gate
     timer_set_oc_mode(TIM2, TIM_OC4, TIM_OCM_PWM1);
@@ -317,7 +381,26 @@ static void buck_boost_enable_clock(void) {
 }
 
 static void buck_boost_disable_clock(void) {
+    // Switch back to low frequency / low power operations
+    rcc_set_hpre(RCC_CFGR_HPRE_NODIV);
+    rcc_set_ppre1(RCC_CFGR_PPRE1_NODIV);
+    rcc_set_ppre2(RCC_CFGR_PPRE2_NODIV);
 
+    rcc_ahb_frequency = 2097000;
+    rcc_apb1_frequency = 2097000;
+    rcc_apb2_frequency = 2097000;
+
+    systick_init();
+
+    rcc_set_sysclk_source(RCC_MSI);
+    while (((RCC_CFGR >> RCC_CFGR_SWS_SHIFT) & RCC_CFGR_SWS_MASK) != RCC_CFGR_SWS_MSI);
+
+    rcc_osc_off(RCC_HSI16);
+
+    flash_prefetch_disable();
+    flash_set_ws(FLASH_ACR_LATENCY_0WS);
+
+    pwr_set_vos_scale(PWR_SCALE3);
 }
 
 /*
@@ -436,7 +519,7 @@ int main(void) {
 
             change_state(STATE_WAIT_SAMPLE);
         } else if (cur_state == STATE_WAIT_SAMPLE) {
-            if (adc_eos(ADC1)){
+            if (adc_conversion_finished){
                 change_state(STATE_SAMPLE);
             } else {
                 enter_sleep_mode();
@@ -482,6 +565,8 @@ int main(void) {
                 }
             }
         } else if (cur_state == STATE_START_CHARGE) {
+            adc_convert_tim2_trigger(ADC_CHSELR_CHSEL(VSOLAR_ADC_CH));
+
             buck_boost_enable_clock();
             buck_boost_enable();
 
@@ -499,15 +584,22 @@ int main(void) {
 //            timer_set_oc_value(TIM2, TIM_OC2, 0); //LA
 //            timer_set_oc_value(TIM2, TIM_OC3, BUCK_BOOST_PERIOD - 0); //HB
 //            timer_set_oc_value(TIM2, TIM_OC4, BUCK_BOOST_PERIOD - 0); //LB
+//            adc_start_conversion_dma(ADC_CHSELR_CHSEL(VSOLAR_ADC_CH), false);
+//
+//            while (!adc_eos(ADC1)) {
+//                //pass
+//            }
+//
+            printf("charge %d\n", adc_buffer[0]);
 
-
-            uint32_t millis = systick_get_value() * 1000 / systick_get_reload();
+            uint32_t millis = systick_get_value() / (systick_get_reload() / 1000);
             timer_set_oc_value(TIM22, TIM_OC1, (millis % 1000 > 500) ? 1000 - (millis % 1000) : millis % 1000);
             timer_set_oc_value(TIM22, TIM_OC2, millis % 500);
 
-            if (system_secs - cur_state_start_secs > 20) {
-                change_state(STATE_END_CHARGE);
-            }
+            // TODO Not leaving charge state for now as a test
+//            if (system_secs - cur_state_start_secs > 20) {
+//                change_state(STATE_END_CHARGE);
+//            }
 
         } else if (cur_state == STATE_END_CHARGE) {
             buck_boost_disable();
@@ -523,7 +615,7 @@ int main(void) {
 
             change_state(STATE_WAIT_BALANCE_CHECK);
         } else if (cur_state == STATE_WAIT_BALANCE_CHECK) {
-            if (adc_eos(ADC1)) {
+            if (adc_conversion_finished) {
                 change_state(STATE_BALANCE_CHECK);
             } else {
                 enter_sleep_mode();
