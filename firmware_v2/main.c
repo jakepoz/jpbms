@@ -277,11 +277,29 @@ static void adc_convert_tim2_trigger(uint16_t channel_mask) {
  * The problem is that the STM32L053 doesn't have a way to generate PWM pulses with a phase offset.
  * We need to make a pulse on OC1/OC2, then, once that pulse is done, start a pulse on OC3/OC4.
  */
-static void buck_boost_set_duty(uint16_t dc) {
-//    timer_set_oc_value(TIM2, TIM_OC1, dc);
-//    timer_set_oc_value(TIM2, TIM_OC2, dc);
-//    timer_set_oc_value(TIM2, TIM_OC3, BUCK_BOOST_PERIOD - dc);
-//    timer_set_oc_value(TIM2, TIM_OC4, BUCK_BOOST_PERIOD - dc);
+static uint16_t buck_boost_last_duty = 0;
+
+static uint16_t buck_boost_get_duty(void) {
+    return buck_boost_last_duty;
+}
+
+static void buck_boost_set_duty(uint16_t new_dc, int16_t delta) {
+    int32_t dc = (int32_t)new_dc + delta;
+    if (dc < 0) {
+        dc = 0;
+    }
+    else if (dc > BUCK_BOOST_PERIOD) {
+        dc = BUCK_BOOST_PERIOD;
+    }
+
+    buck_boost_last_duty = dc;
+
+    timer_set_oc_value(TIM2, TIM_OC1, 0);
+    timer_set_oc_value(TIM2, TIM_OC2, BUCK_BOOST_PERIOD - dc);
+    timer_set_oc_value(TIM2, TIM_OC3, BUCK_BOOST_PERIOD - dc);
+
+    // Fixed tiny amount to run charge pump
+    timer_set_oc_value(TIM2, TIM_OC4, 15);
 }
 
 static void buck_boost_init(void) {
@@ -312,12 +330,12 @@ static void buck_boost_init(void) {
     // LA, which is wired to NOT LIN, needs to be set logic high to turn off LA gate
     timer_set_oc_mode(TIM2, TIM_OC2, TIM_OCM_PWM1);
     timer_set_oc_polarity_high(TIM2, TIM_OC2);
-    timer_set_oc_value(TIM2, TIM_OC2, BUCK_BOOST_PERIOD - 50);
+    timer_set_oc_value(TIM2, TIM_OC2, BUCK_BOOST_PERIOD - 0);
 
     // HB
     timer_set_oc_mode(TIM2, TIM_OC3, TIM_OCM_PWM1);
     timer_set_oc_polarity_low(TIM2, TIM_OC3);
-    timer_set_oc_value(TIM2, TIM_OC3, BUCK_BOOST_PERIOD - 50);
+    timer_set_oc_value(TIM2, TIM_OC3, BUCK_BOOST_PERIOD - 0);
 
     // LB, needs to be set logic high to turn off LB gate
     timer_set_oc_mode(TIM2, TIM_OC4, TIM_OCM_PWM1);
@@ -474,6 +492,15 @@ volatile uint8_t cur_balance_cell = 0;
 volatile uint32_t cur_state_start_secs = 0;
 volatile uint32_t last_balance_check = 0xffffffff;
 
+enum mppt_state {
+    MPPT_INITIAL=0,
+
+    MPPT_GOING_UP,
+    MPPT_GOING_DOWN,
+};
+volatile enum mppt_state cur_mppt_state = MPPT_INITIAL;
+volatile uint32_t last_mppt_power = 0;
+
 static void change_state(enum main_state new_state) {
     cur_state = new_state;
     cur_state_start_secs = system_secs;
@@ -576,31 +603,55 @@ int main(void) {
 
             printf("charge\n");
 
+            // Start with a small initial_duty cycle
+            last_mppt_power = 0;
+            cur_mppt_state = MPPT_INITIAL;
+            buck_boost_set_duty(20, 0);
+
             change_state(STATE_CHARGE);
         } else if (cur_state == STATE_CHARGE) {
-            // Probably increase the clock speed, setup the buckboost
-            // Be checking the MPPT levels here
             // If you are in this state, then you are continously sampling the ADC
-            //set_buck_boost_duty(10);
-//            timer_set_oc_value(TIM2, TIM_OC1, 0); //HA
-//            timer_set_oc_value(TIM2, TIM_OC2, 0); //LA
-//            timer_set_oc_value(TIM2, TIM_OC3, BUCK_BOOST_PERIOD - 0); //HB
-//            timer_set_oc_value(TIM2, TIM_OC4, BUCK_BOOST_PERIOD - 0); //LB
-//            adc_start_conversion_dma(ADC_CHSELR_CHSEL(VSOLAR_ADC_CH), false);
-//
+            uint16_t vbatt = adc_buffer[0];
+            uint16_t vsolar = adc_buffer[1];
+            uint16_t solar_cur = adc_buffer[2];
 
+            uint32_t cur_power = vsolar * solar_cur;
 
-            printf("charge %d %d %d\n", adc_buffer[0], adc_buffer[1], adc_buffer[2]);
+            printf("charge %d %d %d %d %ld %d\n", vbatt, vsolar, solar_cur, buck_boost_get_duty(), cur_power, cur_mppt_state);
+
+            if (cur_mppt_state == MPPT_INITIAL) {
+                last_mppt_power = cur_power;
+                cur_mppt_state = MPPT_GOING_UP;
+            }
+            else if (cur_mppt_state == MPPT_GOING_UP && cur_power >= last_mppt_power) {
+                last_mppt_power = cur_power;
+                buck_boost_set_duty(buck_boost_get_duty(),  +1);
+            }
+            else if (cur_mppt_state == MPPT_GOING_UP && cur_power < last_mppt_power) {
+                last_mppt_power = cur_power;
+                cur_mppt_state = MPPT_GOING_DOWN;
+            }
+            else if (cur_mppt_state == MPPT_GOING_DOWN && cur_power >= last_mppt_power) {
+                last_mppt_power = cur_power;
+                buck_boost_set_duty(buck_boost_get_duty(),  -1);
+            }
+            else if (cur_mppt_state == MPPT_GOING_DOWN && cur_power < last_mppt_power) {
+                last_mppt_power = cur_power;
+                cur_mppt_state = MPPT_GOING_UP;
+            }
+
 
             uint32_t millis = systick_get_value() / (systick_get_reload() / 1000);
             timer_set_oc_value(TIM22, TIM_OC1, (millis % 1000 > 500) ? 1000 - (millis % 1000) : millis % 1000);
             timer_set_oc_value(TIM22, TIM_OC2, millis % 500);
 
-            // TODO Not leaving charge state for now as a test
-//            if (system_secs - cur_state_start_secs > 20) {
-//                change_state(STATE_END_CHARGE);
-//            }
+            if (vbatt < VBATT_LOW_THRESHOLD) {
+                change_state(STATE_END_CHARGE);
+            }
 
+            if (system_secs - cur_state_start_secs > 60) {
+                change_state(STATE_END_CHARGE);
+            }
         } else if (cur_state == STATE_END_CHARGE) {
             buck_boost_disable();
             buck_boost_enable_clock();
