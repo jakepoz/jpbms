@@ -243,7 +243,7 @@ static void adc_convert_tim2_trigger(uint16_t channel_mask) {
     ADC_CFGR2(ADC1) &= ~ADC_CFGR2_OVSR;
 
     // Configure ADC to use TIM2 TRGO event as an external trigger
-    ADC_CFGR1(ADC1) |= ADC_CFGR1_EXTSEL_TIM2_TRGO; // Select TIM2 TRGO as external event for regular group
+    ADC_CFGR1(ADC1) |= ADC_CFGR1_EXTSEL_VAL(ADC_CFGR1_EXTSEL_TIM2_TRGO);
     ADC_CFGR1(ADC1) |= ADC_CFGR1_EXTEN_RISING_EDGE;
 
     adc_power_on(ADC1);
@@ -263,12 +263,9 @@ static void adc_convert_tim2_trigger(uint16_t channel_mask) {
     dma_set_priority(DMA1, DMA_CHANNEL1, DMA_CCR_PL_HIGH);
     dma_enable_channel(DMA1, DMA_CHANNEL1);
 
-
     adc_enable_dma(ADC1);
 
-    adc_start_conversion_regular(ADC1);
-
-
+    adc_set_continuous_conversion_mode(ADC1);
 }
 
 /*
@@ -586,11 +583,9 @@ int main(void) {
 //            timer_set_oc_value(TIM2, TIM_OC4, BUCK_BOOST_PERIOD - 0); //LB
 //            adc_start_conversion_dma(ADC_CHSELR_CHSEL(VSOLAR_ADC_CH), false);
 //
-//            while (!adc_eos(ADC1)) {
-//                //pass
-//            }
-//
-            printf("charge %d\n", adc_buffer[0]);
+
+
+            printf("charge %d %ld\n", adc_buffer[0], ADC_DR(ADC1));
 
             uint32_t millis = systick_get_value() / (systick_get_reload() / 1000);
             timer_set_oc_value(TIM22, TIM_OC1, (millis % 1000 > 500) ? 1000 - (millis % 1000) : millis % 1000);
