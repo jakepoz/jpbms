@@ -222,7 +222,7 @@ static void adc_start_conversion_dma(uint16_t channel_mask, bool oversample) {
     adc_start_conversion_regular(ADC1);
 }
 
-static void adc_convert_tim2_trigger(uint16_t channel_mask) {
+static void adc_begin_convert_tim2_trigger(uint16_t channel_mask) {
     // This function is meant to start ADC conversions on TIM2 triggers
     // on TIM2 overflow, we start a conversion, so we are synced to always get it during the same
     // point in the cycle
@@ -273,6 +273,15 @@ static void adc_convert_tim2_trigger(uint16_t channel_mask) {
     adc_start_conversion_regular(ADC1);
 }
 
+static void adc_end_convert_tim2_trigger(void) {
+    adc_power_off(ADC1);
+
+    ADC_CFGR1(ADC1) &= ADC_CFGR1_EXTSEL;
+    ADC_CFGR1(ADC1) &= ~ADC_CFGR1_EXTEN_BOTH_EDGES;
+
+    adc_power_on(ADC1);
+}
+
 /*
  * The problem is that the STM32L053 doesn't have a way to generate PWM pulses with a phase offset.
  * We need to make a pulse on OC1/OC2, then, once that pulse is done, start a pulse on OC3/OC4.
@@ -288,8 +297,8 @@ static void buck_boost_set_duty(uint16_t new_dc, int16_t delta) {
     if (dc < 0) {
         dc = 0;
     }
-    else if (dc > BUCK_BOOST_PERIOD) {
-        dc = BUCK_BOOST_PERIOD;
+    else if (dc > BUCK_BOOST_PERIOD - 20) {
+        dc = BUCK_BOOST_PERIOD - 20;
     }
 
     buck_boost_last_duty = dc;
@@ -500,6 +509,7 @@ enum mppt_state {
 };
 volatile enum mppt_state cur_mppt_state = MPPT_INITIAL;
 volatile uint32_t last_mppt_power = 0;
+volatile uint32_t mppt_ticks = 0;
 
 static void change_state(enum main_state new_state) {
     cur_state = new_state;
@@ -594,7 +604,9 @@ int main(void) {
                 }
             }
         } else if (cur_state == STATE_START_CHARGE) {
-            adc_convert_tim2_trigger(ADC_CHSELR_CHSEL(VBATT_ADC_CH) | ADC_CHSELR_CHSEL(VSOLAR_ADC_CH) | ADC_CHSELR_CHSEL(SOLAR_CURRENT_ADC_CH)) ;
+            adc_begin_convert_tim2_trigger(ADC_CHSELR_CHSEL(VBATT_ADC_CH) |
+                                            ADC_CHSELR_CHSEL(VSOLAR_ADC_CH) |
+                                            ADC_CHSELR_CHSEL(SOLAR_CURRENT_ADC_CH)) ;
 
             buck_boost_enable_clock();
             buck_boost_enable();
@@ -617,29 +629,31 @@ int main(void) {
 
             uint32_t cur_power = vsolar * solar_cur;
 
-            printf("charge %d %d %d %d %ld %d\n", vbatt, vsolar, solar_cur, buck_boost_get_duty(), cur_power, cur_mppt_state);
+            if (++mppt_ticks % 1000 == 0) {
+                printf("charge %d %d %d %d %ld %d\n", vbatt, vsolar, solar_cur, buck_boost_get_duty(), cur_power, cur_mppt_state);
 
-            if (cur_mppt_state == MPPT_INITIAL) {
-                last_mppt_power = cur_power;
-                cur_mppt_state = MPPT_GOING_UP;
-            }
-            else if (cur_mppt_state == MPPT_GOING_UP && cur_power >= last_mppt_power) {
-                last_mppt_power = cur_power;
-                buck_boost_set_duty(buck_boost_get_duty(),  +1);
-            }
-            else if (cur_mppt_state == MPPT_GOING_UP && cur_power < last_mppt_power) {
-                last_mppt_power = cur_power;
-                cur_mppt_state = MPPT_GOING_DOWN;
-            }
-            else if (cur_mppt_state == MPPT_GOING_DOWN && cur_power >= last_mppt_power) {
-                last_mppt_power = cur_power;
-                buck_boost_set_duty(buck_boost_get_duty(),  -1);
-            }
-            else if (cur_mppt_state == MPPT_GOING_DOWN && cur_power < last_mppt_power) {
-                last_mppt_power = cur_power;
-                cur_mppt_state = MPPT_GOING_UP;
-            }
 
+                if (cur_mppt_state == MPPT_INITIAL) {
+                    last_mppt_power = cur_power;
+                    cur_mppt_state = MPPT_GOING_UP;
+                }
+                else if (cur_mppt_state == MPPT_GOING_UP && cur_power >= last_mppt_power) {
+                    last_mppt_power = cur_power;
+                    buck_boost_set_duty(buck_boost_get_duty(),  +1);
+                }
+                else if (cur_mppt_state == MPPT_GOING_UP && cur_power < last_mppt_power) {
+                    last_mppt_power = cur_power;
+                    cur_mppt_state = MPPT_GOING_DOWN;
+                }
+                else if (cur_mppt_state == MPPT_GOING_DOWN && cur_power >= last_mppt_power) {
+                    last_mppt_power = cur_power;
+                    buck_boost_set_duty(buck_boost_get_duty(),  -1);
+                }
+                else if (cur_mppt_state == MPPT_GOING_DOWN && cur_power < last_mppt_power) {
+                    last_mppt_power = cur_power;
+                    cur_mppt_state = MPPT_GOING_UP;
+                }
+            }
 
             uint32_t millis = systick_get_value() / (systick_get_reload() / 1000);
             timer_set_oc_value(TIM22, TIM_OC1, (millis % 1000 > 500) ? 1000 - (millis % 1000) : millis % 1000);
@@ -649,12 +663,15 @@ int main(void) {
                 change_state(STATE_END_CHARGE);
             }
 
-            if (system_secs - cur_state_start_secs > 60) {
+            if (system_secs - cur_state_start_secs > 20) {
                 change_state(STATE_END_CHARGE);
             }
+
+            enter_sleep_mode();
         } else if (cur_state == STATE_END_CHARGE) {
+            adc_end_convert_tim2_trigger();
             buck_boost_disable();
-            buck_boost_enable_clock();
+            buck_boost_disable_clock();
 
             leds_disable();
 
