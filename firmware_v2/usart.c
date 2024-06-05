@@ -32,7 +32,6 @@ void usart_comm_init(void) {
     }
 
     rcc_periph_clock_enable(RCC_USART1);
-    rcc_periph_clock_enable(RCC_USART1);
 
     /* Setup GPIO pins for USART1 transmit and receive. */
     gpio_mode_setup(USART1_PORT, GPIO_MODE_AF, GPIO_PUPD_NONE, USART1_RX_PIN | USART1_TX_PIN);

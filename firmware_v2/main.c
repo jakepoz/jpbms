@@ -233,7 +233,7 @@ static void adc_begin_convert_tim2_trigger(uint16_t channel_mask) {
     adc_power_off(ADC1);
 
     // Set the sample rate
-    ADC_SMPR1(ADC1) = ADC_SMPR_SMP_3DOT5CYC;
+    ADC_SMPR1(ADC1) = ADC_SMPR_SMP_7DOT5CYC;
 
     // Select which channels to read
     ADC_CHSELR(ADC1) = channel_mask;
@@ -396,14 +396,20 @@ static void buck_boost_enable_clock(void) {
 
     rcc_set_hpre(RCC_CFGR_HPRE_NODIV);
     rcc_set_ppre1(RCC_CFGR_PPRE1_NODIV);
-    rcc_set_ppre2(RCC_CFGR_PPRE2_DIV8); // Divide by 8 to keep USART operating
+    rcc_set_ppre2(RCC_CFGR_PPRE2_NODIV);
 
     rcc_ahb_frequency = 16000000;
     rcc_apb1_frequency = 16000000;
-    rcc_apb2_frequency = 2000000;
+    rcc_apb2_frequency = 16000000;
 
     // Setup systick again with new AHB frequency
     systick_init();
+
+    // Update the usart because the apb2 frequency has changed
+    usart_comm_init();
+
+    // Change the tim22 prescaler
+    timer_set_prescaler(TIM22, 15 - 1); // Shooting for a 1 Mhz clock
 
     rcc_set_sysclk_source(RCC_HSI16);
     while (((RCC_CFGR >> RCC_CFGR_SWS_SHIFT) & RCC_CFGR_SWS_MASK) != RCC_CFGR_SWS_HSI16);
@@ -420,6 +426,12 @@ static void buck_boost_disable_clock(void) {
     rcc_apb2_frequency = 2097000;
 
     systick_init();
+
+    // Update the usart because the apb2 frequency has changed
+    usart_comm_init();
+
+    // Change the tim22 prescaler
+    timer_set_prescaler(TIM22, 2 - 1); // Shooting for a 1 Mhz clock
 
     rcc_set_sysclk_source(RCC_MSI);
     while (((RCC_CFGR >> RCC_CFGR_SWS_SHIFT) & RCC_CFGR_SWS_MASK) != RCC_CFGR_SWS_MSI);
