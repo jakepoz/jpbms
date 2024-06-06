@@ -4,6 +4,7 @@
 #define USART1_BAUDRATE 115200
 
 #define BUCK_BOOST_PERIOD 200
+#define BUCK_BOOST_AVERAGE_SAMPLES 10000
 
 #define VOLTAGE_TO_ADC(voltage) ((int)((voltage) * 4095 * 47.5 / (2.5 * (220.0 + 47.5)) + 0.5))
 #define ADC_TO_VOLTAGE(adc) (((adc) - 0.5) * (2.5 * (220.0 + 47.5)) / (4095 * 47.5))

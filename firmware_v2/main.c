@@ -35,6 +35,8 @@
 
 #define ADC_BUFFER_SIZE 5
 volatile uint16_t adc_buffer[ADC_BUFFER_SIZE];
+volatile uint32_t adc_conversions = 0;
+volatile uint32_t adc_accum[ADC_BUFFER_SIZE];
 
 volatile uint32_t system_secs;
 // The MSI at 2.1Mhz is the default startup clock speed
@@ -133,6 +135,11 @@ static volatile bool adc_conversion_finished = false;
     if (adc_eos(ADC1)) {
         ADC_ISR(ADC1) = ADC_ISR_EOS;
         adc_conversion_finished = true;
+
+        for (uint8_t i = 0; i < ADC_BUFFER_SIZE; i++) {
+            adc_accum[i] += adc_buffer[i];
+        }
+        adc_conversions++;
 
         gpio_set(LED_ERROR_PORT, LED_ERROR_PIN);
         gpio_clear(LED_ERROR_PORT, LED_ERROR_PIN);
@@ -233,7 +240,7 @@ static void adc_begin_convert_tim2_trigger(uint16_t channel_mask) {
     adc_power_off(ADC1);
 
     // Set the sample rate
-    ADC_SMPR1(ADC1) = ADC_SMPR_SMP_7DOT5CYC;
+    ADC_SMPR1(ADC1) = ADC_SMPR_SMP_39DOT5CYC;
 
     // Select which channels to read
     ADC_CHSELR(ADC1) = channel_mask;
@@ -241,6 +248,7 @@ static void adc_begin_convert_tim2_trigger(uint16_t channel_mask) {
     // Turn off oversampling
     ADC_CFGR2(ADC1) &= ~ADC_CFGR2_OVSS;
     ADC_CFGR2(ADC1) &= ~ADC_CFGR2_OVSR;
+    ADC_CFGR2(ADC1) &= ~ADC_CFGR2_OVSE;
 
     // Configure ADC to use TIM2 TRGO event as an external trigger
     ADC_CFGR1(ADC1) |= ADC_CFGR1_EXTSEL_VAL(ADC_CFGR1_EXTSEL_TIM2_TRGO);
@@ -274,6 +282,7 @@ static void adc_begin_convert_tim2_trigger(uint16_t channel_mask) {
 }
 
 static void adc_end_convert_tim2_trigger(void) {
+     // This should wait for any conversions to finish
     adc_power_off(ADC1);
 
     ADC_CFGR1(ADC1) &= ADC_CFGR1_EXTSEL;
@@ -499,6 +508,8 @@ enum main_state {
     STATE_NORMAL_SLEEP,
 
     STATE_START_CHARGE,
+    STATE_START_CHARGE_MEASURE_BASELINE,
+    STATE_START_CHARGE_MEASURE_BASELINE_WAIT,
     STATE_CHARGE,
     STATE_END_CHARGE,
 
@@ -520,8 +531,9 @@ enum mppt_state {
     MPPT_GOING_DOWN,
 };
 volatile enum mppt_state cur_mppt_state = MPPT_INITIAL;
-volatile uint32_t last_mppt_power = 0;
+volatile int32_t last_mppt_power = 0;
 volatile uint32_t mppt_ticks = 0;
+volatile uint16_t start_charge_vbatt, start_charge_vsolar, start_charge_current;
 
 static void change_state(enum main_state new_state) {
     cur_state = new_state;
@@ -587,9 +599,16 @@ int main(void) {
             adc_buffer[0] = 0;
 
             if (vbatt < VBATT_LOW_THRESHOLD) {
+                printf("low vbatt\n");
                 change_state(STATE_LOW_BATT_SLEEP);
-            } else if (cell_4v < SINGLE_CELL_LOW_THRESHOLD || cell_8v - cell_4v < SINGLE_CELL_LOW_THRESHOLD ||
-                       vbatt - cell_8v < SINGLE_CELL_LOW_THRESHOLD) {
+            } else if (cell_4v < SINGLE_CELL_LOW_THRESHOLD) {
+                printf("low cell_0 %d\n", cell_4v);
+                change_state(STATE_LOW_BATT_SLEEP);
+            } else if (cell_8v - cell_4v < SINGLE_CELL_LOW_THRESHOLD) {
+                printf("low cell_1 %d\n", cell_8v - cell_4v);
+                change_state(STATE_LOW_BATT_SLEEP);
+            } else if (vbatt - cell_8v < SINGLE_CELL_LOW_THRESHOLD) {
+                printf("low cell_2 %d\n", vbatt - cell_8v);
                 change_state(STATE_LOW_BATT_SLEEP);
             } else if (vsolar > VSOLAR_START_CHARGING_THRESHOLD && vbatt < VBATT_MAX_THRESHOLD) {
                 change_state(STATE_START_CHARGE);
@@ -616,16 +635,37 @@ int main(void) {
                 }
             }
         } else if (cur_state == STATE_START_CHARGE) {
+            adc_start_conversion_dma(ADC_CHSELR_CHSEL(VBATT_ADC_CH) | ADC_CHSELR_CHSEL(VSOLAR_ADC_CH) |
+                                     ADC_CHSELR_CHSEL(SOLAR_CURRENT_ADC_CH), true);
+
+            change_state(STATE_START_CHARGE_MEASURE_BASELINE_WAIT);
+        } else if (cur_state == STATE_START_CHARGE_MEASURE_BASELINE_WAIT) {
+            if (adc_conversion_finished){
+                change_state(STATE_START_CHARGE_MEASURE_BASELINE);
+            } else {
+                enter_sleep_mode();
+            }
+        } else if (cur_state == STATE_START_CHARGE_MEASURE_BASELINE) {
+            start_charge_vbatt = adc_buffer[0];
+            start_charge_vsolar = adc_buffer[1];
+            start_charge_current = adc_buffer[2];
+
+            printf("startcharge %d %d %d\n", start_charge_vbatt, start_charge_vsolar, start_charge_current);
+
+            for (uint8_t i = 0; i < ADC_BUFFER_SIZE; i++) {
+                adc_buffer[i] = 0;
+                adc_accum[i] = 0;
+                adc_conversions = 0;
+            }
+
             adc_begin_convert_tim2_trigger(ADC_CHSELR_CHSEL(VBATT_ADC_CH) |
-                                            ADC_CHSELR_CHSEL(VSOLAR_ADC_CH) |
-                                            ADC_CHSELR_CHSEL(SOLAR_CURRENT_ADC_CH)) ;
+                                           ADC_CHSELR_CHSEL(VSOLAR_ADC_CH) |
+                                           ADC_CHSELR_CHSEL(SOLAR_CURRENT_ADC_CH));
 
             buck_boost_enable_clock();
             buck_boost_enable();
 
             leds_enable();
-
-            printf("charge\n");
 
             // Start with a small initial_duty cycle
             last_mppt_power = 0;
@@ -635,19 +675,33 @@ int main(void) {
             change_state(STATE_CHARGE);
         } else if (cur_state == STATE_CHARGE) {
             // If you are in this state, then you are continously sampling the ADC
-            uint16_t vbatt = adc_buffer[0];
-            uint16_t vsolar = adc_buffer[1];
-            uint16_t solar_cur = adc_buffer[2];
+            if (adc_conversions >= BUCK_BOOST_AVERAGE_SAMPLES) {
+                nvic_disable_irq(NVIC_ADC_COMP_IRQ);
+                uint32_t vbatt = adc_accum[0];
+                uint32_t vsolar = adc_accum[1];
+                int32_t solar_cur = adc_accum[2];
+                uint32_t last_adc_conversions = adc_conversions;
 
-            uint32_t cur_power = vsolar * solar_cur;
+                adc_accum[0] = 0;
+                adc_accum[1] = 0;
+                adc_accum[2] = 0;
+                adc_conversions = 0;
+                nvic_enable_irq(NVIC_ADC_COMP_IRQ);
 
-            if (++mppt_ticks % 1000 == 0) {
-                printf("charge %d %d %d %d %ld %d\n", vbatt, vsolar, solar_cur, buck_boost_get_duty(), cur_power, cur_mppt_state);
+                vbatt = vbatt / last_adc_conversions;
+                vsolar = vsolar / last_adc_conversions;
+                solar_cur = solar_cur / last_adc_conversions - start_charge_current;
+                int32_t cur_power = vsolar * solar_cur;
 
+                printf("charge %ld %ld %ld %d %ld %d\n", vbatt, vsolar, solar_cur, buck_boost_get_duty(), cur_power, cur_mppt_state);
 
                 if (cur_mppt_state == MPPT_INITIAL) {
                     last_mppt_power = cur_power;
                     cur_mppt_state = MPPT_GOING_UP;
+                }
+                else if (vsolar < start_charge_vsolar * 3 / 4) {
+                    buck_boost_set_duty(buck_boost_get_duty(),  -1);
+                    cur_mppt_state = MPPT_GOING_DOWN;
                 }
                 else if (cur_mppt_state == MPPT_GOING_UP && cur_power >= last_mppt_power) {
                     last_mppt_power = cur_power;
@@ -660,10 +714,18 @@ int main(void) {
                 else if (cur_mppt_state == MPPT_GOING_DOWN && cur_power >= last_mppt_power) {
                     last_mppt_power = cur_power;
                     buck_boost_set_duty(buck_boost_get_duty(),  -1);
+
+                    if (buck_boost_get_duty() < 2) {
+                        change_state(STATE_END_CHARGE);
+                    }
                 }
                 else if (cur_mppt_state == MPPT_GOING_DOWN && cur_power < last_mppt_power) {
                     last_mppt_power = cur_power;
                     cur_mppt_state = MPPT_GOING_UP;
+                }
+
+                if (vbatt < VBATT_LOW_THRESHOLD) {
+                    change_state(STATE_END_CHARGE);
                 }
             }
 
@@ -671,11 +733,8 @@ int main(void) {
             timer_set_oc_value(TIM22, TIM_OC1, (millis % 1000 > 500) ? 1000 - (millis % 1000) : millis % 1000);
             timer_set_oc_value(TIM22, TIM_OC2, millis % 500);
 
-            if (vbatt < VBATT_LOW_THRESHOLD) {
-                change_state(STATE_END_CHARGE);
-            }
-
-            if (system_secs - cur_state_start_secs > 20) {
+            // Periodically we want to stop charging and get a measurement of the system, maybe go into balance, etc.
+            if (system_secs - cur_state_start_secs > 300) {
                 change_state(STATE_END_CHARGE);
             }
 
@@ -687,7 +746,10 @@ int main(void) {
 
             leds_disable();
 
-            change_state(STATE_START_SAMPLE);
+            // The adc is going to read a very low value on vbatt on the first sampling after
+            // so we want to wait a second before moving to that state
+            // We do that by doing a round of sleep first
+            change_state(STATE_NORMAL_SLEEP);
         } else if (cur_state == STATE_START_BALANCE_CHECK) {
             adc_start_conversion_dma(ADC_CHSELR_CHSEL(VBATT_ADC_CH) | ADC_CHSELR_CHSEL(CELL_4V_ADC_CH) |
                                      ADC_CHSELR_CHSEL(CELL_8V_ADC_CH), true);
