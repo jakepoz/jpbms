@@ -9,6 +9,12 @@
 #define VOLTAGE_TO_ADC(voltage) ((int)((voltage) * 4095 * 47.5 / (2.5 * (220.0 + 47.5)) + 0.5))
 #define ADC_TO_VOLTAGE(adc) (((adc) - 0.5) * (2.5 * (220.0 + 47.5)) / (4095 * 47.5))
 
+// Based on 1.2V per amp
+#define ADC_TO_CURRENT(adc_value) (((adc_value) * 2.5 / 4096) / 1.2)
+#define CURRENT_TO_ADC(current) ((uint16_t)(((current) * 1.2 / 2.5) * 4096))
+
+#define MAX_SOLAR_POWER 500000
+
 #define SINGLE_CELL_LOW_THRESHOLD VOLTAGE_TO_ADC(3.6f)
 #define VBATT_LOW_THRESHOLD VOLTAGE_TO_ADC(11.0f)
 #define VBATT_MAX_THRESHOLD VOLTAGE_TO_ADC(12.1f)

@@ -696,7 +696,6 @@ int main(void) {
                 printf("charge %ld %ld %ld %d %ld %d\n", vbatt, vsolar, solar_cur, buck_boost_get_duty(), cur_power, cur_mppt_state);
 
                 if (cur_mppt_state == MPPT_INITIAL) {
-                    last_mppt_power = cur_power;
                     cur_mppt_state = MPPT_GOING_UP;
                 }
                 else if (vsolar < start_charge_vsolar * 3 / 4) {
@@ -704,15 +703,12 @@ int main(void) {
                     cur_mppt_state = MPPT_GOING_DOWN;
                 }
                 else if (cur_mppt_state == MPPT_GOING_UP && cur_power >= last_mppt_power) {
-                    last_mppt_power = cur_power;
                     buck_boost_set_duty(buck_boost_get_duty(),  +1);
                 }
                 else if (cur_mppt_state == MPPT_GOING_UP && cur_power < last_mppt_power) {
-                    last_mppt_power = cur_power;
                     cur_mppt_state = MPPT_GOING_DOWN;
                 }
                 else if (cur_mppt_state == MPPT_GOING_DOWN && cur_power >= last_mppt_power) {
-                    last_mppt_power = cur_power;
                     buck_boost_set_duty(buck_boost_get_duty(),  -1);
 
                     if (buck_boost_get_duty() < 2) {
@@ -720,18 +716,33 @@ int main(void) {
                     }
                 }
                 else if (cur_mppt_state == MPPT_GOING_DOWN && cur_power < last_mppt_power) {
-                    last_mppt_power = cur_power;
                     cur_mppt_state = MPPT_GOING_UP;
                 }
 
-                if (vbatt < VBATT_LOW_THRESHOLD) {
+                if (vbatt < VBATT_LOW_THRESHOLD || vbatt > VBATT_MAX_THRESHOLD) {
                     change_state(STATE_END_CHARGE);
                 }
+
+                last_mppt_power = cur_power;
             }
 
             uint32_t millis = systick_get_value() / (systick_get_reload() / 1000);
-            timer_set_oc_value(TIM22, TIM_OC1, (millis % 1000 > 500) ? 1000 - (millis % 1000) : millis % 1000);
-            timer_set_oc_value(TIM22, TIM_OC2, millis % 500);
+            //timer_set_oc_value(TIM22, TIM_OC1, (millis % 1000 > 500) ? 1000 - (millis % 1000) : millis % 1000);
+            timer_set_oc_value(TIM22, TIM_OC1, 100);
+
+            uint16_t orange_period = 1000;
+
+            if (last_mppt_power > MAX_SOLAR_POWER) {
+                orange_period = 1000;
+            }
+            else if (last_mppt_power <= 0) {
+                orange_period = 0;
+            }
+            else {
+                orange_period = last_mppt_power * 1000 / MAX_SOLAR_POWER;
+            }
+
+            timer_set_oc_value(TIM22, TIM_OC2, orange_period);
 
             // Periodically we want to stop charging and get a measurement of the system, maybe go into balance, etc.
             if (system_secs - cur_state_start_secs > 300) {
