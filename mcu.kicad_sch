@@ -4183,7 +4183,7 @@
 	(text_box "Switch\n"
 		(exclude_from_sim no)
 		(at 220.98 104.14 0)
-		(size 53.34 25.4)
+		(size 53.34 30.48)
 		(stroke
 			(width 0)
 			(type default)
@@ -4201,7 +4201,7 @@
 	)
 	(text "input pins current = 50nA \nSo we can afford up to 15M pullup,\nto stay above .7 * Vdd"
 		(exclude_from_sim no)
-		(at 239.522 150.876 0)
+		(at 247.65 129.54 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -4907,10 +4907,9 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "2077e60e-1ffa-48b8-8a9d-1b518bc7f708")
 		(property "Reference" "D6"
-			(at 255.5875 78.74 0)
+			(at 254 81.026 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4918,7 +4917,7 @@
 			)
 		)
 		(property "Value" "LED_R"
-			(at 255.5875 81.28 0)
+			(at 254 83.566 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5864,10 +5863,9 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "6f051f2d-f9e8-40f1-86f0-83a4e02bd2b6")
 		(property "Reference" "D4"
-			(at 255.5875 60.96 0)
+			(at 253.746 62.992 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5875,7 +5873,7 @@
 			)
 		)
 		(property "Value" "LED_G"
-			(at 255.5875 63.5 0)
+			(at 254.508 65.278 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6717,10 +6715,9 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "ace3769a-7ad0-45b2-8f01-18fa8fe2003f")
 		(property "Reference" "D5"
-			(at 255.5875 69.85 0)
+			(at 254 72.136 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6728,7 +6725,7 @@
 			)
 		)
 		(property "Value" "LED_Y"
-			(at 255.5875 72.39 0)
+			(at 254 74.676 0)
 			(effects
 				(font
 					(size 1.27 1.27)

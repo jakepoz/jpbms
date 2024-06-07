@@ -1541,12 +1541,6 @@
 		(uuid "54dd0797-aabd-4e68-97ed-2ba71848a7b4")
 	)
 	(junction
-		(at 227.33 97.79)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "5ff1ae3e-3cd9-4ca7-b34a-0d7eea9ad7e3")
-	)
-	(junction
 		(at 48.26 72.39)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -1571,22 +1565,10 @@
 		(uuid "7c0f14c9-d062-441c-9f61-88e6a63b58eb")
 	)
 	(junction
-		(at 210.82 97.79)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "8fd427d4-c136-4bc4-805f-6a65158d6295")
-	)
-	(junction
 		(at 125.73 62.23)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "a14567ac-ff16-4e03-8d8d-7a2268d7aae2")
-	)
-	(junction
-		(at 218.44 97.79)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "a663ca0c-37ce-456c-8be1-349eacb7ebd1")
 	)
 	(junction
 		(at 118.11 81.28)
@@ -1617,12 +1599,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "c35e8017-0ec5-44b4-8b47-02234b4242f4")
-	)
-	(junction
-		(at 223.52 97.79)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "d0ff342d-e199-4ca8-8f54-ac651fc91da7")
 	)
 	(junction
 		(at 133.35 97.79)
@@ -1748,16 +1724,6 @@
 	)
 	(wire
 		(pts
-			(xy 223.52 97.79) (xy 227.33 97.79)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "273f6a72-7f7d-4168-8414-328f14c8b51d")
-	)
-	(wire
-		(pts
 			(xy 125.73 62.23) (xy 125.73 67.31)
 		)
 		(stroke
@@ -1848,16 +1814,6 @@
 	)
 	(wire
 		(pts
-			(xy 210.82 95.25) (xy 210.82 97.79)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4a50b5fe-268a-4b0e-a126-4a2b462a6a1a")
-	)
-	(wire
-		(pts
 			(xy 176.53 68.58) (xy 176.53 63.5)
 		)
 		(stroke
@@ -1928,16 +1884,6 @@
 	)
 	(wire
 		(pts
-			(xy 218.44 97.79) (xy 218.44 100.33)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "6ab73fe6-4e74-4c84-aa1a-93561eb66b08")
-	)
-	(wire
-		(pts
 			(xy 39.37 72.39) (xy 38.1 72.39)
 		)
 		(stroke
@@ -1958,7 +1904,7 @@
 	)
 	(wire
 		(pts
-			(xy 223.52 97.79) (xy 218.44 97.79)
+			(xy 218.44 97.79) (xy 236.22 97.79)
 		)
 		(stroke
 			(width 0)
@@ -2038,16 +1984,6 @@
 	)
 	(wire
 		(pts
-			(xy 218.44 95.25) (xy 218.44 97.79)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9939d2e2-1d63-4344-bff3-83adee6c4164")
-	)
-	(wire
-		(pts
 			(xy 118.11 77.47) (xy 118.11 81.28)
 		)
 		(stroke
@@ -2068,16 +2004,6 @@
 	)
 	(wire
 		(pts
-			(xy 236.22 97.79) (xy 227.33 97.79)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9da30891-dd4b-405c-86d3-1143c6505e4e")
-	)
-	(wire
-		(pts
 			(xy 118.11 67.31) (xy 118.11 62.23)
 		)
 		(stroke
@@ -2095,16 +2021,6 @@
 			(type default)
 		)
 		(uuid "b86fef97-7073-4279-a8e9-b9e0cab438ac")
-	)
-	(wire
-		(pts
-			(xy 210.82 97.79) (xy 210.82 100.33)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "c708d97d-eedf-47b7-be8a-f20579ba1e0b")
 	)
 	(wire
 		(pts
@@ -2245,6 +2161,16 @@
 			(type default)
 		)
 		(uuid "ff0f3fa9-4299-4573-a0c9-38b8dc7af93c")
+	)
+	(text "You want ~1/6 ratio so that 12V comes to around 2V.\n1.5kohm max total impedance, because you are sampling frequently\n(Impedance goes to charge ~20pf adc capacitor, so that takes time, limiting sampling rate)\n(Also, at 80khz sampling rate, you have ~4uA current, to charge the 20pf capacitor, leading to voltage drop)"
+		(exclude_from_sim no)
+		(at 220.472 127.508 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "bbbcc1b4-916a-4069-9f85-1f56c8f20d6b")
 	)
 	(text "Multiplex any of the cell voltages to a single voltage divider and ADC pin\nThis makes it possible to get a really good comparison as long as the ADC is linear\n75 ohm resistor to prevent large currents\n"
 		(exclude_from_sim no)
@@ -3146,90 +3072,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:R")
-		(at 223.52 101.6 180)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "43fb32a6-19cb-4329-81b9-0b316dd02540")
-		(property "Reference" "R57"
-			(at 223.52 96.266 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "47.5k"
-			(at 221.488 101.6 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
-			(at 225.298 101.6 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 223.52 101.6 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Resistor"
-			(at 223.52 101.6 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCSC_Code" "C319604"
-			(at 223.52 101.6 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Tolerance" "0.5%"
-			(at 223.52 101.6 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "2"
-			(uuid "d9f7940c-0b1c-414a-b4f8-d0a13486d246")
-		)
-		(pin "1"
-			(uuid "19e88228-ffef-4144-897c-47c986831efb")
-		)
-		(instances
-			(project "JPBms2"
-				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/4f52082d-cd8b-4070-bfed-876b38f927ef"
-					(reference "R57")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:VDD")
 		(at 243.84 92.71 270)
 		(unit 1)
@@ -3916,174 +3758,6 @@
 			(project "JPBms2"
 				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/4f52082d-cd8b-4070-bfed-876b38f927ef"
 					(reference "R56")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R")
-		(at 214.63 95.25 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "8e2d6931-172b-4a58-bd8f-140761a670d0")
-		(property "Reference" "R40"
-			(at 214.63 91.44 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "220k"
-			(at 214.63 93.218 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
-			(at 214.63 97.028 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 214.63 95.25 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Resistor"
-			(at 214.63 95.25 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCSC_Code" "C851925"
-			(at 214.63 95.25 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Tolerance" "0.5%"
-			(at 214.63 95.25 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "2"
-			(uuid "59c5db66-b433-4566-93d4-ee24ac3e4946")
-		)
-		(pin "1"
-			(uuid "48e0d746-4bf1-421e-9d59-81e2934ad855")
-		)
-		(instances
-			(project "JPBms2"
-				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/4f52082d-cd8b-4070-bfed-876b38f927ef"
-					(reference "R40")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R")
-		(at 214.63 100.33 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "9171de72-ec38-490e-87ef-ad82515c2f42")
-		(property "Reference" "R44"
-			(at 214.63 104.648 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "220k"
-			(at 214.63 102.616 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
-			(at 214.63 102.108 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 214.63 100.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Resistor"
-			(at 214.63 100.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCSC_Code" "C851925"
-			(at 214.63 100.33 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Tolerance" "0.5%"
-			(at 214.63 100.33 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "2"
-			(uuid "7e0931ef-3559-44cb-bbd9-f0c716933fad")
-		)
-		(pin "1"
-			(uuid "5cf4c8d3-db7f-40b4-b9b6-f6026e44b72d")
-		)
-		(instances
-			(project "JPBms2"
-				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/4f52082d-cd8b-4070-bfed-876b38f927ef"
-					(reference "R44")
 					(unit 1)
 				)
 			)
@@ -4801,90 +4475,6 @@
 			(project "JPBms2"
 				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/4f52082d-cd8b-4070-bfed-876b38f927ef"
 					(reference "C22")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R")
-		(at 227.33 101.6 180)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "ccd6b60a-1f84-40ab-9ce9-481950542023")
-		(property "Reference" "R58"
-			(at 227.33 96.266 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "47.5k"
-			(at 229.616 101.6 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
-			(at 229.108 101.6 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 227.33 101.6 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Resistor"
-			(at 227.33 101.6 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCSC_Code" "C319604"
-			(at 227.33 101.6 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Tolerance" "0.5%"
-			(at 227.33 101.6 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "2"
-			(uuid "8f553411-87ee-4aa3-83c7-2b009d2a62c1")
-		)
-		(pin "1"
-			(uuid "01bc23eb-8cc5-4e01-96e4-2c9898715c44")
-		)
-		(instances
-			(project "JPBms2"
-				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/4f52082d-cd8b-4070-bfed-876b38f927ef"
-					(reference "R58")
 					(unit 1)
 				)
 			)

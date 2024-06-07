@@ -2029,9 +2029,19 @@
 		)
 		(uuid "ff58d47e-27ce-4ae7-90ec-703a67fedb49")
 	)
-	(text "Originally, I wanted to avoid the bootstrap circuit and use PFETs on the top side.\nBut the IRS2003 has a dead-zone prevention, and since the PFETs are on \nwhen the gate is GND, it wouldn't work logically."
+	(text "Inductor sizing:\nAssume an 80khz pwm cycle.\nWe know we have a roughly 20V charging voltage\n12V discharging voltage.\nWhat size inductor do we need to roughly be at the boundary condition?"
 		(exclude_from_sim no)
-		(at 120.142 25.4 0)
+		(at 187.706 121.158 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "301c0438-fc9d-4faf-9add-5db747af38f5")
+	)
+	(text "Originally, I wanted to avoid the bootstrap circuit and use PFETs on the top side.\nBut the IRS2003 has a dead-zone prevention, and since the PFETs are on \nwhen the gate is GND, it wouldn't work logically.\n\nAlso, the bootstrap works not as a \"voltage doubler\", but by adding Vbatt\nto the source voltage of the top mosfet. Since Vbatt is around 12V\nwe'll always get a well-turned on mosfet."
+		(exclude_from_sim no)
+		(at 200.406 26.67 0)
 		(effects
 			(font
 				(size 1.27 1.27)
