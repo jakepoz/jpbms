@@ -3333,7 +3333,7 @@
 		)
 		(uuid "7e71cf23-c8ff-463f-add0-515afd1ffc63")
 	)
-	(text "The ZXCT has a defined current that it outputs for a given voltage.\nThis is fine if you never sample the signal. But I am seeing on the scope\ntwo spike with each PWM cycle. I think what's happening is that the ADC turns on,\nand there is all of a sudden a small 1000ohm path to ground while charging/discharging the ADC capacitor\nso probably to eliminate that you need an opamp"
+	(text "The ZXCT has a defined current that it outputs for a given voltage.\nThis is fine if you never sample the signal. But I am seeing on the scope\ntwo spike with each PWM cycle. I think what's happening is that the ADC turns on,\nand there is all of a sudden a small 1000ohm path to ground while charging/discharging the ADC capacitor\nso probably to eliminate that you need an opamp. But for now, adding RC filter"
 		(exclude_from_sim no)
 		(at 341.122 53.594 0)
 		(effects
@@ -3364,9 +3364,9 @@
 		)
 		(uuid "b04c3f7c-d3b9-4bf3-9e09-d7e7339e3d57")
 	)
-	(text "25V*(2000/(20000))=2.5V\n25V/20000ohms = 1.25mA current draw\n~30mW power dissipation\n\n1.8kohm Thevenin impedance"
+	(text "25V*(2000/(20000))=2.5V\n25V/20000ohms = 1.25mA current draw\n~30mW power dissipation\n\n1.8kohm Thevenin impedance\n\n~1khz RC constant filter\n\nShould sample in 12.5 cycles @16mhz adc."
 		(exclude_from_sim no)
-		(at 135.382 136.398 0)
+		(at 137.668 138.684 0)
 		(effects
 			(font
 				(size 1.27 1.27)

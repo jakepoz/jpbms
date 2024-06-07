@@ -1547,12 +1547,6 @@
 		(uuid "65b634aa-8418-428c-8cad-8282a4c45025")
 	)
 	(junction
-		(at 224.79 105.41)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "68f9ea32-da8e-4ce0-b285-381363173360")
-	)
-	(junction
 		(at 109.22 72.39)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -1599,6 +1593,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "c35e8017-0ec5-44b4-8b47-02234b4242f4")
+	)
+	(junction
+		(at 224.79 97.79)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "c45ec09e-9691-441c-9f82-2baeb618feca")
 	)
 	(junction
 		(at 133.35 97.79)
@@ -1804,6 +1804,16 @@
 	)
 	(wire
 		(pts
+			(xy 224.79 97.79) (xy 236.22 97.79)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4344c5d8-9edb-4a88-a6ae-b01372f24580")
+	)
+	(wire
+		(pts
 			(xy 110.49 72.39) (xy 109.22 72.39)
 		)
 		(stroke
@@ -1904,7 +1914,7 @@
 	)
 	(wire
 		(pts
-			(xy 218.44 97.79) (xy 236.22 97.79)
+			(xy 218.44 97.79) (xy 224.79 97.79)
 		)
 		(stroke
 			(width 0)
@@ -1934,16 +1944,6 @@
 	)
 	(wire
 		(pts
-			(xy 224.79 105.41) (xy 227.33 105.41)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "89b94bcd-a16e-4f80-bcc0-b8dfef22bc7f")
-	)
-	(wire
-		(pts
 			(xy 167.64 82.55) (xy 176.53 82.55)
 		)
 		(stroke
@@ -1961,16 +1961,6 @@
 			(type default)
 		)
 		(uuid "8f75c2a3-8dd7-49f0-bccb-add3d431f521")
-	)
-	(wire
-		(pts
-			(xy 223.52 105.41) (xy 224.79 105.41)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9629b042-d8c6-4552-b73a-ecb761b1fa95")
 	)
 	(wire
 		(pts
@@ -2164,13 +2154,23 @@
 	)
 	(text "You want ~1/6 ratio so that 12V comes to around 2V.\n1.5kohm max total impedance, because you are sampling frequently\n(Impedance goes to charge ~20pf adc capacitor, so that takes time, limiting sampling rate)\n(Also, at 80khz sampling rate, you have ~4uA current, to charge the 20pf capacitor, leading to voltage drop)"
 		(exclude_from_sim no)
-		(at 220.472 127.508 0)
+		(at 223.012 152.654 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 		)
 		(uuid "bbbcc1b4-916a-4069-9f85-1f56c8f20d6b")
+	)
+	(text "14V * (1600/(7500+1600)) = 2.46V\n14V/9100ohms = 1.5mA draw\n14V * 1.5ma = 22mW power\n\n1320 ohm Thevenin impedance\n~1200Hz RC filter"
+		(exclude_from_sim no)
+		(at 258.826 120.396 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "ea25b15c-763a-43e6-8f33-09f6772e6175")
 	)
 	(text "Multiplex any of the cell voltages to a single voltage divider and ADC pin\nThis makes it possible to get a really good comparison as long as the ADC is linear\n75 ohm resistor to prevent large currents\n"
 		(exclude_from_sim no)
@@ -2775,6 +2775,74 @@
 	)
 	(symbol
 		(lib_id "Device:R")
+		(at 214.63 97.79 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "148a9e95-e1bd-44b4-bebc-60b050dbfb8b")
+		(property "Reference" "R6"
+			(at 214.63 91.44 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "7500"
+			(at 214.63 93.98 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+			(at 214.63 99.568 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 214.63 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 214.63 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "648be1c9-c4bb-452f-bfe7-c10a0f6e8247")
+		)
+		(pin "1"
+			(uuid "770e8f1f-64a9-4572-9c99-b3a0a7d0661e")
+		)
+		(instances
+			(project "JPBms2"
+				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/4f52082d-cd8b-4070-bfed-876b38f927ef"
+					(reference "R6")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
 		(at 43.18 72.39 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -2921,6 +2989,76 @@
 			(project "JPBms2"
 				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/4f52082d-cd8b-4070-bfed-876b38f927ef"
 					(reference "Q12")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 224.79 101.6 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "264e9470-f035-4c0b-a9a3-fba6dd669bbe")
+		(property "Reference" "R7"
+			(at 227.33 100.3299 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "1600"
+			(at 227.33 102.8699 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" ""
+			(at 226.568 101.6 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 224.79 101.6 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 224.79 101.6 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "20b83143-d22a-4130-bee8-01c7439a0a94")
+		)
+		(pin "2"
+			(uuid "a7b6e619-e812-4f70-8b19-e69698f5375b")
+		)
+		(instances
+			(project "JPBms2"
+				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/4f52082d-cd8b-4070-bfed-876b38f927ef"
+					(reference "R7")
 					(unit 1)
 				)
 			)

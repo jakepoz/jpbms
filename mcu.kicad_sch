@@ -3374,6 +3374,16 @@
 	)
 	(wire
 		(pts
+			(xy 158.75 96.52) (xy 165.1 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1ab070a7-886b-432d-9eb1-5461b916518a")
+	)
+	(wire
+		(pts
 			(xy 242.57 34.29) (xy 233.68 34.29)
 		)
 		(stroke
@@ -4442,6 +4452,28 @@
 		(uuid "15d70c45-0fec-4365-b3d8-e8844fbb6f81")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 179.3338 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "DRIVERS_EN"
+		(shape output)
+		(at 165.1 96.52 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "3121a75b-fd0f-4871-94d5-aeb595ca7866")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 179.3942 96.52 0)
 			(effects
 				(font
 					(size 1.27 1.27)
