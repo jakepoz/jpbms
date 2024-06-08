@@ -2738,7 +2738,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "http://www.vishay.com/docs/70209/70209.pdf"
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2311241453_Shikues-SK2301AW_C962722.pdf"
 			(at 74.93 60.96 0)
 			(effects
 				(font
@@ -2776,6 +2776,15 @@
 			)
 		)
 		(property "Tolerance" ""
+			(at 69.85 57.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC_Code" "C962722"
 			(at 69.85 57.15 0)
 			(effects
 				(font
@@ -2988,6 +2997,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC_Code" "C23234"
+			(at 214.63 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "648be1c9-c4bb-452f-bfe7-c10a0f6e8247")
 		)
@@ -3146,7 +3164,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "http://www.vishay.com/docs/70209/70209.pdf"
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2311241453_Shikues-SK2301AW_C962722.pdf"
 			(at 74.93 63.5 0)
 			(effects
 				(font
@@ -3184,6 +3202,15 @@
 			)
 		)
 		(property "Tolerance" ""
+			(at 69.85 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC_Code" "C962722"
 			(at 69.85 67.31 0)
 			(effects
 				(font
@@ -3284,6 +3311,15 @@
 			)
 		)
 		(property "Tolerance" ""
+			(at 224.79 101.6 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC_Code" "C22847"
 			(at 224.79 101.6 0)
 			(effects
 				(font
@@ -3585,7 +3621,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "http://www.vishay.com/docs/70209/70209.pdf"
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2311241453_Shikues-SK2301AW_C962722.pdf"
 			(at 135.89 63.5 0)
 			(effects
 				(font
@@ -3623,6 +3659,15 @@
 			)
 		)
 		(property "Tolerance" ""
+			(at 130.81 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC_Code" "C962722"
 			(at 130.81 67.31 0)
 			(effects
 				(font
@@ -3800,7 +3845,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "http://www.vishay.com/docs/70209/70209.pdf"
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2311241453_Shikues-SK2301AW_C962722.pdf"
 			(at 135.89 60.96 0)
 			(effects
 				(font
@@ -3838,6 +3883,15 @@
 			)
 		)
 		(property "Tolerance" ""
+			(at 130.81 57.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC_Code" "C962722"
 			(at 130.81 57.15 0)
 			(effects
 				(font
@@ -4875,7 +4929,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "http://www.vishay.com/docs/70209/70209.pdf"
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2311241453_Shikues-SK2301AW_C962722.pdf"
 			(at 194.31 62.23 0)
 			(effects
 				(font
@@ -4913,6 +4967,15 @@
 			)
 		)
 		(property "Tolerance" ""
+			(at 189.23 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC_Code" "C962722"
 			(at 189.23 58.42 0)
 			(effects
 				(font
@@ -5535,7 +5598,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "http://www.vishay.com/docs/70209/70209.pdf"
+		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2311241453_Shikues-SK2301AW_C962722.pdf"
 			(at 194.31 64.77 0)
 			(effects
 				(font
@@ -5573,6 +5636,15 @@
 			)
 		)
 		(property "Tolerance" ""
+			(at 189.23 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC_Code" "C962722"
 			(at 189.23 68.58 0)
 			(effects
 				(font

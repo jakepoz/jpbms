@@ -3898,6 +3898,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC_Code" "C23921"
+			(at 72.39 142.24 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "12145763-49b3-461f-b62b-5bbee2cbe80d")
 		)
@@ -4602,7 +4611,7 @@
 				)
 			)
 		)
-		(property "Value" "68uH"
+		(property "Value" "47uH"
 			(at 210.82 88.9 90)
 			(effects
 				(font
@@ -4610,7 +4619,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Inductor_SMD:L_SXN_SMDRI127"
+		(property "Footprint" "Inductor_SMD:L_Sunlord_MWSA0605S"
 			(at 210.82 91.44 0)
 			(effects
 				(font
@@ -4619,7 +4628,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "https://datasheet.lcsc.com/lcsc/2108131530_SXN-Shun-Xiang-Nuo-Elec-SMDRI127-680MT_C9907.pdf"
+		(property "Datasheet" "https://datasheet.lcsc.com/lcsc/2310251550_Sunlord-MWSA0605S-470MT_C408471.pdf"
 			(at 210.82 91.44 0)
 			(effects
 				(font
@@ -4628,7 +4637,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "2.1A 68uH Shielded Power Inductors ±20% 4A SMD,12.3x12.3mm"
+		(property "Description" "  2A 47uH ±20% 2.6A SMD,7x6.6mm Power Inductors ROHS "
 			(at 210.82 91.44 0)
 			(effects
 				(font
@@ -4637,7 +4646,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC_Code" "C9907"
+		(property "LCSC_Code" "C408471"
 			(at 210.82 91.44 90)
 			(effects
 				(font
@@ -5506,6 +5515,15 @@
 			)
 		)
 		(property "Tolerance" ""
+			(at 73.66 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC_Code" "C23921"
 			(at 73.66 96.52 0)
 			(effects
 				(font
@@ -7277,6 +7295,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC_Code" "C22847"
+			(at 175.26 146.05 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "9216efd1-79e0-4753-9b30-5b35d787226b")
 		)
@@ -7366,6 +7393,15 @@
 			)
 		)
 		(property "Tolerance" ""
+			(at 175.26 135.89 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC_Code" "C23234"
 			(at 175.26 135.89 0)
 			(effects
 				(font

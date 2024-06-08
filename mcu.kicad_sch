@@ -7922,6 +7922,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC_Code" "C26097"
+			(at 233.68 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "2b6cb39c-a30e-41bd-8222-5826b2400d59")
 		)

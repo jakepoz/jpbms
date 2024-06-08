@@ -3345,7 +3345,7 @@
 	)
 	(text "Solar input maxes:\n50V capacitors\n30V MOSFET Drain-Source Breakdown\n30V TVS Diode\n"
 		(exclude_from_sim no)
-		(at 208.788 101.854 0)
+		(at 229.108 100.33 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3752,6 +3752,15 @@
 			)
 		)
 		(property "Tolerance" ""
+			(at 60.96 161.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC_Code" "C22975"
 			(at 60.96 161.29 0)
 			(effects
 				(font
@@ -4284,6 +4293,15 @@
 			)
 		)
 		(property "Tolerance" ""
+			(at 53.34 157.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC_Code" "C25810"
 			(at 53.34 157.48 0)
 			(effects
 				(font
@@ -7522,6 +7540,15 @@
 			)
 		)
 		(property "Tolerance" ""
+			(at 215.9 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC_Code" "C431092"
 			(at 215.9 83.82 0)
 			(effects
 				(font
