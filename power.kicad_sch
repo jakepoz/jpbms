@@ -2386,12 +2386,6 @@
 		(uuid "8d38a1a8-6f2e-4444-9e3a-df1bf1160f94")
 	)
 	(junction
-		(at 229.87 45.72)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "918629d2-a8fe-442b-afd8-a0969fb0764f")
-	)
-	(junction
 		(at 189.23 67.31)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -2649,7 +2643,7 @@
 	)
 	(wire
 		(pts
-			(xy 229.87 45.72) (xy 236.22 45.72)
+			(xy 223.52 45.72) (xy 236.22 45.72)
 		)
 		(stroke
 			(width 0)
@@ -3046,16 +3040,6 @@
 			(type default)
 		)
 		(uuid "a4397b7b-91df-4eab-80d7-923057348e5f")
-	)
-	(wire
-		(pts
-			(xy 223.52 45.72) (xy 229.87 45.72)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a5e2a308-cf3a-4f06-9e1b-cb631984c365")
 	)
 	(wire
 		(pts
@@ -7845,100 +7829,6 @@
 			(project "JPBms2"
 				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/fda7e15b-dad1-4f54-abdb-4d4569bf33a6"
 					(reference "#PWR05")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 229.87 45.72 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "f0aa3145-0b99-4145-985b-bdbd7ba14d32")
-		(property "Reference" "TP3"
-			(at 232.41 41.1479 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "SOLAR_CUR"
-			(at 232.41 43.6879 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Loop_D2.60mm_Drill1.6mm_Beaded"
-			(at 234.95 45.72 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 234.95 45.72 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "test point"
-			(at 229.87 45.72 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Device" ""
-			(at 229.87 45.72 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Pins" ""
-			(at 229.87 45.72 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Tolerance" ""
-			(at 229.87 45.72 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "06a893de-71b9-42fe-b4af-908e4cd1c2fa")
-		)
-		(instances
-			(project "JPBms2"
-				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/fda7e15b-dad1-4f54-abdb-4d4569bf33a6"
-					(reference "TP3")
 					(unit 1)
 				)
 			)
