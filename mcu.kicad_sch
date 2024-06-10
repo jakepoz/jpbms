@@ -4469,7 +4469,7 @@
 	)
 	(global_label "VBATT_ADC"
 		(shape input)
-		(at 166.37 50.8 0)
+		(at 166.37 53.34 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -4479,7 +4479,7 @@
 		)
 		(uuid "15d70c45-0fec-4365-b3d8-e8844fbb6f81")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 179.3338 50.8 0)
+			(at 179.3338 53.34 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4601,7 +4601,7 @@
 	)
 	(global_label "VSOLAR_ADC"
 		(shape input)
-		(at 166.37 53.34 0)
+		(at 166.37 50.8 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -4611,7 +4611,7 @@
 		)
 		(uuid "5c1a4e48-0ac2-4ed6-a9a2-2650e55b02a9")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 180.9667 53.34 0)
+			(at 180.9667 50.8 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4623,7 +4623,7 @@
 	)
 	(global_label "CELL4V_ADC_EN"
 		(shape output)
-		(at 165.1 68.58 0)
+		(at 165.1 63.5 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -4632,7 +4632,7 @@
 		)
 		(uuid "5fcfb613-af5b-4052-92ca-b061a6abb05b")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 165.1 68.58 0)
+			(at 165.1 63.5 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4643,7 +4643,7 @@
 	)
 	(global_label "VBATT_ADC_EN"
 		(shape output)
-		(at 165.1 63.5 0)
+		(at 165.1 68.58 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -4652,7 +4652,7 @@
 		)
 		(uuid "602ebb7c-738b-4606-9dc8-d2b999605fdb")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 165.1 63.5 0)
+			(at 165.1 68.58 0)
 			(effects
 				(font
 					(size 1.27 1.27)
