@@ -4589,7 +4589,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "3113117a-7cce-424a-92d6-409aeb9dd9b9")
-		(property "Reference" "L2"
+		(property "Reference" "L1"
 			(at 210.82 86.36 90)
 			(effects
 				(font
@@ -4677,7 +4677,7 @@
 		(instances
 			(project "JPBms2"
 				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/0f5ad211-c4ad-40eb-a8ac-82970ee8fac9"
-					(reference "L2")
+					(reference "L1")
 					(unit 1)
 				)
 			)
