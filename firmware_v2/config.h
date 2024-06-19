@@ -6,8 +6,8 @@
 #define BUCK_BOOST_PERIOD 200
 #define BUCK_BOOST_AVERAGE_SAMPLES 10000
 
-#define VOLTAGE_TO_ADC(voltage) ((int)((voltage) * 4095 * 47.5 / (2.5 * (220.0 + 47.5)) + 0.5))
-#define ADC_TO_VOLTAGE(adc) (((adc) - 0.5) * (2.5 * (220.0 + 47.5)) / (4095 * 47.5))
+#define VOLTAGE_TO_ADC(voltage) ((int)((voltage) * 4095 * 1600 / (2.5 * (7500 + 1600)) + 0.5))
+#define ADC_TO_VOLTAGE(adc) (((adc) - 0.5) * (2.5 * (7500 + 1600)) / (4095 * 1600))
 
 // Based on 1.2V per amp
 #define ADC_TO_CURRENT(adc_value) (((adc_value) * 2.5 / 4096) / 1.2)

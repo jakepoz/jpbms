@@ -1,3 +1,9 @@
+Version 1.3 stuff:
+ - The 10M pullup calculation was clearly wrong, voltage only gets up to around 1.25V out of 2.5, so not above the .7 Vdd it should be to be reliable.
+   Do I even need the pullup, what's the leakage on the internal one? Better do some real measurements and find out
+ - I should have specced 0.5% resistors on the VBATT stuff, or something more precise there in general...
+
+
 Gate bounce:
  - I'm seeing this effect where, I charge up the inductor via VSolar (off of power supply for now)
  - There is definitely current in the inductor, because then I briefly enable VBatt + GND on the other side, and then turn those gates off again

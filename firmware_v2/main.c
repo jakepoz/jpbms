@@ -15,6 +15,7 @@
 #include <libopencm3/stm32/pwr.h>
 #include <libopencm3/stm32/usart.h>
 #include <libopencm3/stm32/timer.h>
+#include <libopencm3/stm32/exti.h>
 #include <libopencm3/stm32/adc.h>
 #include <libopencm3/stm32/dma.h>
 
@@ -84,6 +85,10 @@ static void gpiob_init(void) {
     // Setup the balance pins
     gpio_clear(BALANCE_PORT, BALANCE_1_PIN | BALANCE_2_PIN | BALANCE_3_PIN);
     gpio_mode_setup(BALANCE_PORT, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, BALANCE_1_PIN | BALANCE_2_PIN | BALANCE_3_PIN);
+
+    // Setup the mosfet drivers output
+    gpio_clear(DRIVERS_EN_PORT, DRIVERS_EN_PIN);
+    gpio_mode_setup(DRIVERS_EN_PORT, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, DRIVERS_EN_PIN);
 }
 
 static void leds_init(void) {
@@ -119,6 +124,37 @@ static void leds_disable(void) {
     timer_disable_counter(TIM22);
 }
 
+void exti0_1_isr(void) {
+    // Check if the interrupt is from EXTI0
+    if (exti_get_flag_status(EXTI0)) {
+        // Clear the interrupt flag
+        exti_reset_request(EXTI0);
+
+        gpio_toggle(LED_ERROR_PORT, LED_ERROR_PIN);
+    }
+}
+
+static void switch_init(void) {
+    // Setup the switch input
+    // TODO the datasheet or our calculations were wrong and the pin leakage current is higher than expected
+    // So we have to use the built in pullup
+    gpio_mode_setup(SWITCH_PORT, GPIO_MODE_INPUT, GPIO_PUPD_PULLUP, SWITCH_PIN);
+
+    rcc_periph_clock_enable(RCC_SYSCFG);
+
+    // Select the source input for EXTI0
+    exti_select_source(EXTI0, SWITCH_PORT);
+
+    // Configure EXTI0 to trigger on falling edge
+    exti_set_trigger(EXTI0, EXTI_TRIGGER_FALLING);
+
+    // Enable EXTI0 interrupt
+    exti_enable_request(EXTI0);
+
+    // Enable the EXTI0 interrupt in the NVIC
+    nvic_enable_irq(NVIC_EXTI0_1_IRQ);
+}
+
 
 //void dma1_channel1_isr(void)
 //{
@@ -141,8 +177,8 @@ static volatile bool adc_conversion_finished = false;
         }
         adc_conversions++;
 
-        gpio_set(LED_ERROR_PORT, LED_ERROR_PIN);
-        gpio_clear(LED_ERROR_PORT, LED_ERROR_PIN);
+//        gpio_set(LED_ERROR_PORT, LED_ERROR_PIN);
+//        gpio_clear(LED_ERROR_PORT, LED_ERROR_PIN);
     }
  }
 
@@ -157,8 +193,8 @@ static void adc_init(void) {
     gpio_mode_setup(VSOLAR_ADC_PORT, GPIO_MODE_ANALOG, GPIO_PUPD_NONE, VSOLAR_ADC_PIN);
     gpio_mode_setup(VBATT_ADC_PORT, GPIO_MODE_ANALOG, GPIO_PUPD_NONE, VBATT_ADC_PIN);
     gpio_mode_setup(SOLAR_CURRENT_ADC_PORT, GPIO_MODE_ANALOG, GPIO_PUPD_NONE, SOLAR_CURRENT_ADC_PIN);
-    gpio_mode_setup(CELL_4V_ADC_PORT, GPIO_MODE_ANALOG, GPIO_PUPD_NONE, CELL_4V_ADC_PIN);
-    gpio_mode_setup(CELL_8V_ADC_PORT, GPIO_MODE_ANALOG, GPIO_PUPD_NONE, CELL_8V_ADC_PIN);
+
+    gpio_mode_setup(ADC_MULTIPLEX_PORT, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, ADC_MULTIPLEX_CELL4V_PIN | ADC_MULTIPLEX_CELL8V_PIN | ADC_MULTIPLEX_VBATT_PIN);
 
     adc_power_off(ADC1);
     adc_calibrate(ADC1);
@@ -524,6 +560,9 @@ volatile uint8_t cur_balance_cell = 0;
 volatile uint32_t cur_state_start_secs = 0;
 volatile uint32_t last_balance_check = 0xffffffff;
 
+volatile uint16_t cur_sample_channel = 0;
+volatile uint16_t cur_vbatt, cur_8v, cur_4v;
+
 enum mppt_state {
     MPPT_INITIAL=0,
 
@@ -552,6 +591,7 @@ int main(void) {
     leds_init();
     systick_init();
     usart_comm_init();
+    switch_init();
 
     adc_init();
     buck_boost_init();
@@ -577,8 +617,14 @@ int main(void) {
             }
         } else if (cur_state == STATE_START_SAMPLE) {
             // Do a single, non-oversampled read of all battery and solar voltages
-            adc_start_conversion_dma(ADC_CHSELR_CHSEL(VBATT_ADC_CH) | ADC_CHSELR_CHSEL(VSOLAR_ADC_CH) |
-                                     ADC_CHSELR_CHSEL(CELL_4V_ADC_CH) | ADC_CHSELR_CHSEL(CELL_8V_ADC_CH), false);
+            gpio_clear(ADC_MULTIPLEX_PORT, ADC_MULTIPLEX_CELL4V_PIN | ADC_MULTIPLEX_CELL8V_PIN);
+            gpio_set(ADC_MULTIPLEX_PORT, ADC_MULTIPLEX_VBATT_PIN);
+
+
+
+            adc_start_conversion_dma(ADC_CHSELR_CHSEL(VBATT_ADC_CH) |
+                                     ADC_CHSELR_CHSEL(VSOLAR_ADC_CH) |
+                                     ADC_CHSELR_CHSEL(SOLAR_CURRENT_ADC_CH), false);
 
             change_state(STATE_WAIT_SAMPLE);
         } else if (cur_state == STATE_WAIT_SAMPLE) {
@@ -589,32 +635,33 @@ int main(void) {
             }
         } else if (cur_state == STATE_SAMPLE) {
             // voltages will be in adc_buffer in the order of their channel index
-            uint16_t vbatt = adc_buffer[0];
-            uint16_t vsolar = adc_buffer[1];
-            uint16_t cell_4v = adc_buffer[2];
-            uint16_t cell_8v = adc_buffer[3];
+            uint16_t vsolar = adc_buffer[0];
+            uint16_t vbatt = adc_buffer[1];
 
-            printf("sample %d %d %d %d\n", vbatt, vsolar, cell_4v, cell_8v);
+            uint16_t solar_cur = adc_buffer[2];
+
+            printf("sample %d %d\n", vbatt, vsolar);
 
             adc_buffer[0] = 0;
-
-            if (vbatt < VBATT_LOW_THRESHOLD) {
-                printf("low vbatt\n");
-                change_state(STATE_LOW_BATT_SLEEP);
-            } else if (cell_4v < SINGLE_CELL_LOW_THRESHOLD) {
-                printf("low cell_0 %d\n", cell_4v);
-                change_state(STATE_LOW_BATT_SLEEP);
-            } else if (cell_8v - cell_4v < SINGLE_CELL_LOW_THRESHOLD) {
-                printf("low cell_1 %d\n", cell_8v - cell_4v);
-                change_state(STATE_LOW_BATT_SLEEP);
-            } else if (vbatt - cell_8v < SINGLE_CELL_LOW_THRESHOLD) {
-                printf("low cell_2 %d\n", vbatt - cell_8v);
-                change_state(STATE_LOW_BATT_SLEEP);
-            } else if (vsolar > VSOLAR_START_CHARGING_THRESHOLD && vbatt < VBATT_MAX_THRESHOLD) {
-                change_state(STATE_START_CHARGE);
-            } else {
-                change_state(STATE_NORMAL_SLEEP);
-            }
+//
+//            if (vbatt < VBATT_LOW_THRESHOLD) {
+//                printf("low vbatt\n");
+//                change_state(STATE_LOW_BATT_SLEEP);
+//            } else if (cell_4v < SINGLE_CELL_LOW_THRESHOLD) {
+//                printf("low cell_0 %d\n", cell_4v);
+//                change_state(STATE_LOW_BATT_SLEEP);
+//            } else if (cell_8v - cell_4v < SINGLE_CELL_LOW_THRESHOLD) {
+//                printf("low cell_1 %d\n", cell_8v - cell_4v);
+//                change_state(STATE_LOW_BATT_SLEEP);
+//            } else if (vbatt - cell_8v < SINGLE_CELL_LOW_THRESHOLD) {
+//                printf("low cell_2 %d\n", vbatt - cell_8v);
+//                change_state(STATE_LOW_BATT_SLEEP);
+//            } else if (vsolar > VSOLAR_START_CHARGING_THRESHOLD && vbatt < VBATT_MAX_THRESHOLD) {
+//                change_state(STATE_START_CHARGE);
+//            } else {
+//                change_state(STATE_NORMAL_SLEEP);
+//            }
+            change_state(STATE_NORMAL_SLEEP);
         } else if (cur_state == STATE_LOW_BATT_SLEEP) {
             gpio_set(LED_ERROR_PORT, LED_ERROR_PIN);
 
@@ -762,8 +809,7 @@ int main(void) {
             // We do that by doing a round of sleep first
             change_state(STATE_NORMAL_SLEEP);
         } else if (cur_state == STATE_START_BALANCE_CHECK) {
-            adc_start_conversion_dma(ADC_CHSELR_CHSEL(VBATT_ADC_CH) | ADC_CHSELR_CHSEL(CELL_4V_ADC_CH) |
-                                     ADC_CHSELR_CHSEL(CELL_8V_ADC_CH), true);
+            adc_start_conversion_dma(ADC_CHSELR_CHSEL(VBATT_ADC_CH), true);
             last_balance_check = system_secs;
 
             change_state(STATE_WAIT_BALANCE_CHECK);
@@ -774,31 +820,31 @@ int main(void) {
                 enter_sleep_mode();
             }
         } else if (cur_state == STATE_BALANCE_CHECK) {
-            uint16_t vbatt = adc_buffer[0];
-            uint16_t cell_4v = adc_buffer[1];
-            uint16_t cell_8v = adc_buffer[2];
-
-            uint16_t cell1 = cell_4v;
-            uint16_t cell2 = cell_8v - cell_4v;
-            uint16_t cell3 = vbatt - cell_8v;
-
-            printf("balance %d %d %d\n", cell1, cell2, cell3);
-
-            if (cell1 > cell2 && cell1 > cell3 &&
-                ((cell1 - cell2) > MIN_BALANCE_DIFF_THRESHOLD || (cell1 - cell3) > MIN_BALANCE_DIFF_THRESHOLD)) {
-                change_state(STATE_BALANCE);
-                cur_balance_cell = 1;
-            } else if (cell2 > cell1 && cell2 > cell3 &&
-                       ((cell2 - cell1) > MIN_BALANCE_DIFF_THRESHOLD || (cell2 - cell3) > MIN_BALANCE_DIFF_THRESHOLD)) {
-                change_state(STATE_BALANCE);
-                cur_balance_cell = 2;
-            } else if (cell3 > cell1 && cell3 > cell2 &&
-                       ((cell3 - cell1) > MIN_BALANCE_DIFF_THRESHOLD || (cell3 - cell2) > MIN_BALANCE_DIFF_THRESHOLD)) {
-                change_state(STATE_BALANCE);
-                cur_balance_cell = 3;
-            } else {
-                change_state(STATE_NORMAL_SLEEP);
-            }
+//            uint16_t vbatt = adc_buffer[0];
+//            uint16_t cell_4v = adc_buffer[1];
+//            uint16_t cell_8v = adc_buffer[2];
+//
+//            uint16_t cell1 = cell_4v;
+//            uint16_t cell2 = cell_8v - cell_4v;
+//            uint16_t cell3 = vbatt - cell_8v;
+//
+//            printf("balance %d %d %d\n", cell1, cell2, cell3);
+//
+//            if (cell1 > cell2 && cell1 > cell3 &&
+//                ((cell1 - cell2) > MIN_BALANCE_DIFF_THRESHOLD || (cell1 - cell3) > MIN_BALANCE_DIFF_THRESHOLD)) {
+//                change_state(STATE_BALANCE);
+//                cur_balance_cell = 1;
+//            } else if (cell2 > cell1 && cell2 > cell3 &&
+//                       ((cell2 - cell1) > MIN_BALANCE_DIFF_THRESHOLD || (cell2 - cell3) > MIN_BALANCE_DIFF_THRESHOLD)) {
+//                change_state(STATE_BALANCE);
+//                cur_balance_cell = 2;
+//            } else if (cell3 > cell1 && cell3 > cell2 &&
+//                       ((cell3 - cell1) > MIN_BALANCE_DIFF_THRESHOLD || (cell3 - cell2) > MIN_BALANCE_DIFF_THRESHOLD)) {
+//                change_state(STATE_BALANCE);
+//                cur_balance_cell = 3;
+//            } else {
+//                change_state(STATE_NORMAL_SLEEP);
+//            }
         } else if (cur_state == STATE_BALANCE) {
             gpio_clear(BALANCE_PORT, BALANCE_1_PIN | BALANCE_2_PIN | BALANCE_3_PIN);
 
