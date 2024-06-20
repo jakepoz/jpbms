@@ -374,7 +374,7 @@ static void buck_boost_set_duty(uint16_t new_dc, int16_t delta) {
     timer_set_oc_value(TIM2, TIM_OC3, BUCK_BOOST_PERIOD - dc);
 
     // Fixed tiny amount to run charge pump
-    timer_set_oc_value(TIM2, TIM_OC4, 15);
+    timer_set_oc_value(TIM2, TIM_OC4, 25);
 }
 
 static void buck_boost_init(void) {
@@ -402,9 +402,9 @@ static void buck_boost_init(void) {
     timer_set_oc_polarity_high(TIM2, TIM_OC1);
     timer_set_oc_value(TIM2, TIM_OC1, 0);
 
-    // LA, which is wired to NOT LIN, needs to be set logic high to turn off LA gate
+    // LA
     timer_set_oc_mode(TIM2, TIM_OC2, TIM_OCM_PWM1);
-    timer_set_oc_polarity_high(TIM2, TIM_OC2);
+    timer_set_oc_polarity_low(TIM2, TIM_OC2);
     timer_set_oc_value(TIM2, TIM_OC2, BUCK_BOOST_PERIOD - 0);
 
     // HB
@@ -412,10 +412,10 @@ static void buck_boost_init(void) {
     timer_set_oc_polarity_low(TIM2, TIM_OC3);
     timer_set_oc_value(TIM2, TIM_OC3, BUCK_BOOST_PERIOD - 0);
 
-    // LB, needs to be set logic high to turn off LB gate
+    // LB
     timer_set_oc_mode(TIM2, TIM_OC4, TIM_OCM_PWM1);
-    timer_set_oc_polarity_low(TIM2, TIM_OC4);
-    timer_set_oc_value(TIM2, TIM_OC4, 15);
+    timer_set_oc_polarity_high(TIM2, TIM_OC4);
+    timer_set_oc_value(TIM2, TIM_OC4, 0);
 
     // Also remember that you can only turn on HA or HB if corresponding LA/LB have been on recently
     // Because the charge pump needs to operate to get the gate voltage high enough
@@ -800,7 +800,7 @@ int main(void) {
             // Start with a small initial_duty cycle
             last_mppt_power = 0;
             cur_mppt_state = MPPT_INITIAL;
-            buck_boost_set_duty(20, 0);
+            buck_boost_set_duty(25, 0);
 
             change_state(STATE_CHARGE);
         } else if (cur_state == STATE_CHARGE) {
@@ -824,6 +824,18 @@ int main(void) {
                 int32_t cur_power = vsolar * solar_cur;
 
                 printf("charge %ld %ld %ld %d %ld %d\n", vbatt, vsolar, solar_cur, buck_boost_get_duty(), cur_power, cur_mppt_state);
+
+                uint32_t target_vsolar = start_charge_vsolar * 90 / 100;
+
+                // TODO: VBATT AND VSOLAR are not on the same scale, so this is not quite accurate
+                uint32_t max_dcm_duty = BUCK_BOOST_PERIOD * vbatt / (vsolar * 2);
+
+                if (vsolar > target_vsolar && buck_boost_get_duty() < max_dcm_duty) {
+                    buck_boost_set_duty(buck_boost_get_duty(), +1);
+                }
+                else if (vsolar < target_vsolar) {
+                    buck_boost_set_duty(buck_boost_get_duty(), -1);
+                }
 
 //                if (cur_mppt_state == MPPT_INITIAL) {
 //                    cur_mppt_state = MPPT_GOING_UP;
