@@ -719,6 +719,7 @@ int main(void) {
                 change_state(STATE_START_CHARGE);
             } else if (system_secs - last_balance_check > 60) {
                 printf("balance %d %d %d\n", cell1, cell2, cell3);
+                last_balance_check = system_secs;
 
                 if (cell1 > cell2 && cell1 > cell3 &&
                     ((cell1 - cell2) > MIN_BALANCE_DIFF_THRESHOLD || (cell1 - cell3) > MIN_BALANCE_DIFF_THRESHOLD)) {
@@ -740,8 +741,8 @@ int main(void) {
                 change_state(STATE_NORMAL_SLEEP);
             }
 
+            // Be sure the multiplexer is off when leaving this state
             gpio_clear(ADC_MULTIPLEX_PORT, ADC_MULTIPLEX_VBATT_PIN | ADC_MULTIPLEX_CELL4V_PIN | ADC_MULTIPLEX_CELL8V_PIN);
-            change_state(STATE_NORMAL_SLEEP);
         } else if (cur_state == STATE_LOW_BATT_SLEEP) {
             gpio_set(LED_ERROR_PORT, LED_ERROR_PIN);
 
@@ -757,8 +758,15 @@ int main(void) {
                 change_state(STATE_START_SAMPLE);
             }
         } else if (cur_state == STATE_START_CHARGE) {
-            adc_start_conversion_dma(ADC_CHSELR_CHSEL(VBATT_ADC_CH) | ADC_CHSELR_CHSEL(VSOLAR_ADC_CH) |
-                                     ADC_CHSELR_CHSEL(SOLAR_CURRENT_ADC_CH), true);
+            // Set the multiplexer to be measuring VBATT on future conversions
+            gpio_clear(ADC_MULTIPLEX_PORT, ADC_MULTIPLEX_VBATT_PIN | ADC_MULTIPLEX_CELL4V_PIN | ADC_MULTIPLEX_CELL8V_PIN);
+            gpio_set(ADC_MULTIPLEX_PORT, ADC_MULTIPLEX_VBATT_PIN);
+
+            // Enable the drivers
+            gpio_set(DRIVERS_EN_PORT, DRIVERS_EN_PIN);
+
+            // Get a baseline of the solar current, so you can zero-out the sensor properly
+            adc_start_conversion_dma(ADC_CHSELR_CHSEL(SOLAR_CURRENT_ADC_CH), true);
 
             change_state(STATE_START_CHARGE_MEASURE_BASELINE_WAIT);
         } else if (cur_state == STATE_START_CHARGE_MEASURE_BASELINE_WAIT) {
@@ -768,9 +776,9 @@ int main(void) {
                 enter_sleep_mode();
             }
         } else if (cur_state == STATE_START_CHARGE_MEASURE_BASELINE) {
-            start_charge_vbatt = adc_buffer[0];
-            start_charge_vsolar = adc_buffer[1];
-            start_charge_current = adc_buffer[2];
+            start_charge_vsolar = cur_vsolar;
+            start_charge_vbatt = cur_vbatt;
+            start_charge_current = adc_buffer[0];
 
             printf("startcharge %d %d %d\n", start_charge_vbatt, start_charge_vsolar, start_charge_current);
 
@@ -799,8 +807,8 @@ int main(void) {
             // If you are in this state, then you are continously sampling the ADC
             if (adc_conversions >= BUCK_BOOST_AVERAGE_SAMPLES) {
                 nvic_disable_irq(NVIC_ADC_COMP_IRQ);
-                uint32_t vbatt = adc_accum[0];
-                uint32_t vsolar = adc_accum[1];
+                uint32_t vsolar = adc_accum[0];
+                uint32_t vbatt = adc_accum[1];
                 int32_t solar_cur = adc_accum[2];
                 uint32_t last_adc_conversions = adc_conversions;
 
@@ -817,29 +825,29 @@ int main(void) {
 
                 printf("charge %ld %ld %ld %d %ld %d\n", vbatt, vsolar, solar_cur, buck_boost_get_duty(), cur_power, cur_mppt_state);
 
-                if (cur_mppt_state == MPPT_INITIAL) {
-                    cur_mppt_state = MPPT_GOING_UP;
-                }
-                else if (vsolar < start_charge_vsolar * 3 / 4) {
-                    buck_boost_set_duty(buck_boost_get_duty(),  -1);
-                    cur_mppt_state = MPPT_GOING_DOWN;
-                }
-                else if (cur_mppt_state == MPPT_GOING_UP && cur_power >= last_mppt_power) {
-                    buck_boost_set_duty(buck_boost_get_duty(),  +1);
-                }
-                else if (cur_mppt_state == MPPT_GOING_UP && cur_power < last_mppt_power) {
-                    cur_mppt_state = MPPT_GOING_DOWN;
-                }
-                else if (cur_mppt_state == MPPT_GOING_DOWN && cur_power >= last_mppt_power) {
-                    buck_boost_set_duty(buck_boost_get_duty(),  -1);
-
-                    if (buck_boost_get_duty() < 2) {
-                        change_state(STATE_END_CHARGE);
-                    }
-                }
-                else if (cur_mppt_state == MPPT_GOING_DOWN && cur_power < last_mppt_power) {
-                    cur_mppt_state = MPPT_GOING_UP;
-                }
+//                if (cur_mppt_state == MPPT_INITIAL) {
+//                    cur_mppt_state = MPPT_GOING_UP;
+//                }
+//                else if (vsolar < start_charge_vsolar * 3 / 4) {
+//                    buck_boost_set_duty(buck_boost_get_duty(),  -1);
+//                    cur_mppt_state = MPPT_GOING_DOWN;
+//                }
+//                else if (cur_mppt_state == MPPT_GOING_UP && cur_power >= last_mppt_power) {
+//                    buck_boost_set_duty(buck_boost_get_duty(),  +1);
+//                }
+//                else if (cur_mppt_state == MPPT_GOING_UP && cur_power < last_mppt_power) {
+//                    cur_mppt_state = MPPT_GOING_DOWN;
+//                }
+//                else if (cur_mppt_state == MPPT_GOING_DOWN && cur_power >= last_mppt_power) {
+//                    buck_boost_set_duty(buck_boost_get_duty(),  -1);
+//
+//                    if (buck_boost_get_duty() < 2) {
+//                        change_state(STATE_END_CHARGE);
+//                    }
+//                }
+//                else if (cur_mppt_state == MPPT_GOING_DOWN && cur_power < last_mppt_power) {
+//                    cur_mppt_state = MPPT_GOING_UP;
+//                }
 
                 if (vbatt < VBATT_LOW_THRESHOLD || vbatt > VBATT_MAX_THRESHOLD) {
                     change_state(STATE_END_CHARGE);
@@ -876,6 +884,9 @@ int main(void) {
             adc_end_convert_tim2_trigger();
             buck_boost_disable();
             buck_boost_disable_clock();
+
+            gpio_clear(ADC_MULTIPLEX_PORT, ADC_MULTIPLEX_VBATT_PIN | ADC_MULTIPLEX_CELL4V_PIN | ADC_MULTIPLEX_CELL8V_PIN);
+            gpio_clear(DRIVERS_EN_PORT, DRIVERS_EN_PIN);
 
             leds_disable();
 
