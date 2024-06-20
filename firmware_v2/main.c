@@ -75,6 +75,27 @@ static void systick_init(void)
     systick_interrupt_enable();
 }
 
+static void delay_us(uint32_t cycles) {
+    // Calculate the number of iterations needed, assuming each iteration is 10 NOPs
+    uint32_t iterations = (rcc_ahb_frequency / 1000000) * cycles / 10;
+
+    __asm__ volatile (
+            "1: \n"
+            "nop \n"
+            "nop \n"
+            "nop \n"
+            "nop \n"
+            "nop \n"
+            "nop \n"
+            "nop \n"
+            "sub %[iterations], %[iterations], #1 \n"
+            "cmp %[iterations], #0 \n"
+            "bne 1b \n"
+            : [iterations] "+r" (iterations) // Output: iterations is modified in place
+    );
+}
+
+
 static void gpiob_init(void) {
     rcc_periph_clock_enable(RCC_GPIOB);
 
@@ -537,6 +558,8 @@ enum main_state {
     STATE_STARTUP=0,
 
     STATE_START_SAMPLE,
+    STATE_SELECT_SAMPLE_MULTIPLEXER,
+    STATE_WAIT_SAMPLE_MULTIPLEXER,
     STATE_WAIT_SAMPLE,
     STATE_SAMPLE,
 
@@ -549,9 +572,6 @@ enum main_state {
     STATE_CHARGE,
     STATE_END_CHARGE,
 
-    STATE_START_BALANCE_CHECK,
-    STATE_WAIT_BALANCE_CHECK,
-    STATE_BALANCE_CHECK,
     STATE_BALANCE,
 };
 
@@ -561,7 +581,7 @@ volatile uint32_t cur_state_start_secs = 0;
 volatile uint32_t last_balance_check = 0xffffffff;
 
 volatile uint16_t cur_sample_channel = 0;
-volatile uint16_t cur_vbatt, cur_8v, cur_4v;
+volatile uint16_t cur_vbatt, cur_8v, cur_4v, cur_vsolar;
 
 enum mppt_state {
     MPPT_INITIAL=0,
@@ -616,31 +636,68 @@ int main(void) {
                 //change_state(STATE_START_CHARGE);
             }
         } else if (cur_state == STATE_START_SAMPLE) {
-            // Do a single, non-oversampled read of all battery and solar voltages
-            gpio_clear(ADC_MULTIPLEX_PORT, ADC_MULTIPLEX_CELL4V_PIN | ADC_MULTIPLEX_CELL8V_PIN);
-            gpio_set(ADC_MULTIPLEX_PORT, ADC_MULTIPLEX_VBATT_PIN);
+            gpio_clear(ADC_MULTIPLEX_PORT, ADC_MULTIPLEX_VBATT_PIN | ADC_MULTIPLEX_CELL4V_PIN | ADC_MULTIPLEX_CELL8V_PIN);
+            cur_sample_channel = 0;
 
+            change_state(STATE_SELECT_SAMPLE_MULTIPLEXER);
+        } else if (cur_state == STATE_SELECT_SAMPLE_MULTIPLEXER) {
+            if (cur_sample_channel == 0) {
+                gpio_clear(ADC_MULTIPLEX_PORT, ADC_MULTIPLEX_VBATT_PIN | ADC_MULTIPLEX_CELL4V_PIN | ADC_MULTIPLEX_CELL8V_PIN);
+                gpio_set(ADC_MULTIPLEX_PORT, ADC_MULTIPLEX_VBATT_PIN);
+            }
+            else if (cur_sample_channel == 1) {
+                gpio_clear(ADC_MULTIPLEX_PORT, ADC_MULTIPLEX_VBATT_PIN | ADC_MULTIPLEX_CELL4V_PIN | ADC_MULTIPLEX_CELL8V_PIN);
+                gpio_set(ADC_MULTIPLEX_PORT, ADC_MULTIPLEX_CELL4V_PIN);
+            }
+            else if (cur_sample_channel == 2) {
+                gpio_clear(ADC_MULTIPLEX_PORT, ADC_MULTIPLEX_VBATT_PIN | ADC_MULTIPLEX_CELL4V_PIN | ADC_MULTIPLEX_CELL8V_PIN);
+                gpio_set(ADC_MULTIPLEX_PORT, ADC_MULTIPLEX_CELL8V_PIN);
+            }
+            else {
+                gpio_clear(ADC_MULTIPLEX_PORT, ADC_MULTIPLEX_VBATT_PIN | ADC_MULTIPLEX_CELL4V_PIN | ADC_MULTIPLEX_CELL8V_PIN);
+            }
 
+            change_state(STATE_WAIT_SAMPLE_MULTIPLEXER);
+        } else if (cur_state == STATE_WAIT_SAMPLE_MULTIPLEXER) {
+            delay_us(5000);
 
-            adc_start_conversion_dma(ADC_CHSELR_CHSEL(VBATT_ADC_CH) |
-                                     ADC_CHSELR_CHSEL(VSOLAR_ADC_CH) |
-                                     ADC_CHSELR_CHSEL(SOLAR_CURRENT_ADC_CH), false);
+            if (cur_sample_channel <= 2)
+                adc_start_conversion_dma(ADC_CHSELR_CHSEL(VBATT_ADC_CH), true);
+            else
+                adc_start_conversion_dma(ADC_CHSELR_CHSEL(VSOLAR_ADC_CH), true);
 
             change_state(STATE_WAIT_SAMPLE);
         } else if (cur_state == STATE_WAIT_SAMPLE) {
             if (adc_conversion_finished){
-                change_state(STATE_SAMPLE);
+                if (cur_sample_channel == 0) {
+                    cur_vbatt = adc_buffer[0];
+
+                    cur_sample_channel++;
+                    change_state(STATE_SELECT_SAMPLE_MULTIPLEXER);
+                }
+                else if (cur_sample_channel == 1) {
+                    cur_4v = adc_buffer[0];
+
+                    cur_sample_channel++;
+                    change_state(STATE_SELECT_SAMPLE_MULTIPLEXER);
+                }
+                else if (cur_sample_channel == 2) {
+                    cur_8v = adc_buffer[0];
+
+                    cur_sample_channel++;
+                    change_state(STATE_SELECT_SAMPLE_MULTIPLEXER);
+                }
+                else if (cur_sample_channel == 3) {
+                    cur_vsolar = adc_buffer[0];
+
+                    cur_sample_channel++;
+                    change_state(STATE_SAMPLE);
+                }
             } else {
                 enter_sleep_mode();
             }
         } else if (cur_state == STATE_SAMPLE) {
-            // voltages will be in adc_buffer in the order of their channel index
-            uint16_t vsolar = adc_buffer[0];
-            uint16_t vbatt = adc_buffer[1];
-
-            uint16_t solar_cur = adc_buffer[2];
-
-            printf("sample %d %d\n", vbatt, vsolar);
+            printf("sample %d %d %d %d\n", cur_vbatt, cur_8v, cur_4v, cur_vsolar);
 
             adc_buffer[0] = 0;
 //
@@ -661,6 +718,8 @@ int main(void) {
 //            } else {
 //                change_state(STATE_NORMAL_SLEEP);
 //            }
+
+            gpio_clear(ADC_MULTIPLEX_PORT, ADC_MULTIPLEX_VBATT_PIN | ADC_MULTIPLEX_CELL4V_PIN | ADC_MULTIPLEX_CELL8V_PIN);
             change_state(STATE_NORMAL_SLEEP);
         } else if (cur_state == STATE_LOW_BATT_SLEEP) {
             gpio_set(LED_ERROR_PORT, LED_ERROR_PIN);
@@ -674,12 +733,7 @@ int main(void) {
             enter_sleep_mode();
 
             if (system_secs - cur_state_start_secs > 2) {
-
-                if (system_secs - last_balance_check > 60) {
-                    change_state(STATE_START_BALANCE_CHECK);
-                } else {
-                    change_state(STATE_START_SAMPLE);
-                }
+                change_state(STATE_START_SAMPLE);
             }
         } else if (cur_state == STATE_START_CHARGE) {
             adc_start_conversion_dma(ADC_CHSELR_CHSEL(VBATT_ADC_CH) | ADC_CHSELR_CHSEL(VSOLAR_ADC_CH) |
@@ -808,22 +862,25 @@ int main(void) {
             // so we want to wait a second before moving to that state
             // We do that by doing a round of sleep first
             change_state(STATE_NORMAL_SLEEP);
-        } else if (cur_state == STATE_START_BALANCE_CHECK) {
-            adc_start_conversion_dma(ADC_CHSELR_CHSEL(VBATT_ADC_CH), true);
-            last_balance_check = system_secs;
+        } else if (cur_state == STATE_BALANCE) {
+            gpio_clear(BALANCE_PORT, BALANCE_1_PIN | BALANCE_2_PIN | BALANCE_3_PIN);
 
-            change_state(STATE_WAIT_BALANCE_CHECK);
-        } else if (cur_state == STATE_WAIT_BALANCE_CHECK) {
-            if (adc_conversion_finished) {
-                change_state(STATE_BALANCE_CHECK);
+            if (cur_balance_cell == 1)
+                gpio_set(BALANCE_PORT, BALANCE_1_PIN);
+            else if (cur_balance_cell == 2)
+                gpio_set(BALANCE_PORT, BALANCE_2_PIN);
+            else if (cur_balance_cell == 3)
+                gpio_set(BALANCE_PORT, BALANCE_3_PIN);
+
+            if (system_secs - cur_state_start_secs > 10) {
+                change_state(STATE_START_SAMPLE);
             } else {
                 enter_sleep_mode();
             }
-        } else if (cur_state == STATE_BALANCE_CHECK) {
-//            uint16_t vbatt = adc_buffer[0];
-//            uint16_t cell_4v = adc_buffer[1];
-//            uint16_t cell_8v = adc_buffer[2];
-//
+        }
+    }
+}
+
 //            uint16_t cell1 = cell_4v;
 //            uint16_t cell2 = cell_8v - cell_4v;
 //            uint16_t cell3 = vbatt - cell_8v;
@@ -845,21 +902,3 @@ int main(void) {
 //            } else {
 //                change_state(STATE_NORMAL_SLEEP);
 //            }
-        } else if (cur_state == STATE_BALANCE) {
-            gpio_clear(BALANCE_PORT, BALANCE_1_PIN | BALANCE_2_PIN | BALANCE_3_PIN);
-
-            if (cur_balance_cell == 1)
-                gpio_set(BALANCE_PORT, BALANCE_1_PIN);
-            else if (cur_balance_cell == 2)
-                gpio_set(BALANCE_PORT, BALANCE_2_PIN);
-            else if (cur_balance_cell == 3)
-                gpio_set(BALANCE_PORT, BALANCE_3_PIN);
-
-            if (system_secs - cur_state_start_secs > 10) {
-                change_state(STATE_START_SAMPLE);
-            } else {
-                enter_sleep_mode();
-            }
-        }
-    }
-}
