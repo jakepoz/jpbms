@@ -699,25 +699,46 @@ int main(void) {
         } else if (cur_state == STATE_SAMPLE) {
             printf("sample %d %d %d %d\n", cur_vbatt, cur_8v, cur_4v, cur_vsolar);
 
-            adc_buffer[0] = 0;
-//
-//            if (vbatt < VBATT_LOW_THRESHOLD) {
-//                printf("low vbatt\n");
-//                change_state(STATE_LOW_BATT_SLEEP);
-//            } else if (cell_4v < SINGLE_CELL_LOW_THRESHOLD) {
-//                printf("low cell_0 %d\n", cell_4v);
-//                change_state(STATE_LOW_BATT_SLEEP);
-//            } else if (cell_8v - cell_4v < SINGLE_CELL_LOW_THRESHOLD) {
-//                printf("low cell_1 %d\n", cell_8v - cell_4v);
-//                change_state(STATE_LOW_BATT_SLEEP);
-//            } else if (vbatt - cell_8v < SINGLE_CELL_LOW_THRESHOLD) {
-//                printf("low cell_2 %d\n", vbatt - cell_8v);
-//                change_state(STATE_LOW_BATT_SLEEP);
-//            } else if (vsolar > VSOLAR_START_CHARGING_THRESHOLD && vbatt < VBATT_MAX_THRESHOLD) {
-//                change_state(STATE_START_CHARGE);
-//            } else {
-//                change_state(STATE_NORMAL_SLEEP);
-//            }
+            uint16_t cell1 = cur_4v;
+            uint16_t cell2 = cur_8v - cur_4v;
+            uint16_t cell3 = cur_vbatt - cur_8v;
+
+            if (cur_vbatt < VBATT_LOW_THRESHOLD) {
+                printf("low vbatt %d\n", cur_vbatt);
+                change_state(STATE_LOW_BATT_SLEEP);
+            } else if (cell1 < SINGLE_CELL_LOW_THRESHOLD) {
+                printf("low cell_1 %d\n", cell1);
+                change_state(STATE_LOW_BATT_SLEEP);
+            } else if (cell2< SINGLE_CELL_LOW_THRESHOLD) {
+                printf("low cell_2 %d\n", cell2);
+                change_state(STATE_LOW_BATT_SLEEP);
+            } else if (cell3 < SINGLE_CELL_LOW_THRESHOLD) {
+                printf("low cell_3 %d\n",cell3);
+                change_state(STATE_LOW_BATT_SLEEP);
+            } else if (cur_vsolar > VSOLAR_START_CHARGING_THRESHOLD && cur_vbatt < VBATT_MAX_THRESHOLD) {
+                change_state(STATE_START_CHARGE);
+            } else if (system_secs - last_balance_check > 60) {
+                printf("balance %d %d %d\n", cell1, cell2, cell3);
+
+                if (cell1 > cell2 && cell1 > cell3 &&
+                    ((cell1 - cell2) > MIN_BALANCE_DIFF_THRESHOLD || (cell1 - cell3) > MIN_BALANCE_DIFF_THRESHOLD)) {
+                    change_state(STATE_BALANCE);
+                    cur_balance_cell = 1;
+                } else if (cell2 > cell1 && cell2 > cell3 &&
+                           ((cell2 - cell1) > MIN_BALANCE_DIFF_THRESHOLD || (cell2 - cell3) > MIN_BALANCE_DIFF_THRESHOLD)) {
+                    change_state(STATE_BALANCE);
+                    cur_balance_cell = 2;
+                } else if (cell3 > cell1 && cell3 > cell2 &&
+                           ((cell3 - cell1) > MIN_BALANCE_DIFF_THRESHOLD || (cell3 - cell2) > MIN_BALANCE_DIFF_THRESHOLD)) {
+                    change_state(STATE_BALANCE);
+                    cur_balance_cell = 3;
+                } else {
+                    change_state(STATE_NORMAL_SLEEP);
+                }
+            }
+            else {
+                change_state(STATE_NORMAL_SLEEP);
+            }
 
             gpio_clear(ADC_MULTIPLEX_PORT, ADC_MULTIPLEX_VBATT_PIN | ADC_MULTIPLEX_CELL4V_PIN | ADC_MULTIPLEX_CELL8V_PIN);
             change_state(STATE_NORMAL_SLEEP);
@@ -881,24 +902,3 @@ int main(void) {
     }
 }
 
-//            uint16_t cell1 = cell_4v;
-//            uint16_t cell2 = cell_8v - cell_4v;
-//            uint16_t cell3 = vbatt - cell_8v;
-//
-//            printf("balance %d %d %d\n", cell1, cell2, cell3);
-//
-//            if (cell1 > cell2 && cell1 > cell3 &&
-//                ((cell1 - cell2) > MIN_BALANCE_DIFF_THRESHOLD || (cell1 - cell3) > MIN_BALANCE_DIFF_THRESHOLD)) {
-//                change_state(STATE_BALANCE);
-//                cur_balance_cell = 1;
-//            } else if (cell2 > cell1 && cell2 > cell3 &&
-//                       ((cell2 - cell1) > MIN_BALANCE_DIFF_THRESHOLD || (cell2 - cell3) > MIN_BALANCE_DIFF_THRESHOLD)) {
-//                change_state(STATE_BALANCE);
-//                cur_balance_cell = 2;
-//            } else if (cell3 > cell1 && cell3 > cell2 &&
-//                       ((cell3 - cell1) > MIN_BALANCE_DIFF_THRESHOLD || (cell3 - cell2) > MIN_BALANCE_DIFF_THRESHOLD)) {
-//                change_state(STATE_BALANCE);
-//                cur_balance_cell = 3;
-//            } else {
-//                change_state(STATE_NORMAL_SLEEP);
-//            }
