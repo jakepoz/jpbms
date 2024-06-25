@@ -19,6 +19,9 @@
 #include <libopencm3/stm32/adc.h>
 #include <libopencm3/stm32/dma.h>
 
+#define CLAMP(val, min, max) ((val) < (min) ? (min) : ((val) > (max) ? (max) : (val)))
+
+
 /*!< Low Frequency Mode enable */
 // Must be set with ADC Freq < 3.5Mhz, and we run at 2.1 main clock
 #define ADC_CCR_LFMEN                       ((uint32_t)0x02000000U)
@@ -373,8 +376,8 @@ static void buck_boost_set_duty(uint16_t new_dc, int16_t delta) {
     timer_set_oc_value(TIM2, TIM_OC2, BUCK_BOOST_PERIOD - dc);
     timer_set_oc_value(TIM2, TIM_OC3, BUCK_BOOST_PERIOD - dc);
 
-    // Fixed tiny amount to run charge pump
-    timer_set_oc_value(TIM2, TIM_OC4, 25);
+    // Fixed amount to run charge pump
+    timer_set_oc_value(TIM2, TIM_OC4, CLAMP(BUCK_BOOST_PERIOD - dc + 5, 5, BUCK_BOOST_PERIOD - 5));
 }
 
 static void buck_boost_init(void) {
@@ -624,6 +627,9 @@ int main(void) {
     // Lowest possible internal voltage scaling to save power, limits to 4mhz clock
     pwr_set_vos_scale(PWR_SCALE3);
 
+//    while(1) {
+//        enter_sleep_mode();
+//    }
 
     printf("startup\n");
 
@@ -706,15 +712,16 @@ int main(void) {
             if (cur_vbatt < VBATT_LOW_THRESHOLD) {
                 printf("low vbatt %d\n", cur_vbatt);
                 change_state(STATE_LOW_BATT_SLEEP);
-            } else if (cell1 < SINGLE_CELL_LOW_THRESHOLD) {
-                printf("low cell_1 %d\n", cell1);
-                change_state(STATE_LOW_BATT_SLEEP);
-            } else if (cell2< SINGLE_CELL_LOW_THRESHOLD) {
-                printf("low cell_2 %d\n", cell2);
-                change_state(STATE_LOW_BATT_SLEEP);
-            } else if (cell3 < SINGLE_CELL_LOW_THRESHOLD) {
-                printf("low cell_3 %d\n",cell3);
-                change_state(STATE_LOW_BATT_SLEEP);
+//            }
+//            else if (cell1 < SINGLE_CELL_LOW_THRESHOLD) {
+//                printf("low cell_1 %d\n", cell1);
+//                change_state(STATE_LOW_BATT_SLEEP);
+//            } else if (cell2< SINGLE_CELL_LOW_THRESHOLD) {
+//                printf("low cell_2 %d\n", cell2);
+//                change_state(STATE_LOW_BATT_SLEEP);
+//            } else if (cell3 < SINGLE_CELL_LOW_THRESHOLD) {
+//                printf("low cell_3 %d\n",cell3);
+//                change_state(STATE_LOW_BATT_SLEEP);
             } else if (cur_vsolar > VSOLAR_START_CHARGING_THRESHOLD && cur_vbatt < VBATT_MAX_THRESHOLD) {
                 change_state(STATE_START_CHARGE);
             } else if (system_secs - last_balance_check > 60) {
@@ -744,11 +751,11 @@ int main(void) {
             // Be sure the multiplexer is off when leaving this state
             gpio_clear(ADC_MULTIPLEX_PORT, ADC_MULTIPLEX_VBATT_PIN | ADC_MULTIPLEX_CELL4V_PIN | ADC_MULTIPLEX_CELL8V_PIN);
         } else if (cur_state == STATE_LOW_BATT_SLEEP) {
-            gpio_set(LED_ERROR_PORT, LED_ERROR_PIN);
+            //gpio_set(LED_ERROR_PORT, LED_ERROR_PIN);
 
             enter_sleep_mode();
 
-            if (system_secs - cur_state_start_secs > 10) {
+            if (system_secs - cur_state_start_secs > 30) {
                 change_state(STATE_START_SAMPLE);
             }
         } else if (cur_state == STATE_NORMAL_SLEEP) {
@@ -825,7 +832,7 @@ int main(void) {
 
                 printf("charge %ld %ld %ld %d %ld %d\n", vbatt, vsolar, solar_cur, buck_boost_get_duty(), cur_power, cur_mppt_state);
 
-                uint32_t target_vsolar = start_charge_vsolar * 90 / 100;
+                uint32_t target_vsolar = start_charge_vsolar * 88 / 100;
 
                 // TODO: VBATT AND VSOLAR are not on the same scale, so this is not quite accurate
                 uint32_t max_dcm_duty = BUCK_BOOST_PERIOD * vbatt / (vsolar * 2);
@@ -836,30 +843,6 @@ int main(void) {
                 else if (vsolar < target_vsolar) {
                     buck_boost_set_duty(buck_boost_get_duty(), -1);
                 }
-
-//                if (cur_mppt_state == MPPT_INITIAL) {
-//                    cur_mppt_state = MPPT_GOING_UP;
-//                }
-//                else if (vsolar < start_charge_vsolar * 3 / 4) {
-//                    buck_boost_set_duty(buck_boost_get_duty(),  -1);
-//                    cur_mppt_state = MPPT_GOING_DOWN;
-//                }
-//                else if (cur_mppt_state == MPPT_GOING_UP && cur_power >= last_mppt_power) {
-//                    buck_boost_set_duty(buck_boost_get_duty(),  +1);
-//                }
-//                else if (cur_mppt_state == MPPT_GOING_UP && cur_power < last_mppt_power) {
-//                    cur_mppt_state = MPPT_GOING_DOWN;
-//                }
-//                else if (cur_mppt_state == MPPT_GOING_DOWN && cur_power >= last_mppt_power) {
-//                    buck_boost_set_duty(buck_boost_get_duty(),  -1);
-//
-//                    if (buck_boost_get_duty() < 2) {
-//                        change_state(STATE_END_CHARGE);
-//                    }
-//                }
-//                else if (cur_mppt_state == MPPT_GOING_DOWN && cur_power < last_mppt_power) {
-//                    cur_mppt_state = MPPT_GOING_UP;
-//                }
 
                 if (vbatt < VBATT_LOW_THRESHOLD || vbatt > VBATT_MAX_THRESHOLD) {
                     change_state(STATE_END_CHARGE);

@@ -39936,7 +39936,7 @@
 		(layer "Edge.Cuts")
 		(uuid "2bcb63dc-5069-403b-9976-e6ea9aa3eb1d")
 	)
-	(gr_text "V1.2\n X Move solar adc line to other layer for less noise?\n X Move adc sampling capacitors closest to stm32\n X stm power pins should be wired to capacitors, then those wired to vcc/gnd\n - multiple gnd vias around decoupling caps\n X balance resistors are placed in a weird grouping\n X bootstrap diodes backwards\n X Check, do I need vcc for level shifting on the BMP uart?\n X Could I make the uart only turn on if the cable is plugged in?\n X Multiplex ADCs for sampling battery voltage\n X Switch to XT30 connector for solar\n X Add button to show battery charge level?\n X ESD protection\n X larger decoulping caps on drivers\n X larger caps on vsolar\n X larger caps on vbatt at entrance?\n X ability to turn off driver chips\n X 30v divider on vsolar\n X rc filter on solar current\n X calculate inductor size\n X add some heatsinking pads to main mosfets & inductor"
+	(gr_text "V1.3\n - Recalculate pullup on switch\n - Bootstrap circuit is not strong enough, remove\n   the gate resistors?\n - 0.5% resistors for the voltage calculations\n - Ordering on the balance LEDS\n - Multiplexer -> use a chip?\n   - Issue with exceeding +20V drain-source or -8v gate source if solar unplugged"
 		(at 182.4 68.4 0)
 		(layer "F.Cu")
 		(uuid "e087b897-86a0-4c44-a2cf-be59dda6f395")
