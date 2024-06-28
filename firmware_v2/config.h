@@ -12,6 +12,10 @@
 #define VOLTAGE_TO_VSOLAR_ADC(voltage) ((int)((voltage) * 4095 * 2 / (2.5 * (18.0 + 2.0)) + 0.5))
 #define VSOLAR_ADC_TO_VOLTAGE(adc) (((adc) - 0.5) * (2.5 * (18.0 + 2.0)) / (4095 * 2.0))
 
+// An approximation to VOLTAGE_TO_VSOLAR_ADC(1) / VOLTAGE_TO_VBATT_ADC(1)
+#define VSOLAR_TO_VBATT_RATIO_NUM 57
+#define VSOLAR_TO_VBATT_RATIO_DEN 100
+
 // Based on 1.2V per amp
 #define ADC_TO_CURRENT(adc_value) (((adc_value) * 2.5 / 4096) / 1.2)
 #define CURRENT_TO_ADC(current) ((uint16_t)(((current) * 1.2 / 2.5) * 4096))

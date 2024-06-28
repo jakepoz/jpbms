@@ -253,7 +253,7 @@ static void adc_set_oversample_256(bool oversample) {
     }
 }
 
-static void adc_start_conversion_dma(uint16_t channel_mask, bool oversample) {
+static void adc_start_conversion_dma(uint32_t channel_mask, bool oversample) {
     // Set the sample rate
     ADC_SMPR1(ADC1) = ADC_SMPR_SMP_160DOT5CYC;
 
@@ -289,7 +289,7 @@ static void adc_start_conversion_dma(uint16_t channel_mask, bool oversample) {
     adc_start_conversion_regular(ADC1);
 }
 
-static void adc_begin_convert_tim2_trigger(uint16_t channel_mask) {
+static void adc_begin_convert_tim2_trigger(uint32_t channel_mask) {
     // This function is meant to start ADC conversions on TIM2 triggers
     // on TIM2 overflow, we start a conversion, so we are synced to always get it during the same
     // point in the cycle
@@ -372,6 +372,7 @@ static void buck_boost_set_duty(uint16_t new_dc, int16_t delta) {
 
     buck_boost_last_duty = dc;
 
+    // TODO The high side switch on the battery side is still in asynchronous mode, so we need to set it to something
     timer_set_oc_value(TIM2, TIM_OC1, 0);
     timer_set_oc_value(TIM2, TIM_OC2, BUCK_BOOST_PERIOD - dc);
     timer_set_oc_value(TIM2, TIM_OC3, BUCK_BOOST_PERIOD - dc);
@@ -584,7 +585,7 @@ volatile uint32_t cur_state_start_secs = 0;
 volatile uint32_t last_balance_check = 0xffffffff;
 
 volatile uint16_t cur_sample_channel = 0;
-volatile uint16_t cur_vbatt, cur_8v, cur_4v, cur_vsolar;
+volatile uint16_t cur_vbatt, cur_8v, cur_4v, cur_vsolar, cur_vrefint;
 
 enum mppt_state {
     MPPT_INITIAL=0,
@@ -649,18 +650,26 @@ int main(void) {
         } else if (cur_state == STATE_SELECT_SAMPLE_MULTIPLEXER) {
             if (cur_sample_channel == 0) {
                 gpio_clear(ADC_MULTIPLEX_PORT, ADC_MULTIPLEX_VBATT_PIN | ADC_MULTIPLEX_CELL4V_PIN | ADC_MULTIPLEX_CELL8V_PIN);
+                delay_us(2000); // Need to wait for the multiplexer to switch off the previous voltage or else you'll have two enabled at the same time which shows a distinct current spike
                 gpio_set(ADC_MULTIPLEX_PORT, ADC_MULTIPLEX_VBATT_PIN);
             }
             else if (cur_sample_channel == 1) {
                 gpio_clear(ADC_MULTIPLEX_PORT, ADC_MULTIPLEX_VBATT_PIN | ADC_MULTIPLEX_CELL4V_PIN | ADC_MULTIPLEX_CELL8V_PIN);
+                delay_us(2000); // Need to wait for the multiplexer to switch off the previous voltage or else you'll have two enabled at the same time which shows a distinct current spike
                 gpio_set(ADC_MULTIPLEX_PORT, ADC_MULTIPLEX_CELL4V_PIN);
             }
             else if (cur_sample_channel == 2) {
                 gpio_clear(ADC_MULTIPLEX_PORT, ADC_MULTIPLEX_VBATT_PIN | ADC_MULTIPLEX_CELL4V_PIN | ADC_MULTIPLEX_CELL8V_PIN);
+                delay_us(2000); // Need to wait for the multiplexer to switch off the previous voltage or else you'll have two enabled at the same time which shows a distinct current spike
                 gpio_set(ADC_MULTIPLEX_PORT, ADC_MULTIPLEX_CELL8V_PIN);
             }
-            else {
+            else if (cur_sample_channel == 3) {
                 gpio_clear(ADC_MULTIPLEX_PORT, ADC_MULTIPLEX_VBATT_PIN | ADC_MULTIPLEX_CELL4V_PIN | ADC_MULTIPLEX_CELL8V_PIN);
+
+                adc_enable_vrefint();
+            }
+            else {
+                adc_disable_vrefint();
             }
 
             change_state(STATE_WAIT_SAMPLE_MULTIPLEXER);
@@ -669,8 +678,10 @@ int main(void) {
 
             if (cur_sample_channel <= 2)
                 adc_start_conversion_dma(ADC_CHSELR_CHSEL(VBATT_ADC_CH), true);
-            else
+            else if (cur_sample_channel == 3)
                 adc_start_conversion_dma(ADC_CHSELR_CHSEL(VSOLAR_ADC_CH), true);
+            else if (cur_sample_channel == 4)
+                adc_start_conversion_dma(ADC_CHSELR_CHSEL(VREFINT_ADC_CH), true);
 
             change_state(STATE_WAIT_SAMPLE);
         } else if (cur_state == STATE_WAIT_SAMPLE) {
@@ -697,13 +708,19 @@ int main(void) {
                     cur_vsolar = adc_buffer[0];
 
                     cur_sample_channel++;
+                    change_state(STATE_SELECT_SAMPLE_MULTIPLEXER);
+                }
+                else if (cur_sample_channel == 4) {
+                    cur_vrefint = adc_buffer[0];
+
+                    cur_sample_channel++;
                     change_state(STATE_SAMPLE);
                 }
             } else {
                 enter_sleep_mode();
             }
         } else if (cur_state == STATE_SAMPLE) {
-            printf("sample %d %d %d %d\n", cur_vbatt, cur_8v, cur_4v, cur_vsolar);
+            printf("sample %d %d %d %d %d\n", cur_vbatt, cur_8v, cur_4v, cur_vsolar, cur_vrefint);
 
             uint16_t cell1 = cur_4v;
             uint16_t cell2 = cur_8v - cur_4v;
@@ -712,16 +729,16 @@ int main(void) {
             if (cur_vbatt < VBATT_LOW_THRESHOLD) {
                 printf("low vbatt %d\n", cur_vbatt);
                 change_state(STATE_LOW_BATT_SLEEP);
-//            }
-//            else if (cell1 < SINGLE_CELL_LOW_THRESHOLD) {
-//                printf("low cell_1 %d\n", cell1);
-//                change_state(STATE_LOW_BATT_SLEEP);
-//            } else if (cell2< SINGLE_CELL_LOW_THRESHOLD) {
-//                printf("low cell_2 %d\n", cell2);
-//                change_state(STATE_LOW_BATT_SLEEP);
-//            } else if (cell3 < SINGLE_CELL_LOW_THRESHOLD) {
-//                printf("low cell_3 %d\n",cell3);
-//                change_state(STATE_LOW_BATT_SLEEP);
+            }
+            else if (cell1 < SINGLE_CELL_LOW_THRESHOLD) {
+                printf("low cell_1 %d\n", cell1);
+                change_state(STATE_LOW_BATT_SLEEP);
+            } else if (cell2< SINGLE_CELL_LOW_THRESHOLD) {
+                printf("low cell_2 %d\n", cell2);
+                change_state(STATE_LOW_BATT_SLEEP);
+            } else if (cell3 < SINGLE_CELL_LOW_THRESHOLD) {
+                printf("low cell_3 %d\n",cell3);
+                change_state(STATE_LOW_BATT_SLEEP);
             } else if (cur_vsolar > VSOLAR_START_CHARGING_THRESHOLD && cur_vbatt < VBATT_MAX_THRESHOLD) {
                 change_state(STATE_START_CHARGE);
             } else if (system_secs - last_balance_check > 60) {
@@ -834,8 +851,10 @@ int main(void) {
 
                 uint32_t target_vsolar = start_charge_vsolar * 88 / 100;
 
-                // TODO: VBATT AND VSOLAR are not on the same scale, so this is not quite accurate
-                uint32_t max_dcm_duty = BUCK_BOOST_PERIOD * vbatt / (vsolar * 2);
+                // VBATT AND VSOLAR are not on the same scale, so you need to adjust the ratio
+                uint32_t max_dcm_duty = (BUCK_BOOST_PERIOD * vbatt) / ((vsolar * VSOLAR_TO_VBATT_RATIO_NUM) / VSOLAR_TO_VBATT_RATIO_DEN + vbatt);
+
+                printf("maxduty %ld\n", max_dcm_duty);
 
                 if (vsolar > target_vsolar && buck_boost_get_duty() < max_dcm_duty) {
                     buck_boost_set_duty(buck_boost_get_duty(), +1);
@@ -855,19 +874,9 @@ int main(void) {
             //timer_set_oc_value(TIM22, TIM_OC1, (millis % 1000 > 500) ? 1000 - (millis % 1000) : millis % 1000);
             timer_set_oc_value(TIM22, TIM_OC1, 100);
 
-            uint16_t orange_period = 1000;
-
-            if (last_mppt_power > MAX_SOLAR_POWER) {
-                orange_period = 1000;
-            }
-            else if (last_mppt_power <= 0) {
-                orange_period = 0;
-            }
-            else {
-                orange_period = last_mppt_power * 1000 / MAX_SOLAR_POWER;
-            }
-
-            timer_set_oc_value(TIM22, TIM_OC2, orange_period);
+            gpio_set(LED_ERROR_PORT, LED_ERROR_PIN);
+            timer_set_oc_value(TIM22, TIM_OC2, millis % (((130 - 23) * 1000 + 200) / 130));
+            gpio_clear(LED_ERROR_PORT, LED_ERROR_PIN);
 
             // Periodically we want to stop charging and get a measurement of the system, maybe go into balance, etc.
             if (system_secs - cur_state_start_secs > 300) {
