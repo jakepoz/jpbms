@@ -3135,7 +3135,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC_Code" "C23234"
+		(property "LCSC_Code" "C728597"
 			(at 214.63 97.79 0)
 			(effects
 				(font
@@ -3457,7 +3457,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC_Code" "C22847"
+		(property "LCSC_Code" "C861205"
 			(at 224.79 101.6 0)
 			(effects
 				(font

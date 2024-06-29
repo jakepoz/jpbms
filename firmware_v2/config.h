@@ -16,6 +16,11 @@
 #define VSOLAR_TO_VBATT_RATIO_NUM 57
 #define VSOLAR_TO_VBATT_RATIO_DEN 100
 
+#define VREFINT_CAL MMIO16(0x1FF80078)
+#define VREFINT_EXPECTED_VOLTAGE (1.224)
+#define VDDA_EXPECTED_VOLTAGE (2.50)
+#define VREFINT_EXPECTED_ADC ((int)(VREFINT_EXPECTED_VOLTAGE/VDDA_EXPECTED_VOLTAGE * 4095 + 0.5))
+
 // Based on 1.2V per amp
 #define ADC_TO_CURRENT(adc_value) (((adc_value) * 2.5 / 4096) / 1.2)
 #define CURRENT_TO_ADC(current) ((uint16_t)(((current) * 1.2 / 2.5) * 4096))

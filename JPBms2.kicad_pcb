@@ -39936,7 +39936,7 @@
 		(layer "Edge.Cuts")
 		(uuid "2bcb63dc-5069-403b-9976-e6ea9aa3eb1d")
 	)
-	(gr_text "V1.3\n - Recalculate pullup on switch\n - Bootstrap circuit is not strong enough, remove\n   the gate resistors?\n - 0.5% resistors for the voltage calculations\n - Ordering on the balance LEDS\n - Multiplexer -> use a chip?\n   - Issue with exceeding +20V drain-source or -8v gate source if solar unplugged"
+	(gr_text "V1.3\n - Recalculate pullup on switch\n - Bootstrap circuit is not strong enough, remove\n   the gate resistors?\n - 0.1% resistors for the voltage calculations\n - Ordering on the balance LEDS\n - Multiplexer -> use a chip?\n   - Issue with exceeding +20V drain-source or -8v gate source if solar unplugged"
 		(at 182.4 68.4 0)
 		(layer "F.Cu")
 		(uuid "e087b897-86a0-4c44-a2cf-be59dda6f395")

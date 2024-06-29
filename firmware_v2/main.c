@@ -649,69 +649,69 @@ int main(void) {
             change_state(STATE_SELECT_SAMPLE_MULTIPLEXER);
         } else if (cur_state == STATE_SELECT_SAMPLE_MULTIPLEXER) {
             if (cur_sample_channel == 0) {
+                adc_enable_vrefint();
+            }
+            else if (cur_sample_channel == 1) {
+                adc_disable_vrefint();
                 gpio_clear(ADC_MULTIPLEX_PORT, ADC_MULTIPLEX_VBATT_PIN | ADC_MULTIPLEX_CELL4V_PIN | ADC_MULTIPLEX_CELL8V_PIN);
                 delay_us(2000); // Need to wait for the multiplexer to switch off the previous voltage or else you'll have two enabled at the same time which shows a distinct current spike
                 gpio_set(ADC_MULTIPLEX_PORT, ADC_MULTIPLEX_VBATT_PIN);
             }
-            else if (cur_sample_channel == 1) {
+            else if (cur_sample_channel == 2) {
                 gpio_clear(ADC_MULTIPLEX_PORT, ADC_MULTIPLEX_VBATT_PIN | ADC_MULTIPLEX_CELL4V_PIN | ADC_MULTIPLEX_CELL8V_PIN);
                 delay_us(2000); // Need to wait for the multiplexer to switch off the previous voltage or else you'll have two enabled at the same time which shows a distinct current spike
                 gpio_set(ADC_MULTIPLEX_PORT, ADC_MULTIPLEX_CELL4V_PIN);
             }
-            else if (cur_sample_channel == 2) {
+            else if (cur_sample_channel == 3) {
                 gpio_clear(ADC_MULTIPLEX_PORT, ADC_MULTIPLEX_VBATT_PIN | ADC_MULTIPLEX_CELL4V_PIN | ADC_MULTIPLEX_CELL8V_PIN);
                 delay_us(2000); // Need to wait for the multiplexer to switch off the previous voltage or else you'll have two enabled at the same time which shows a distinct current spike
                 gpio_set(ADC_MULTIPLEX_PORT, ADC_MULTIPLEX_CELL8V_PIN);
             }
-            else if (cur_sample_channel == 3) {
+            else if (cur_sample_channel == 4) {
                 gpio_clear(ADC_MULTIPLEX_PORT, ADC_MULTIPLEX_VBATT_PIN | ADC_MULTIPLEX_CELL4V_PIN | ADC_MULTIPLEX_CELL8V_PIN);
+            }
 
-                adc_enable_vrefint();
-            }
-            else {
-                adc_disable_vrefint();
-            }
 
             change_state(STATE_WAIT_SAMPLE_MULTIPLEXER);
         } else if (cur_state == STATE_WAIT_SAMPLE_MULTIPLEXER) {
             delay_us(5000);
 
-            if (cur_sample_channel <= 2)
-                adc_start_conversion_dma(ADC_CHSELR_CHSEL(VBATT_ADC_CH), true);
-            else if (cur_sample_channel == 3)
-                adc_start_conversion_dma(ADC_CHSELR_CHSEL(VSOLAR_ADC_CH), true);
-            else if (cur_sample_channel == 4)
+            if (cur_sample_channel == 0 )
                 adc_start_conversion_dma(ADC_CHSELR_CHSEL(VREFINT_ADC_CH), true);
+            else if (cur_sample_channel >= 1 && cur_sample_channel <= 3)
+                adc_start_conversion_dma(ADC_CHSELR_CHSEL(VBATT_ADC_CH), true);
+            else if (cur_sample_channel == 4)
+                adc_start_conversion_dma(ADC_CHSELR_CHSEL(VSOLAR_ADC_CH), true);
 
             change_state(STATE_WAIT_SAMPLE);
         } else if (cur_state == STATE_WAIT_SAMPLE) {
             if (adc_conversion_finished){
                 if (cur_sample_channel == 0) {
-                    cur_vbatt = adc_buffer[0];
+                    cur_vrefint = adc_buffer[0];
 
                     cur_sample_channel++;
                     change_state(STATE_SELECT_SAMPLE_MULTIPLEXER);
                 }
                 else if (cur_sample_channel == 1) {
-                    cur_4v = adc_buffer[0];
+                    cur_vbatt = (adc_buffer[0] * VREFINT_EXPECTED_ADC) / cur_vrefint;
 
                     cur_sample_channel++;
                     change_state(STATE_SELECT_SAMPLE_MULTIPLEXER);
                 }
                 else if (cur_sample_channel == 2) {
-                    cur_8v = adc_buffer[0];
+                    cur_4v = (adc_buffer[0] * VREFINT_EXPECTED_ADC) / cur_vrefint;
 
                     cur_sample_channel++;
                     change_state(STATE_SELECT_SAMPLE_MULTIPLEXER);
                 }
                 else if (cur_sample_channel == 3) {
-                    cur_vsolar = adc_buffer[0];
+                    cur_8v = (adc_buffer[0] * VREFINT_EXPECTED_ADC) / cur_vrefint;
 
                     cur_sample_channel++;
                     change_state(STATE_SELECT_SAMPLE_MULTIPLEXER);
                 }
                 else if (cur_sample_channel == 4) {
-                    cur_vrefint = adc_buffer[0];
+                    cur_vsolar = (adc_buffer[0] * VREFINT_EXPECTED_ADC) / cur_vrefint;
 
                     cur_sample_channel++;
                     change_state(STATE_SAMPLE);
@@ -720,7 +720,7 @@ int main(void) {
                 enter_sleep_mode();
             }
         } else if (cur_state == STATE_SAMPLE) {
-            printf("sample %d %d %d %d %d\n", cur_vbatt, cur_8v, cur_4v, cur_vsolar, cur_vrefint);
+            printf("sample %d %d %d %d %d %d\n", cur_vbatt, cur_8v, cur_4v, cur_vsolar, cur_vrefint, VREFINT_CAL);
 
             uint16_t cell1 = cur_4v;
             uint16_t cell2 = cur_8v - cur_4v;
