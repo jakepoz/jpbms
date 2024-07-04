@@ -190,21 +190,77 @@ static void switch_init(void) {
 
 static volatile bool adc_conversion_finished = false;
 
- void adc_comp_isr(void)
- {
-    if (adc_eos(ADC1)) {
-        ADC_ISR(ADC1) = ADC_ISR_EOS;
-        adc_conversion_finished = true;
+void adc_comp_isr(void)
+{
 
-        for (uint8_t i = 0; i < ADC_BUFFER_SIZE; i++) {
-            adc_accum[i] += adc_buffer[i];
-        }
-        adc_conversions++;
+//    if (adc_eos(ADC1)) {
+//        ADC_ISR(ADC1) = ADC_ISR_EOS;
+//        adc_conversion_finished = true;
+//
+//        for (uint8_t i = 0; i < ADC_BUFFER_SIZE; i++) {
+//            adc_accum[i] += adc_buffer[i];
+//        }
+//        adc_conversions++;
+//    }
 
-//        gpio_set(LED_ERROR_PORT, LED_ERROR_PIN);
-//        gpio_clear(LED_ERROR_PORT, LED_ERROR_PIN);
-    }
- }
+    __asm__ volatile (
+        // gpio_set(LED_ERROR_PORT, LED_ERROR_PIN)
+            "LDR R0, =%[port_bsrr]\n\t"               // Load the address of LED_ERROR_PORT into R0
+            "LDR R1, =%[pin]\n\t"                // Load the value of LED_ERROR_PIN into R1
+            "STR R1, [R0, #24]\n\t"                   // Store the value of LED_ERROR_PIN at the address in R0 (LED_ERROR_PORT)
+
+            // if (adc_eos(ADC1))
+            "LDR R2, =%[adc]\n\t"                // Load the address of ADC1 into R2
+            "LDR R3, [R2, #0x00]\n\t"            // Load the ADC_ISR register value at ADC1 into R3
+            "LDR R4, =%[eos]\n\t"                // Load the value of ADC_ISR_EOS into R4
+            "TST R3, R4\n\t"                     // Test if EOS bit is set
+            "BEQ 1f\n\t"                         // Branch to label 1 if EOS bit is not set
+            "STR R4, [R2, #0x00]\n\t"            // Store the value of ADC_ISR_EOS into ADC_ISR register
+
+            // adc_conversion_finished = true
+            "LDR R5, =%[conversion_finished]\n\t" // Load the address of adc_conversion_finished into R5
+            "MOVS R6, #1\n\t"                     // Load the value 1 into R6 (true)
+            "STRB R6, [R5]\n\t"                   // Store the value 1 into adc_conversion_finished
+
+            // adc_conversions++
+            "LDR R7, =%[conversions]\n\t"         // Load the address of adc_conversions into R7
+            "LDR R6, [R7]\n\t"                    // Load the current value of adc_conversions into R6
+            "ADD R6, R6, #1\n\t"                  // Increment the value in R6 by 1
+            "STR R6, [R7]\n\t"                    // Store the incremented value back to adc_conversions
+
+            // Increment the accums
+            "LDR R6, =adc_accum\n"     // Load address of adc_accum
+            "LDR R7, =adc_buffer\n"    // Load address of adc_buffer
+
+            "LDRH R1, [R7, #0]\n"      // Load adc_buffer[0]
+            "LDR R2, [R6, #0]\n"      // Load adc_accum[0]
+            "ADD R1, R1, R2\n"        // Add values
+            "STR R1, [R6, #0]\n"      // Store result back to adc_accum[0]
+
+            "LDRH R1, [R7, #2]\n"      // Load adc_buffer[0]
+            "LDR R2, [R6, #4]\n"      // Load adc_accum[0]
+            "ADD R1, R1, R2\n"        // Add values
+            "STR R1, [R6, #4]\n"      // Store result back to adc_accum[1]
+
+            "LDRH R1, [R7, #4]\n"      // Load adc_buffer[0]
+            "LDR R2, [R6, #8]\n"      // Load adc_accum[0]
+            "ADD R1, R1, R2\n"        // Add values
+            "STR R1, [R6, #8]\n"      // Store result back to adc_accum[2]
+
+            // gpio_clear(LED_ERROR_PORT, LED_ERROR_PIN)
+            "1:\n\t"
+            "LDR R0, =%[port_bsrr]\n\t"               // Load the address of LED_ERROR_PORT into R0
+            "LDR R1, =%[pin]\n\t"                // Load the value of LED_ERROR_PIN into R1
+            "LSL R1, R1, #16\n\t"
+            "STR R1, [R0, #24]\n\t"               // Clear the value of LED_ERROR_PIN at the address in R0+4 (LED_ERROR_PORT)
+            :
+            : [port_bsrr] "i" (LED_ERROR_PORT), [pin] "i" (LED_ERROR_PIN),
+    [adc] "i" (ADC1), [eos] "i" (ADC_ISR_EOS),
+    [conversion_finished] "i" (&adc_conversion_finished), [conversions] "i" (&adc_conversions),
+    [adc_accum] "i" (adc_accum), [adc_buffer] "i" (adc_buffer)
+    : "r0", "r1", "r2", "r3", "r4", "r5", "r6", "r7"
+    );
+}
 
 static void adc_init(void) {
     rcc_periph_clock_enable(RCC_ADC1);
@@ -830,6 +886,8 @@ int main(void) {
         } else if (cur_state == STATE_CHARGE) {
             // If you are in this state, then you are continously sampling the ADC
             if (adc_conversions >= BUCK_BOOST_AVERAGE_SAMPLES) {
+                //gpio_set(LED_ERROR_PORT, LED_ERROR_PIN);
+
                 nvic_disable_irq(NVIC_ADC_COMP_IRQ);
                 uint32_t vsolar = adc_accum[0];
                 uint32_t vbatt = adc_accum[1];
@@ -842,9 +900,9 @@ int main(void) {
                 adc_conversions = 0;
                 nvic_enable_irq(NVIC_ADC_COMP_IRQ);
 
-                vbatt = vbatt / last_adc_conversions;
-                vsolar = vsolar / last_adc_conversions;
-                solar_cur = solar_cur / last_adc_conversions - start_charge_current;
+                vbatt = ((vbatt / last_adc_conversions) * VREFINT_EXPECTED_ADC) / cur_vrefint;
+                vsolar = ((vsolar / last_adc_conversions) * VREFINT_EXPECTED_ADC) / cur_vrefint;
+                solar_cur = ((solar_cur / last_adc_conversions - start_charge_current) * VREFINT_EXPECTED_ADC) / cur_vrefint;
                 int32_t cur_power = vsolar * solar_cur;
 
                 printf("charge %ld %ld %ld %d %ld %d\n", vbatt, vsolar, solar_cur, buck_boost_get_duty(), cur_power, cur_mppt_state);
@@ -867,16 +925,25 @@ int main(void) {
                     change_state(STATE_END_CHARGE);
                 }
 
+                if (vsolar < VSOLAR_STOP_CHARGING_THRESHOLD) {
+                    change_state(STATE_END_CHARGE);
+                }
+
+                if (vsolar > VSOLAR_MEASUREMENT_ERROR_THRESHOLD) {
+                    change_state(STATE_END_CHARGE);
+                }
+
                 last_mppt_power = cur_power;
+                //gpio_clear(LED_ERROR_PORT, LED_ERROR_PIN);
             }
 
             uint32_t millis = systick_get_value() / (systick_get_reload() / 1000);
             //timer_set_oc_value(TIM22, TIM_OC1, (millis % 1000 > 500) ? 1000 - (millis % 1000) : millis % 1000);
             timer_set_oc_value(TIM22, TIM_OC1, 100);
 
-            gpio_set(LED_ERROR_PORT, LED_ERROR_PIN);
+
             timer_set_oc_value(TIM22, TIM_OC2, millis % (((130 - 23) * 1000 + 200) / 130));
-            gpio_clear(LED_ERROR_PORT, LED_ERROR_PIN);
+
 
             // Periodically we want to stop charging and get a measurement of the system, maybe go into balance, etc.
             if (system_secs - cur_state_start_secs > 300) {
