@@ -3238,7 +3238,7 @@
 		)
 		(uuid "d2762d85-f22f-481f-8d96-b92c90020cca")
 	)
-	(text "Vrefint = 1.224V\nWe want the comparator to trigger when VS_A is around 6V\n(or half the expected 12V)\nSo we can have a backup measurement on when DCM mode is done\n"
+	(text "Vrefint = 1.224V\nWe want the comparator to trigger when VS_A is \njust below the 16V TDS voltage.\n15.8V * (4700/(56000+4700)) = 1.224\n"
 		(exclude_from_sim no)
 		(at 248.158 142.494 0)
 		(effects
@@ -7151,7 +7151,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "1600"
+		(property "Value" "4.7k"
 			(at 177.8 147.3199 0)
 			(effects
 				(font
@@ -7214,7 +7214,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC_Code" "C22847"
+		(property "LCSC_Code" "C23162"
 			(at 175.26 146.05 0)
 			(effects
 				(font
@@ -7257,7 +7257,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "7500"
+		(property "Value" "56k"
 			(at 177.8 137.1599 0)
 			(effects
 				(font
@@ -7320,7 +7320,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC_Code" "C23234"
+		(property "LCSC_Code" "C23206"
 			(at 175.26 135.89 0)
 			(effects
 				(font

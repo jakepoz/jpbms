@@ -719,151 +719,6 @@
 				)
 			)
 		)
-		(symbol "Device:D_TVS_Small"
-			(pin_numbers hide)
-			(pin_names
-				(offset 1.016) hide)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "D"
-				(at 0 2.54 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "D_TVS_Small"
-				(at 0 -2.54 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" "~"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "Bidirectional transient-voltage-suppression diode, small symbol"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "diode TVS thyrector"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_fp_filters" "TO-???* *_Diode_* *SingleDiode* D_*"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "D_TVS_Small_0_1"
-				(polyline
-					(pts
-						(xy -1.27 0) (xy 1.27 0)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0.508 1.016) (xy 0 1.016) (xy 0 -1.016) (xy -0.508 -1.016)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -1.27 1.016) (xy -1.27 -1.016) (xy 1.27 1.016) (xy 1.27 -1.016) (xy -1.27 1.016)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "D_TVS_Small_1_1"
-				(pin passive line
-					(at -2.54 0 0)
-					(length 1.27)
-					(name "A1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 2.54 0 180)
-					(length 1.27)
-					(name "A2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-		)
 		(symbol "Device:Polyfuse_Small"
 			(pin_numbers hide)
 			(pin_names
@@ -1443,6 +1298,139 @@
 						)
 					)
 					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
+		(symbol "Diode:SMAJ16A"
+			(pin_numbers hide)
+			(pin_names
+				(offset 1.016) hide)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "D"
+				(at 0 2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "SMAJ16A"
+				(at 0 -2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" "Diode_SMD:D_SMA"
+				(at 0 -5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "https://www.littelfuse.com/media?resourcetype=datasheets&itemid=75e32973-b177-4ee3-a0ff-cedaf1abdb93&filename=smaj-datasheet"
+				(at -1.27 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "400W unidirectional Transient Voltage Suppressor, 16.0Vr, SMA(DO-214AC)"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "unidirectional diode TVS voltage suppressor"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "D*SMA*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "SMAJ16A_0_1"
+				(polyline
+					(pts
+						(xy -0.762 1.27) (xy -1.27 1.27) (xy -1.27 -1.27)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 1.27) (xy 1.27 -1.27) (xy -1.27 0) (xy 1.27 1.27)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "SMAJ16A_1_1"
+				(pin passive line
+					(at -3.81 0 0)
+					(length 2.54)
+					(name "A1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 3.81 0 180)
+					(length 2.54)
+					(name "A2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -2332,34 +2320,16 @@
 		(uuid "0b10edd1-27ff-409b-937d-394709591424")
 	)
 	(junction
-		(at 63.5 44.45)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "1be8d0e9-8d3c-4bfe-a31f-5e778cf2aac0")
-	)
-	(junction
 		(at 39.37 88.9)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "38f8d4e8-8b4c-4fb4-bf3e-f3202e9f704b")
 	)
 	(junction
-		(at 58.42 41.91)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "3a8a4647-0699-46dc-b5bb-897ce05ed190")
-	)
-	(junction
 		(at 189.23 86.36)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "43c43485-135e-45fd-af8d-c09321b7fd79")
-	)
-	(junction
-		(at 66.04 44.45)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "4796e987-1ec7-4e57-a736-b0fbba9e60f0")
 	)
 	(junction
 		(at 223.52 45.72)
@@ -2372,12 +2342,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "66a308d5-0630-44dd-8b84-38bfaa727d9a")
-	)
-	(junction
-		(at 71.12 46.99)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "76c8004e-9f91-4008-9377-ecee6d8177c8")
 	)
 	(junction
 		(at 195.58 45.72)
@@ -2446,6 +2410,12 @@
 		(uuid "c0a7a30b-f187-47e2-904c-d6fd6e58ed09")
 	)
 	(junction
+		(at 74.93 46.99)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "c4b3fccf-aa4c-4b0a-b2b5-ba13a4edaca6")
+	)
+	(junction
 		(at 168.91 86.36)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -2470,12 +2440,6 @@
 		(uuid "eb61b354-21d0-44e7-a1d4-02d831e4d112")
 	)
 	(junction
-		(at 55.88 41.91)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "f1b674cb-e240-461c-976c-db474831053e")
-	)
-	(junction
 		(at 179.07 67.31)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -2493,7 +2457,7 @@
 	)
 	(wire
 		(pts
-			(xy 71.12 46.99) (xy 73.66 46.99)
+			(xy 49.53 46.99) (xy 68.58 46.99)
 		)
 		(stroke
 			(width 0)
@@ -2503,17 +2467,7 @@
 	)
 	(wire
 		(pts
-			(xy 49.53 46.99) (xy 71.12 46.99)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "0687fbe7-3a20-4186-81f2-04e2c2a43a43")
-	)
-	(wire
-		(pts
-			(xy 49.53 44.45) (xy 63.5 44.45)
+			(xy 49.53 44.45) (xy 68.58 44.45)
 		)
 		(stroke
 			(width 0)
@@ -2533,7 +2487,7 @@
 	)
 	(wire
 		(pts
-			(xy 78.74 44.45) (xy 81.28 44.45)
+			(xy 73.66 44.45) (xy 81.28 44.45)
 		)
 		(stroke
 			(width 0)
@@ -2570,16 +2524,6 @@
 			(type default)
 		)
 		(uuid "1237e141-76c4-4a13-bef5-d3f84e911a17")
-	)
-	(wire
-		(pts
-			(xy 63.5 44.45) (xy 63.5 54.61)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "137581b8-670a-4886-a18b-6f0c825a7140")
 	)
 	(wire
 		(pts
@@ -2650,16 +2594,6 @@
 			(type default)
 		)
 		(uuid "4a6eab04-def7-4299-9f85-f58f277643bf")
-	)
-	(wire
-		(pts
-			(xy 66.04 44.45) (xy 66.04 58.42)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4a740c37-c441-43cc-9ed9-70c92cdaebca")
 	)
 	(wire
 		(pts
@@ -2773,16 +2707,6 @@
 	)
 	(wire
 		(pts
-			(xy 58.42 41.91) (xy 58.42 54.61)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "605b18d6-04d5-4abf-b59a-12b53df99b15")
-	)
-	(wire
-		(pts
 			(xy 220.98 54.61) (xy 220.98 53.34)
 		)
 		(stroke
@@ -2823,16 +2747,6 @@
 	)
 	(wire
 		(pts
-			(xy 55.88 41.91) (xy 55.88 50.8)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "7308a688-ca4b-4e9f-9cc0-447f2aa5533c")
-	)
-	(wire
-		(pts
 			(xy 71.12 90.17) (xy 71.12 88.9)
 		)
 		(stroke
@@ -2860,16 +2774,6 @@
 			(type default)
 		)
 		(uuid "8101fd23-2814-4e01-8739-9755fd469781")
-	)
-	(wire
-		(pts
-			(xy 73.66 41.91) (xy 58.42 41.91)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "82a8f591-4b02-4149-ade2-9553dd78d43e")
 	)
 	(wire
 		(pts
@@ -2943,16 +2847,6 @@
 	)
 	(wire
 		(pts
-			(xy 63.5 44.45) (xy 66.04 44.45)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "93f913c4-75cb-4295-bda9-dde6e2fa6fac")
-	)
-	(wire
-		(pts
 			(xy 179.07 67.31) (xy 179.07 69.85)
 		)
 		(stroke
@@ -2963,7 +2857,7 @@
 	)
 	(wire
 		(pts
-			(xy 78.74 46.99) (xy 80.01 46.99)
+			(xy 73.66 46.99) (xy 74.93 46.99)
 		)
 		(stroke
 			(width 0)
@@ -3013,26 +2907,6 @@
 	)
 	(wire
 		(pts
-			(xy 71.12 46.99) (xy 71.12 58.42)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a0f9e865-0dc5-4d80-9d5a-92971bbd9e88")
-	)
-	(wire
-		(pts
-			(xy 55.88 41.91) (xy 49.53 41.91)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a4397b7b-91df-4eab-80d7-923057348e5f")
-	)
-	(wire
-		(pts
 			(xy 144.78 80.01) (xy 144.78 83.82)
 		)
 		(stroke
@@ -3073,7 +2947,7 @@
 	)
 	(wire
 		(pts
-			(xy 78.74 41.91) (xy 81.28 41.91)
+			(xy 73.66 41.91) (xy 81.28 41.91)
 		)
 		(stroke
 			(width 0)
@@ -3083,7 +2957,7 @@
 	)
 	(wire
 		(pts
-			(xy 58.42 41.91) (xy 55.88 41.91)
+			(xy 49.53 41.91) (xy 68.58 41.91)
 		)
 		(stroke
 			(width 0)
@@ -3110,16 +2984,6 @@
 			(type default)
 		)
 		(uuid "d2d7f2c6-cd51-4e69-985c-1203786f1013")
-	)
-	(wire
-		(pts
-			(xy 50.8 39.37) (xy 50.8 50.8)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "db566024-9610-4f9a-b756-ee0121fe4c69")
 	)
 	(wire
 		(pts
@@ -3173,13 +3037,13 @@
 	)
 	(wire
 		(pts
-			(xy 66.04 44.45) (xy 73.66 44.45)
+			(xy 74.93 46.99) (xy 80.01 46.99)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "eb36b1ba-db5a-4083-8ced-0b32f679e855")
+		(uuid "f3a279a6-f920-4f00-9a86-3a2653ec5927")
 	)
 	(wire
 		(pts
@@ -4020,7 +3884,7 @@
 	)
 	(symbol
 		(lib_id "Device:Polyfuse_Small")
-		(at 76.2 46.99 90)
+		(at 71.12 46.99 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -4028,7 +3892,7 @@
 		(dnp no)
 		(uuid "1f88cb3c-8e8f-4985-a236-465d2ebe9135")
 		(property "Reference" "F3"
-			(at 76.2 40.64 90)
+			(at 71.12 40.64 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4036,7 +3900,7 @@
 			)
 		)
 		(property "Value" "30V 750mA"
-			(at 76.2 43.18 90)
+			(at 71.12 43.18 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4045,7 +3909,7 @@
 			)
 		)
 		(property "Footprint" "Fuse:Fuse_1206_3216Metric"
-			(at 81.28 45.72 0)
+			(at 76.2 45.72 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4055,7 +3919,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 76.2 46.99 0)
+			(at 71.12 46.99 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4064,7 +3928,7 @@
 			)
 		)
 		(property "Description" "Resettable fuse, polymeric positive temperature coefficient, small symbol"
-			(at 76.2 46.99 0)
+			(at 71.12 46.99 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4073,7 +3937,7 @@
 			)
 		)
 		(property "LCSC_Code" "C976305"
-			(at 76.2 46.99 0)
+			(at 71.12 46.99 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4082,7 +3946,7 @@
 			)
 		)
 		(property "Sim.Device" ""
-			(at 76.2 46.99 0)
+			(at 71.12 46.99 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4091,7 +3955,7 @@
 			)
 		)
 		(property "Sim.Pins" ""
-			(at 76.2 46.99 0)
+			(at 71.12 46.99 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4100,7 +3964,7 @@
 			)
 		)
 		(property "Tolerance" ""
-			(at 76.2 46.99 0)
+			(at 71.12 46.99 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4362,7 +4226,7 @@
 	)
 	(symbol
 		(lib_id "Device:Polyfuse_Small")
-		(at 76.2 41.91 90)
+		(at 71.12 41.91 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -4370,7 +4234,7 @@
 		(dnp no)
 		(uuid "2e7e2701-2eb3-499d-99c8-a54dc56eabee")
 		(property "Reference" "F1"
-			(at 76.2 35.56 90)
+			(at 71.12 35.56 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4378,7 +4242,7 @@
 			)
 		)
 		(property "Value" "30V 750mA"
-			(at 85.09 35.306 90)
+			(at 80.01 35.306 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4386,7 +4250,7 @@
 			)
 		)
 		(property "Footprint" "Fuse:Fuse_1206_3216Metric"
-			(at 81.28 40.64 0)
+			(at 76.2 40.64 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4396,7 +4260,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 76.2 41.91 0)
+			(at 71.12 41.91 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4405,7 +4269,7 @@
 			)
 		)
 		(property "Description" "Resettable fuse, polymeric positive temperature coefficient, small symbol"
-			(at 76.2 41.91 0)
+			(at 71.12 41.91 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4414,7 +4278,7 @@
 			)
 		)
 		(property "LCSC_Code" "C976305"
-			(at 76.2 41.91 0)
+			(at 71.12 41.91 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4423,7 +4287,7 @@
 			)
 		)
 		(property "Sim.Device" ""
-			(at 76.2 41.91 0)
+			(at 71.12 41.91 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4432,7 +4296,7 @@
 			)
 		)
 		(property "Sim.Pins" ""
-			(at 76.2 41.91 0)
+			(at 71.12 41.91 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4441,7 +4305,7 @@
 			)
 		)
 		(property "Tolerance" ""
-			(at 76.2 41.91 0)
+			(at 71.12 41.91 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4988,109 +4852,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:D_TVS_Small")
-		(at 53.34 50.8 180)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "4ec36040-de81-41b7-ac7b-8194181ff1af")
-		(property "Reference" "D15"
-			(at 53.34 48.26 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "H5VL10B"
-			(at 53.34 53.34 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Diode_SMD:D_SOD-882"
-			(at 53.34 50.8 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "https://jlcpcb.com/partdetail/Hongjiacheng-H5VL10B/C7420372"
-			(at 53.34 50.8 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Bidirectional transient-voltage-suppression diode, small symbol"
-			(at 53.34 50.8 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCSC_Code" "C7420372"
-			(at 53.34 50.8 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Device" ""
-			(at 53.34 50.8 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Pins" ""
-			(at 53.34 50.8 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Tolerance" ""
-			(at 53.34 50.8 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "61570925-f92b-4e60-8e8a-50f30be79d32")
-		)
-		(pin "1"
-			(uuid "8ff1049d-9caf-4a41-88c3-4260fe277852")
-		)
-		(instances
-			(project "JPBms2"
-				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/fda7e15b-dad1-4f54-abdb-4d4569bf33a6"
-					(reference "D15")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:C")
 		(at 168.91 90.17 0)
 		(mirror x)
@@ -5274,7 +5035,7 @@
 	)
 	(symbol
 		(lib_id "Device:Polyfuse_Small")
-		(at 76.2 44.45 90)
+		(at 71.12 44.45 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -5282,7 +5043,7 @@
 		(dnp no)
 		(uuid "59b26a1e-d2f8-4e0c-982f-2ad53a77bb2f")
 		(property "Reference" "F2"
-			(at 76.2 38.1 90)
+			(at 71.12 38.1 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5290,7 +5051,7 @@
 			)
 		)
 		(property "Value" "30V 750mA"
-			(at 76.2 40.64 90)
+			(at 71.12 40.64 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5299,7 +5060,7 @@
 			)
 		)
 		(property "Footprint" "Fuse:Fuse_1206_3216Metric"
-			(at 81.28 43.18 0)
+			(at 76.2 43.18 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5309,7 +5070,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 76.2 44.45 0)
+			(at 71.12 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5318,7 +5079,7 @@
 			)
 		)
 		(property "Description" "Resettable fuse, polymeric positive temperature coefficient, small symbol"
-			(at 76.2 44.45 0)
+			(at 71.12 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5327,7 +5088,7 @@
 			)
 		)
 		(property "LCSC_Code" "C976305"
-			(at 76.2 44.45 0)
+			(at 71.12 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5336,7 +5097,7 @@
 			)
 		)
 		(property "Sim.Device" ""
-			(at 76.2 44.45 0)
+			(at 71.12 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5345,7 +5106,7 @@
 			)
 		)
 		(property "Sim.Pins" ""
-			(at 76.2 44.45 0)
+			(at 71.12 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5354,7 +5115,7 @@
 			)
 		)
 		(property "Tolerance" ""
-			(at 76.2 44.45 0)
+			(at 71.12 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6479,41 +6240,34 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:D_TVS_Small")
-		(at 68.58 58.42 180)
+		(lib_id "Diode:SMAJ16A")
+		(at 74.93 50.8 270)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "b3b04b73-1358-4482-b8e7-004038471739")
-		(property "Reference" "D17"
-			(at 68.58 55.88 0)
+		(uuid "b47421bb-1305-4d35-8848-8ec9fff31757")
+		(property "Reference" "D9"
+			(at 64.008 51.816 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left)
 			)
 		)
-		(property "Value" "H5VL10B"
-			(at 68.58 60.96 0)
+		(property "Value" "SMAJ16A"
+			(at 63.754 53.848 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left)
 			)
 		)
-		(property "Footprint" "Diode_SMD:D_SOD-882"
-			(at 68.58 58.42 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 68.58 58.42 0)
+		(property "Footprint" "Diode_SMD:D_SMA"
+			(at 69.85 50.8 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6521,8 +6275,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Bidirectional transient-voltage-suppression diode, small symbol"
-			(at 68.58 58.42 0)
+		(property "Datasheet" "https://www.littelfuse.com/media?resourcetype=datasheets&itemid=75e32973-b177-4ee3-a0ff-cedaf1abdb93&filename=smaj-datasheet"
+			(at 74.93 49.53 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6530,35 +6284,8 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC_Code" "C7420372"
-			(at 68.58 58.42 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Device" ""
-			(at 68.58 58.42 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Pins" ""
-			(at 68.58 58.42 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Tolerance" ""
-			(at 68.58 58.42 0)
+		(property "Description" "400W unidirectional Transient Voltage Suppressor, 16.0Vr, SMA(DO-214AC)"
+			(at 74.93 50.8 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6567,15 +6294,15 @@
 			)
 		)
 		(pin "2"
-			(uuid "9436eb0b-caa0-4d92-b993-dfab41fae859")
+			(uuid "0ef0eb14-d0ef-462e-b760-d9f25dc971be")
 		)
 		(pin "1"
-			(uuid "fdb07ab2-5aea-4395-a204-46883c80bc15")
+			(uuid "cf4d3a7e-60ec-4643-b789-911503a4e573")
 		)
 		(instances
-			(project "JPBms2"
+			(project ""
 				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/fda7e15b-dad1-4f54-abdb-4d4569bf33a6"
-					(reference "D17")
+					(reference "D9")
 					(unit 1)
 				)
 			)
@@ -6709,109 +6436,6 @@
 			(project "JPBms2"
 				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/fda7e15b-dad1-4f54-abdb-4d4569bf33a6"
 					(reference "#PWR03")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:D_TVS_Small")
-		(at 60.96 54.61 180)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "bdf358f0-38c5-48c4-93bb-17ed402eb2bc")
-		(property "Reference" "D16"
-			(at 60.96 52.07 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "H5VL10B"
-			(at 60.96 57.15 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Diode_SMD:D_SOD-882"
-			(at 60.96 54.61 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 60.96 54.61 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Bidirectional transient-voltage-suppression diode, small symbol"
-			(at 60.96 54.61 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCSC_Code" "C7420372"
-			(at 60.96 54.61 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Device" ""
-			(at 60.96 54.61 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Pins" ""
-			(at 60.96 54.61 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Tolerance" ""
-			(at 60.96 54.61 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "6f7911af-6922-4ded-959e-06704cc22f19")
-		)
-		(pin "1"
-			(uuid "948cf08e-8a74-4d04-a32a-8828aa89aa72")
-		)
-		(instances
-			(project "JPBms2"
-				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/fda7e15b-dad1-4f54-abdb-4d4569bf33a6"
-					(reference "D16")
 					(unit 1)
 				)
 			)
@@ -7575,6 +7199,72 @@
 			(project "JPBms2"
 				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/fda7e15b-dad1-4f54-abdb-4d4569bf33a6"
 					(reference "R2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 74.93 54.61 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "ea876be7-2423-4957-bf23-1751e56a8067")
+		(property "Reference" "#PWR012"
+			(at 74.93 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 74.93 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 74.93 54.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 74.93 54.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 74.93 54.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "f65439f0-c12e-4b2f-938e-98a4533be2e3")
+		)
+		(instances
+			(project "JPBms2"
+				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/fda7e15b-dad1-4f54-abdb-4d4569bf33a6"
+					(reference "#PWR012")
 					(unit 1)
 				)
 			)

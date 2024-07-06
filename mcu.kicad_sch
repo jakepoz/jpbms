@@ -1477,7 +1477,6 @@
 					(alternate "COMP1_INM" bidirectional line)
 					(alternate "COMP2_INM" bidirectional line)
 					(alternate "DAC_OUT1" bidirectional line)
-					(alternate "" input line)
 					(alternate "SPI1_NSS" bidirectional line)
 					(alternate "TIM22_ETR" bidirectional line)
 					(alternate "TSC_G2_IO1" bidirectional line)
@@ -3117,7 +3116,7 @@
 		(uuid "8aaf11d1-f0b2-4dab-8903-4917ae87d95e")
 	)
 	(junction
-		(at 233.68 120.65)
+		(at 234.95 115.57)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "a3f96275-363b-428d-ad31-d863d4d4fad8")
@@ -3332,7 +3331,7 @@
 	)
 	(wire
 		(pts
-			(xy 260.35 120.65) (xy 252.73 120.65)
+			(xy 261.62 115.57) (xy 254 115.57)
 		)
 		(stroke
 			(width 0)
@@ -3912,7 +3911,7 @@
 	)
 	(wire
 		(pts
-			(xy 233.68 120.65) (xy 242.57 120.65)
+			(xy 234.95 115.57) (xy 243.84 115.57)
 		)
 		(stroke
 			(width 0)
@@ -3952,7 +3951,7 @@
 	)
 	(wire
 		(pts
-			(xy 223.52 120.65) (xy 233.68 120.65)
+			(xy 224.79 115.57) (xy 234.95 115.57)
 		)
 		(stroke
 			(width 0)
@@ -4201,7 +4200,7 @@
 	(text_box "Switch\n"
 		(exclude_from_sim no)
 		(at 220.98 104.14 0)
-		(size 53.34 30.48)
+		(size 53.34 40.64)
 		(stroke
 			(width 0)
 			(type default)
@@ -4217,9 +4216,9 @@
 		)
 		(uuid "7fd8f108-7042-409f-8c6d-3e6fccc7ebf6")
 	)
-	(text "input pins current = 50nA \nSo we can afford up to 15M pullup,\nto stay above .7 * Vdd"
+	(text "input pins current = 50nA \nTried w/ 10M pullup but it only got to 1.25V\nSo, doing a super weak pulldown instead\n"
 		(exclude_from_sim no)
-		(at 247.65 129.54 0)
+		(at 247.65 135.128 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -4393,7 +4392,7 @@
 		(uuid "e0e2b896-bf12-471e-aded-3c981705077a")
 	)
 	(label "SWITCH"
-		(at 223.52 120.65 0)
+		(at 224.79 115.57 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -4744,6 +4743,73 @@
 				)
 				(justify left)
 				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:VDD")
+		(at 261.62 115.57 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "041fe653-c5eb-4f12-a867-b278d0fe513f")
+		(property "Reference" "#PWR014"
+			(at 257.81 115.57 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "VDD"
+			(at 265.43 115.5699 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 261.62 115.57 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 261.62 115.57 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"VDD\""
+			(at 261.62 115.57 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "8ed3d8a5-bb09-4162-bd52-bfa87d42a254")
+		)
+		(instances
+			(project "JPBms2"
+				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/852788cb-2266-4d4a-865c-a7e0873e4190"
+					(reference "#PWR014")
+					(unit 1)
+				)
 			)
 		)
 	)
@@ -6302,73 +6368,6 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
-		(at 260.35 120.65 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "73cb80df-c5da-47c5-9c2f-36d7c48f2b41")
-		(property "Reference" "#PWR054"
-			(at 266.7 120.65 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 264.16 120.6499 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" ""
-			(at 260.35 120.65 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 260.35 120.65 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 260.35 120.65 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "edf759e4-6b63-4c31-8523-bcb2ea9ee5c2")
-		)
-		(instances
-			(project "JPBms2"
-				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/852788cb-2266-4d4a-865c-a7e0873e4190"
-					(reference "#PWR054")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:C_Small")
 		(at 261.62 30.48 0)
 		(unit 1)
@@ -6602,6 +6601,72 @@
 			(project "JPBms2"
 				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/852788cb-2266-4d4a-865c-a7e0873e4190"
 					(reference "#FLG04")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 234.95 123.19 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "8b4d5971-da41-4d93-853f-94f20d4f8b08")
+		(property "Reference" "#PWR052"
+			(at 234.95 129.54 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 234.95 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 234.95 123.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 234.95 123.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 234.95 123.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "56060ea8-9da7-49f2-a1e7-df789be7fb76")
+		)
+		(instances
+			(project "JPBms2"
+				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/852788cb-2266-4d4a-865c-a7e0873e4190"
+					(reference "#PWR052")
 					(unit 1)
 				)
 			)
@@ -6847,7 +6912,7 @@
 	)
 	(symbol
 		(lib_id "Switch:SW_Push")
-		(at 247.65 120.65 0)
+		(at 248.92 115.57 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -6856,7 +6921,7 @@
 		(fields_autoplaced yes)
 		(uuid "941d2ef0-9266-4987-8312-a5e2ae2a32ad")
 		(property "Reference" "SW1"
-			(at 247.65 113.03 0)
+			(at 248.92 107.95 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6864,7 +6929,7 @@
 			)
 		)
 		(property "Value" "SW_Push"
-			(at 247.65 115.57 0)
+			(at 248.92 110.49 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6872,7 +6937,7 @@
 			)
 		)
 		(property "Footprint" "Button_Switch_SMD:SW_Push_1P1T_XKB_TS-1187A"
-			(at 247.65 115.57 0)
+			(at 248.92 110.49 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6881,7 +6946,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 247.65 115.57 0)
+			(at 248.92 110.49 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6890,7 +6955,7 @@
 			)
 		)
 		(property "Description" "Push button switch, generic, two pins"
-			(at 247.65 120.65 0)
+			(at 248.92 115.57 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6899,7 +6964,7 @@
 			)
 		)
 		(property "LCSC_Code" "C318884"
-			(at 247.65 120.65 0)
+			(at 248.92 115.57 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6908,7 +6973,7 @@
 			)
 		)
 		(property "Sim.Device" ""
-			(at 247.65 120.65 0)
+			(at 248.92 115.57 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6917,7 +6982,7 @@
 			)
 		)
 		(property "Sim.Pins" ""
-			(at 247.65 120.65 0)
+			(at 248.92 115.57 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6926,7 +6991,7 @@
 			)
 		)
 		(property "Tolerance" ""
-			(at 247.65 120.65 0)
+			(at 248.92 115.57 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6944,72 +7009,6 @@
 			(project "JPBms2"
 				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/852788cb-2266-4d4a-865c-a7e0873e4190"
 					(reference "SW1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:VDD")
-		(at 233.68 113.03 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "a7c0b9a0-d4e9-4734-8dcf-557f10c44c3e")
-		(property "Reference" "#PWR055"
-			(at 233.68 116.84 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "VDD"
-			(at 233.68 107.95 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 233.68 113.03 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 233.68 113.03 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"VDD\""
-			(at 233.68 113.03 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "dd2afe21-36e5-4a79-aa67-6230f90420a4")
-		)
-		(instances
-			(project "JPBms2"
-				(path "/d86e471c-a8be-422d-a5d1-5a4699b7b766/852788cb-2266-4d4a-865c-a7e0873e4190"
-					(reference "#PWR055")
 					(unit 1)
 				)
 			)
@@ -7808,7 +7807,7 @@
 	)
 	(symbol
 		(lib_id "Device:R")
-		(at 233.68 116.84 0)
+		(at 234.95 119.38 180)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -7817,25 +7816,25 @@
 		(fields_autoplaced yes)
 		(uuid "ef2b70d3-797b-44dc-9c83-144073f5370c")
 		(property "Reference" "R39"
-			(at 236.22 115.5699 0)
+			(at 237.49 118.1099 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(justify right)
 			)
 		)
 		(property "Value" "10M"
-			(at 236.22 118.1099 0)
+			(at 237.49 120.6499 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(justify right)
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
-			(at 231.902 116.84 90)
+			(at 236.728 119.38 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7844,7 +7843,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 233.68 116.84 0)
+			(at 234.95 119.38 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7853,7 +7852,7 @@
 			)
 		)
 		(property "Description" "Resistor"
-			(at 233.68 116.84 0)
+			(at 234.95 119.38 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7862,7 +7861,7 @@
 			)
 		)
 		(property "Sim.Device" ""
-			(at 233.68 116.84 0)
+			(at 234.95 119.38 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7871,7 +7870,7 @@
 			)
 		)
 		(property "Sim.Pins" ""
-			(at 233.68 116.84 0)
+			(at 234.95 119.38 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7880,7 +7879,7 @@
 			)
 		)
 		(property "Tolerance" ""
-			(at 233.68 116.84 0)
+			(at 234.95 119.38 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7889,7 +7888,7 @@
 			)
 		)
 		(property "LCSC_Code" "C26097"
-			(at 233.68 116.84 0)
+			(at 234.95 119.38 0)
 			(effects
 				(font
 					(size 1.27 1.27)
