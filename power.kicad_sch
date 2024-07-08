@@ -6303,6 +6303,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC_Code" "C908770"
+			(at 74.93 50.8 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "0ef0eb14-d0ef-462e-b760-d9f25dc971be")
 		)

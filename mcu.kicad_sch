@@ -1477,6 +1477,7 @@
 					(alternate "COMP1_INM" bidirectional line)
 					(alternate "COMP2_INM" bidirectional line)
 					(alternate "DAC_OUT1" bidirectional line)
+					(alternate "" input line)
 					(alternate "SPI1_NSS" bidirectional line)
 					(alternate "TIM22_ETR" bidirectional line)
 					(alternate "TSC_G2_IO1" bidirectional line)
