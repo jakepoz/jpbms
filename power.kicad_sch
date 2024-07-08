@@ -3192,6 +3192,16 @@
 		)
 		(uuid "7e9c46cd-6cad-4f61-8ea7-d91b38438338")
 	)
+	(text "TVS diode is needed, because if you unplug the battery while\nthe circuit is charging, the voltage can spike since nothing\nis there to absorb the load, damaging the multiplexer and other\nparts"
+		(exclude_from_sim no)
+		(at 59.69 21.336 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "9c70271f-ad22-4a38-b3d1-1eec9ed8998f")
+	)
 	(text "Measure current \"before\" the vsolar capacitor bank so you see\nthe smoother average power draw"
 		(exclude_from_sim no)
 		(at 169.926 106.172 0)
