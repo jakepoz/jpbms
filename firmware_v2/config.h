@@ -6,8 +6,8 @@
 #define BUCK_BOOST_PERIOD 200
 #define BUCK_BOOST_AVERAGE_SAMPLES 5000
 
-#define VOLTAGE_TO_VBATT_ADC(voltage) ((int)((voltage) * 4095 * 1600 / (2.5 * (7500 + 1600)) + 0.5))
-#define VBATT_ADC_TO_VOLTAGE(adc) (((adc) - 0.5) * (2.5 * (7500 + 1600)) / (4095 * 1600))
+#define VOLTAGE_TO_VBATT_ADC(voltage) ((int)((voltage) * 4095 * 1600 / (2.5 * (7575 + 1600)) + 0.5))
+#define VBATT_ADC_TO_VOLTAGE(adc) (((adc) - 0.5) * (2.5 * (7575 + 1600)) / (4095 * 1600))
 
 #define VOLTAGE_TO_VSOLAR_ADC(voltage) ((int)((voltage) * 4095 * 2 / (2.5 * (18.0 + 2.0)) + 0.5))
 #define VSOLAR_ADC_TO_VOLTAGE(adc) (((adc) - 0.5) * (2.5 * (18.0 + 2.0)) / (4095 * 2.0))
@@ -17,9 +17,12 @@
 #define VSOLAR_TO_VBATT_RATIO_DEN 100
 
 #define VREFINT_CAL MMIO16(0x1FF80078)
-#define VREFINT_EXPECTED_VOLTAGE (1.224)
-#define VDDA_EXPECTED_VOLTAGE (2.50)
-#define VREFINT_EXPECTED_ADC ((int)(VREFINT_EXPECTED_VOLTAGE/VDDA_EXPECTED_VOLTAGE * 4095 + 0.5))
+
+#define VDDA_DATASHEET_VOLTAGE (3.0)
+// This is the ratio between our own 2.5V and the 3V that the ADC was calibrated at
+#define VDDA_CONVERSION_RATIO_NUM 6
+#define VDDA_CONVERSION_RATIO_DEN 5
+
 
 // Based on 1.2V per amp
 #define ADC_TO_CURRENT(adc_value) (((adc_value) * 2.5 / 4096) / 1.2)

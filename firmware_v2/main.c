@@ -749,25 +749,25 @@ int main(void) {
                     change_state(STATE_SELECT_SAMPLE_MULTIPLEXER);
                 }
                 else if (cur_sample_channel == 1) {
-                    cur_vbatt = (adc_buffer[0] * VREFINT_EXPECTED_ADC) / cur_vrefint;
+                    cur_vbatt = (adc_buffer[0] * VDDA_CONVERSION_RATIO_NUM * VREFINT_CAL) / (VDDA_CONVERSION_RATIO_DEN * cur_vrefint);
 
                     cur_sample_channel++;
                     change_state(STATE_SELECT_SAMPLE_MULTIPLEXER);
                 }
                 else if (cur_sample_channel == 2) {
-                    cur_4v = (adc_buffer[0] * VREFINT_EXPECTED_ADC) / cur_vrefint;
+                    cur_4v = (adc_buffer[0] * VDDA_CONVERSION_RATIO_NUM * VREFINT_CAL) / (VDDA_CONVERSION_RATIO_DEN * cur_vrefint);
 
                     cur_sample_channel++;
                     change_state(STATE_SELECT_SAMPLE_MULTIPLEXER);
                 }
                 else if (cur_sample_channel == 3) {
-                    cur_8v = (adc_buffer[0] * VREFINT_EXPECTED_ADC) / cur_vrefint;
+                    cur_8v = (adc_buffer[0] * VDDA_CONVERSION_RATIO_NUM * VREFINT_CAL) / (VDDA_CONVERSION_RATIO_DEN * cur_vrefint);
 
                     cur_sample_channel++;
                     change_state(STATE_SELECT_SAMPLE_MULTIPLEXER);
                 }
                 else if (cur_sample_channel == 4) {
-                    cur_vsolar = (adc_buffer[0] * VREFINT_EXPECTED_ADC) / cur_vrefint;
+                    cur_vsolar = (adc_buffer[0] * VDDA_CONVERSION_RATIO_NUM * VREFINT_CAL) / (VDDA_CONVERSION_RATIO_DEN * cur_vrefint);
 
                     cur_sample_channel++;
                     change_state(STATE_SAMPLE);
@@ -900,9 +900,9 @@ int main(void) {
                 adc_conversions = 0;
                 nvic_enable_irq(NVIC_ADC_COMP_IRQ);
 
-                vbatt = ((vbatt / last_adc_conversions) * VREFINT_EXPECTED_ADC) / cur_vrefint;
-                vsolar = ((vsolar / last_adc_conversions) * VREFINT_EXPECTED_ADC) / cur_vrefint;
-                solar_cur = ((solar_cur / last_adc_conversions - start_charge_current) * VREFINT_EXPECTED_ADC) / cur_vrefint;
+                vbatt = ((vbatt / last_adc_conversions) * VDDA_CONVERSION_RATIO_NUM * VREFINT_CAL) / (VDDA_CONVERSION_RATIO_DEN * cur_vrefint);
+                vsolar = ((vsolar / last_adc_conversions) * VDDA_CONVERSION_RATIO_NUM * VREFINT_CAL) / (VDDA_CONVERSION_RATIO_DEN * cur_vrefint);
+                solar_cur = ((solar_cur / last_adc_conversions - start_charge_current) * VDDA_CONVERSION_RATIO_NUM * VREFINT_CAL) / (VDDA_CONVERSION_RATIO_DEN * cur_vrefint);
                 int32_t cur_power = vsolar * solar_cur;
 
                 printf("charge %ld %ld %ld %d %ld %d\n", vbatt, vsolar, solar_cur, buck_boost_get_duty(), cur_power, cur_mppt_state);
