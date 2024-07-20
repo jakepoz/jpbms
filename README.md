@@ -20,6 +20,7 @@ It implements a basic charging circuit that can charge a ~12V 3S battery from ba
 - It's just an inductor with a full set of switches on it, so you can customize it
 - Simple resistive balancing
 - Single layer board design for easy JLCPCB style production
+  - ~$150 to order 5 from JLCPCB, way cheaper in bulk
 - Low ~100uA quiescent current
 - XT30 solar panel connector, JST-XH battery balance connector
 
