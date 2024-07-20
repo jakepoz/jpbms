@@ -1,3 +1,16 @@
+**JPBms**
+
+JPBms is a simple BMS for solar charging and balancing a 3-cell lithium ion battery.
+
+The key thing about it is that it uses no custom ICs, beyond a basic microcontroller. 
+That is to say that it depends on no hard-to-find custom ICs that will be obsolete 3 years from now.
+It implements a basic charging circuit that can charge a ~12V 3S battery from basically any input power source between
+6V-24V, including if that source is a solar panel.
+
+
+
+
+
 Quiescent Current Calculations:
  - ST715M25R Quiescent = 5uA
  - ZXCT1107 Quiescent = 5uA
