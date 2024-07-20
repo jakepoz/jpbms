@@ -192,7 +192,6 @@ static volatile bool adc_conversion_finished = false;
 
 void adc_comp_isr(void)
 {
-
     if (adc_eos(ADC1)) {
         ADC_ISR(ADC1) = ADC_ISR_EOS;
         adc_conversion_finished = true;
@@ -890,6 +889,7 @@ int main(void) {
 
                 nvic_disable_irq(NVIC_ADC_COMP_IRQ);
                 uint32_t vsolar = adc_accum[0];
+                uint32_t vsolar_orig;
                 uint32_t vbatt = adc_accum[1];
                 int32_t solar_cur = adc_accum[2];
                 uint32_t last_adc_conversions = adc_conversions;
@@ -901,7 +901,8 @@ int main(void) {
                 nvic_enable_irq(NVIC_ADC_COMP_IRQ);
 
                 vbatt = ((vbatt / last_adc_conversions) * VDDA_CONVERSION_RATIO_NUM * VREFINT_CAL) / (VDDA_CONVERSION_RATIO_DEN * cur_vrefint);
-                vsolar = ((vsolar / last_adc_conversions) * VDDA_CONVERSION_RATIO_NUM * VREFINT_CAL) / (VDDA_CONVERSION_RATIO_DEN * cur_vrefint);
+                vsolar_orig = (vsolar / last_adc_conversions);
+                vsolar = ((vsolar_orig) * VDDA_CONVERSION_RATIO_NUM * VREFINT_CAL) / (VDDA_CONVERSION_RATIO_DEN * cur_vrefint);
                 solar_cur = ((solar_cur / last_adc_conversions - start_charge_current) * VDDA_CONVERSION_RATIO_NUM * VREFINT_CAL) / (VDDA_CONVERSION_RATIO_DEN * cur_vrefint);
                 int32_t cur_power = vsolar * solar_cur;
 
@@ -929,7 +930,9 @@ int main(void) {
                     change_state(STATE_END_CHARGE);
                 }
 
-                if (vsolar > VSOLAR_MEASUREMENT_ERROR_THRESHOLD) {
+                // This means that we were not able to correctly measure vsolar, so we might not be able to
+                // keep things in DCM mode, so better stop early
+                if (vsolar_orig > VSOLAR_MEASUREMENT_ERROR_THRESHOLD) {
                     change_state(STATE_END_CHARGE);
                 }
 

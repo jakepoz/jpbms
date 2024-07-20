@@ -13,8 +13,8 @@
 #define VSOLAR_ADC_TO_VOLTAGE(adc) (((adc) - 0.5) * (2.5 * (18.0 + 2.0)) / (4095 * 2.0))
 
 // An approximation to VOLTAGE_TO_VSOLAR_ADC(1) / VOLTAGE_TO_VBATT_ADC(1)
-#define VSOLAR_TO_VBATT_RATIO_NUM 57
-#define VSOLAR_TO_VBATT_RATIO_DEN 100
+#define VSOLAR_TO_VBATT_RATIO_NUM 100
+#define VSOLAR_TO_VBATT_RATIO_DEN 57
 
 #define VREFINT_CAL MMIO16(0x1FF80078)
 
@@ -25,8 +25,8 @@
 
 
 // Based on 1.2V per amp
-#define ADC_TO_CURRENT(adc_value) (((adc_value) * 2.5 / 4096) / 1.2)
-#define CURRENT_TO_ADC(current) ((uint16_t)(((current) * 1.2 / 2.5) * 4096))
+#define ADC_TO_CURRENT(adc_value) (((adc_value) * 2.5 / 4095) / 1.2)
+#define CURRENT_TO_ADC(current) ((uint16_t)(((current) * 1.2 / 2.5) * 4095))
 
 #define MAX_SOLAR_POWER 500000
 
@@ -41,6 +41,6 @@
 // If we are measuring anything too close to 4095, which is the max, then we should just shutdown
 #define VSOLAR_MEASUREMENT_ERROR_THRESHOLD 4090
 
-#define MIN_BALANCE_DIFF_THRESHOLD VOLTAGE_TO_VBATT_ADC(0.2f)
+#define MIN_BALANCE_DIFF_THRESHOLD VOLTAGE_TO_VBATT_ADC(0.1f)
 
 #endif
